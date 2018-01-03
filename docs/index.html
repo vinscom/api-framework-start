@@ -1180,35 +1180,33 @@ component via EventBus.</p>
 <span class="lineno">13 </span><span class="tok-kn">import</span> <span class="tok-nn">org.junit.runner.RunWith</span><span class="tok-o">;</span>
 <span class="lineno">14 </span>
 <span class="lineno">15 </span><span class="tok-nd">@RunWith</span><span class="tok-o">(</span><span class="tok-n">VertxUnitRunner</span><span class="tok-o">.</span><span class="tok-na">class</span><span class="tok-o">)</span>
-<span class="lineno">16 </span><span class="tok-kd">public</span> <span class="tok-kd">class</span> <span class="tok-nc">SessionGetServiceTest</span> <span class="tok-o">{</span>
+<span class="lineno">16 </span><span class="tok-kd">public</span> <span class="tok-kd">class</span> <span class="tok-nc">SessionTest</span> <span class="tok-o">{</span>
 <span class="lineno">17 </span>
 <span class="lineno">18 </span>  <span class="tok-nd">@Rule</span>
 <span class="lineno">19 </span>  <span class="tok-kd">public</span> <span class="tok-n">Timeout</span> <span class="tok-n">rule</span> <span class="tok-o">=</span> <span class="tok-n">Timeout</span><span class="tok-o">.</span><span class="tok-na">seconds</span><span class="tok-o">(</span><span class="tok-mi">2000</span><span class="tok-o">);</span>
 <span class="lineno">20 </span>
 <span class="lineno">21 </span>  <span class="tok-nd">@Test</span>
-<span class="lineno">22 </span>  <span class="tok-kd">public</span> <span class="tok-kt">void</span> <span class="tok-nf">testProcess</span><span class="tok-o">(</span><span class="tok-n">TestContext</span> <span class="tok-n">context</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+<span class="lineno">22 </span>  <span class="tok-kd">public</span> <span class="tok-kt">void</span> <span class="tok-nf">getRequest</span><span class="tok-o">(</span><span class="tok-n">TestContext</span> <span class="tok-n">context</span><span class="tok-o">)</span> <span class="tok-o">{</span>
 <span class="lineno">23 </span>
 <span class="lineno">24 </span>    <span class="tok-n">Async</span> <span class="tok-n">async</span> <span class="tok-o">=</span> <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">async</span><span class="tok-o">(</span><span class="tok-mi">2</span><span class="tok-o">);</span>
-<span class="lineno">25 </span>
-<span class="lineno">26 </span>    <span class="tok-n">Server</span> <span class="tok-n">server</span> <span class="tok-o">=</span> <span class="tok-n">Glue</span><span class="tok-o">.</span><span class="tok-na">instance</span><span class="tok-o">().&lt;</span><span class="tok-n">Server</span><span class="tok-o">&gt;</span><span class="tok-n">resolve</span><span class="tok-o">(</span><span class="tok-s">&quot;/in/erail/server/Server&quot;</span><span class="tok-o">);</span>
-<span class="lineno">27 </span>
-<span class="lineno">28 </span>    <span class="tok-n">server</span>
-<span class="lineno">29 </span>            <span class="tok-o">.</span><span class="tok-na">getVertx</span><span class="tok-o">()</span>
-<span class="lineno">30 </span>            <span class="tok-o">.</span><span class="tok-na">createHttpClient</span><span class="tok-o">()</span>
-<span class="lineno">31 </span>            <span class="tok-o">.</span><span class="tok-na">get</span><span class="tok-o">(</span><span class="tok-n">server</span><span class="tok-o">.</span><span class="tok-na">getPort</span><span class="tok-o">(),</span> <span class="tok-n">server</span><span class="tok-o">.</span><span class="tok-na">getHost</span><span class="tok-o">(),</span> <span class="tok-s">&quot;/v1/session&quot;</span><span class="tok-o">)</span>
-<span class="lineno">32 </span>            <span class="tok-o">.</span><span class="tok-na">handler</span><span class="tok-o">(</span><span class="tok-n">response</span> <span class="tok-o">-&gt;</span> <span class="tok-o">{</span>
-<span class="lineno">33 </span>              <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">assertEquals</span><span class="tok-o">(</span><span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">statusCode</span><span class="tok-o">(),</span> <span class="tok-mi">200</span><span class="tok-o">,</span> <span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">statusMessage</span><span class="tok-o">());</span>
-<span class="lineno">34 </span>              <span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">bodyHandler</span><span class="tok-o">((</span><span class="tok-n">event</span><span class="tok-o">)</span> <span class="tok-o">-&gt;</span> <span class="tok-o">{</span>
-<span class="lineno">35 </span>                <span class="tok-n">JsonArray</span> <span class="tok-n">data</span> <span class="tok-o">=</span> <span class="tok-n">event</span><span class="tok-o">.</span><span class="tok-na">toJsonArray</span><span class="tok-o">();</span>
-<span class="lineno">36 </span>                <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">assertEquals</span><span class="tok-o">(</span><span class="tok-mi">5</span><span class="tok-o">,</span> <span class="tok-n">data</span><span class="tok-o">.</span><span class="tok-na">size</span><span class="tok-o">());</span>
-<span class="lineno">37 </span>                <span class="tok-n">async</span><span class="tok-o">.</span><span class="tok-na">countDown</span><span class="tok-o">();</span>
-<span class="lineno">38 </span>              <span class="tok-o">});</span>
-<span class="lineno">39 </span>              <span class="tok-n">async</span><span class="tok-o">.</span><span class="tok-na">countDown</span><span class="tok-o">();</span>
-<span class="lineno">40 </span>            <span class="tok-o">})</span>
-<span class="lineno">41 </span>            <span class="tok-o">.</span><span class="tok-na">end</span><span class="tok-o">();</span>
-<span class="lineno">42 </span>  <span class="tok-o">}</span>
-<span class="lineno">43 </span>
-<span class="lineno">44 </span><span class="tok-o">}</span></code></pre>
+<span class="lineno">25 </span>    <span class="tok-n">Server</span> <span class="tok-n">server</span> <span class="tok-o">=</span> <span class="tok-n">Glue</span><span class="tok-o">.</span><span class="tok-na">instance</span><span class="tok-o">().&lt;</span><span class="tok-n">Server</span><span class="tok-o">&gt;</span><span class="tok-n">resolve</span><span class="tok-o">(</span><span class="tok-s">&quot;/in/erail/server/Server&quot;</span><span class="tok-o">);</span>
+<span class="lineno">26 </span>    <span class="tok-n">server</span>
+<span class="lineno">27 </span>            <span class="tok-o">.</span><span class="tok-na">getVertx</span><span class="tok-o">()</span>
+<span class="lineno">28 </span>            <span class="tok-o">.</span><span class="tok-na">createHttpClient</span><span class="tok-o">()</span>
+<span class="lineno">29 </span>            <span class="tok-o">.</span><span class="tok-na">get</span><span class="tok-o">(</span><span class="tok-n">server</span><span class="tok-o">.</span><span class="tok-na">getPort</span><span class="tok-o">(),</span> <span class="tok-n">server</span><span class="tok-o">.</span><span class="tok-na">getHost</span><span class="tok-o">(),</span> <span class="tok-s">&quot;/v1/session&quot;</span><span class="tok-o">)</span>
+<span class="lineno">30 </span>            <span class="tok-o">.</span><span class="tok-na">handler</span><span class="tok-o">(</span><span class="tok-n">response</span> <span class="tok-o">-&gt;</span> <span class="tok-o">{</span>
+<span class="lineno">31 </span>              <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">assertEquals</span><span class="tok-o">(</span><span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">statusCode</span><span class="tok-o">(),</span> <span class="tok-mi">200</span><span class="tok-o">,</span> <span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">statusMessage</span><span class="tok-o">());</span>
+<span class="lineno">32 </span>              <span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">bodyHandler</span><span class="tok-o">((</span><span class="tok-n">event</span><span class="tok-o">)</span> <span class="tok-o">-&gt;</span> <span class="tok-o">{</span>
+<span class="lineno">33 </span>                <span class="tok-n">JsonArray</span> <span class="tok-n">data</span> <span class="tok-o">=</span> <span class="tok-n">event</span><span class="tok-o">.</span><span class="tok-na">toJsonArray</span><span class="tok-o">();</span>
+<span class="lineno">34 </span>                <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">assertEquals</span><span class="tok-o">(</span><span class="tok-mi">5</span><span class="tok-o">,</span> <span class="tok-n">data</span><span class="tok-o">.</span><span class="tok-na">size</span><span class="tok-o">());</span>
+<span class="lineno">35 </span>                <span class="tok-n">async</span><span class="tok-o">.</span><span class="tok-na">countDown</span><span class="tok-o">();</span>
+<span class="lineno">36 </span>              <span class="tok-o">});</span>
+<span class="lineno">37 </span>              <span class="tok-n">async</span><span class="tok-o">.</span><span class="tok-na">countDown</span><span class="tok-o">();</span>
+<span class="lineno">38 </span>            <span class="tok-o">})</span>
+<span class="lineno">39 </span>            <span class="tok-o">.</span><span class="tok-na">end</span><span class="tok-o">();</span>
+<span class="lineno">40 </span>  <span class="tok-o">}</span>
+<span class="lineno">41 </span>
+<span class="lineno">42 </span><span class="tok-o">}</span></code></pre>
 </div>
 </div>
 </div>

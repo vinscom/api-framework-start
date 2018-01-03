@@ -3,7 +3,6 @@ package in.erail.tutorial;
 import in.erail.glue.Glue;
 import in.erail.server.Server;
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
