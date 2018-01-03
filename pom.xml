@@ -55,7 +55,7 @@
                 <version>2.5.3</version>
                 <executions>
                     <execution>
-                        <id>create-archive</id>
+                        <id>tutorial-simple-get-api-config</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
