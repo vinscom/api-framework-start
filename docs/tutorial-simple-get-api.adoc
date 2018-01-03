@@ -11,10 +11,10 @@ definition. Below is definition
 .openapi3.json
 [source,json,linenums]
 ----
-include::./../config-layers/common/in/erail/route/openapi3.json[]
+include::./../config-layers/tutorial-simple-get-api/in/erail/route/openapi3.json[]
 ----
 
-Our API will have single URL /session (like http://localhost:8080/session). Session is not
+Our API will have single URL /session (like http://localhost:8888/v1/session). Session is not
 related to actual Vertx session.
 
 .GET
@@ -25,7 +25,7 @@ is used for processing request from method.
 
 ==== Configure API Framework to use service definition
 
-Copy openapi3.json to *config-layers/common/in/erail/route/openapi3.json*. Now
+Copy openapi3.json to *config-layers/tutorial-simple-get-api/in/erail/route/openapi3.json*. Now
 API Framework is configured to handle API Request. Next step is to write code to handle
 request.
 
@@ -91,11 +91,11 @@ Reply JSON Object you can have below fields
 ===== Create Service Component
 
 Create below Component configuration file and place it in
-*/config-layers/common/in/erail/tutorial/SessionService*
+*/config-layers/tutorial-simple-get-api/in/erail/tutorial/SessionService*
 
 [source,ini,linenums]
 ----
-include::./../config-layers/common/in/erail/tutorial/SessionService.properties[]
+include::./../config-layers/tutorial-simple-get-api/in/erail/tutorial/SessionService.properties[]
 ----
 
 `operationId` and `serviceUniqueId` are same. `serviceUniqueId` can be different and it
@@ -104,7 +104,7 @@ must be unique across all services.
 Add service to *OpenAPI3RouteBuilder*
 [source,ini,linenums]
 ----
-include::./../config-layers/common/in/erail/route/OpenAPI3RouteBuilder.properties[]
+include::./../config-layers/tutorial-simple-get-api/in/erail/route/OpenAPI3RouteBuilder.properties[]
 ----
 
 `OpenAPI3RouteBuilder` will make sure, that, request received on URL and method with
@@ -149,7 +149,7 @@ java \
 -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory \
 -Dglue.layers=\
 ./config/api-framwork-1.0-SNAPSHOT-common-config.zip,\
-./config/api-framwork-start-1.0-SNAPSHOT-common-config.zip \
+./config/api-framwork-start-1.0-SNAPSHOT-tutorial-simple-get-api-config.zip \
 -jar api-framwork-start-1.0-SNAPSHOT.jar
 ----
 

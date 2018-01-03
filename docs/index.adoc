@@ -9,4 +9,6 @@ include::basic-concept.adoc[]
 
 include::project-setup.adoc[]
 
-include::tutorial-minimum-api.adoc[]
+include::tutorial-simple-get-api.adoc[]
+
+include::tutorial-simple-post-api.adoc[]

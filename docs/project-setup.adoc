@@ -23,17 +23,17 @@ include::./../pom.xml[tag=requiredDependencies]
 include::./../pom.xml[tag=optionalDependencies]
 ----
 
-. Create *api-framwork-start/config-layers/common* and
+. Create *api-framwork-start/config-layers/tutorial-simple-get-api* and
   *api-framwork-start/config-layers/test* folder to store all configuration
 +
 NOTE: *common* configuration is for production use. *test* configuration can be
           used to add new or override *common* configuration during unit test
 
-. Create *api-framwork-start/src/assembly/common-config.xml*
+. Create *api-framwork-start/src/assembly/tutorial-simple-get-api-config.xml*
 +
 [source, xml,linenums,indent=0]
 ----
-include::./../src/assembly/common-config.xml[]
+include::./../src/assembly/tutorial-simple-get-api-config.xml[]
 ----
 NOTE: This configuration will make sure that your *common* config layers is packed
 and installed as artefact in maven repository.
@@ -59,14 +59,14 @@ include::./../pom.xml[tag=argLine]
 | vertx.logger-delegate-factory-class-name
 | io.vertx.core.logging.Log4j2LogDelegateFactory
 | Enable Log4J based logging.
-| Dglue.layers
+| glue.layers
 |
 [%header]
 !===
 ! Layer ! Description
 ! ${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-common-config.zip
 ! API Framework Configuration Layer
-! ${project.basedir}/config-layers/common
+! ${project.basedir}/config-layers/tutorial-simple-get-api
 ! Our project configuration layer
 ! ${project.basedir}/config-layers/test
 ! Our project test configuration layer. Any test specific configuration can be done in this
