@@ -117,7 +117,7 @@ Now, our API is ready to use. Lets create a test class to test our service.
 
 [source,java,linenums]
 ----
-include::./../src/test/java/in/erail/tutorial/SessionTest.java[]
+include::./../src/test/java/in/erail/tutorial/SessionGetServiceTest.java[]
 ----
 
 === Step 4: Run API Server

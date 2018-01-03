@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(VertxUnitRunner.class)
-public class SessionTest {
+public class SessionGetServiceTest {
 
   @Rule
   public Timeout rule = Timeout.seconds(2000);
