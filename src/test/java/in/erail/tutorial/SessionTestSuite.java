@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+  in.erail.tutorial.SessionPostServiceTest.class,
   in.erail.tutorial.SessionGetServiceTest.class
 })
 public class SessionTestSuite {  
