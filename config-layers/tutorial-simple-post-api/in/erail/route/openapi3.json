@@ -1,0 +1,55 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "tutorial-api",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/session": {
+            "post": {
+                "summary": "Post message on session",
+                "description": "Post message on session",
+                "operationId": "API_SESSION_POST",
+                "responses": {
+                    "200": {
+                        "description": "Post Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/message"
+                            }
+                        }
+                    },
+                    "required": true
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "message": {
+                "title": "Root Type for message",
+                "description": "The root of the message type's schema.",
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "time": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

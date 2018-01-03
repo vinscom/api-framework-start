@@ -55,7 +55,7 @@
                 <version>2.5.3</version>
                 <executions>
                     <execution>
-                        <id>create-archive</id>
+                        <id>tutorial-simple-get-api-config</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
@@ -63,6 +63,17 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}/build/config</outputDirectory>
                             <descriptor>src/assembly/tutorial-simple-get-api-config.xml</descriptor>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>tutorial-simple-post-api-config</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/build/config</outputDirectory>
+                            <descriptor>src/assembly/tutorial-simple-post-api-config.xml</descriptor>
                         </configuration>
                     </execution>
                 </executions>
@@ -73,7 +84,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.20.1</version>
                 <configuration>
-                    <argLine>-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dglue.layers=${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-common-config.zip,${project.basedir}/config-layers/tutorial-simple-get-api,${project.basedir}/config-layers/test</argLine>
+                    <argLine>-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dglue.layers=${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-common-config.zip,${project.basedir}/config-layers/tutorial-simple-get-api,${project.basedir}/config-layers/tutorial-simple-post-api,${project.basedir}/config-layers/test</argLine>
                 </configuration>
             </plugin>
             <!-- end::argLine[] -->
