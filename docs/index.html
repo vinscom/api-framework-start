@@ -1019,7 +1019,7 @@ it is converted into EventBus message and sent on UniqueServiceId (Steps 2-3).</
 <span class="lineno"> 8 </span>
 <span class="lineno"> 9 </span><span class="tok-kd">public</span> <span class="tok-kd">class</span> <span class="tok-nc">SessionGetService</span> <span class="tok-kd">extends</span> <span class="tok-n">RESTServiceImpl</span> <span class="tok-o">{</span>
 <span class="lineno">10 </span>
-<span class="lineno">11 </span>  <span class="tok-kd">private</span> <span class="tok-kd">final</span> <span class="tok-n">JsonArray</span> <span class="tok-n">mSessions</span> <span class="tok-o">=</span> <span class="tok-k">new</span> <span class="tok-n">JsonArray</span><span class="tok-o">();</span>
+<span class="lineno">11 </span>  <span class="tok-kd">private</span> <span class="tok-n">JsonArray</span> <span class="tok-n">mSessions</span> <span class="tok-o">=</span> <span class="tok-k">new</span> <span class="tok-n">JsonArray</span><span class="tok-o">();</span>
 <span class="lineno">12 </span>
 <span class="lineno">13 </span>  <span class="tok-kd">public</span> <span class="tok-nf">SessionGetService</span><span class="tok-o">()</span> <span class="tok-o">{</span>
 <span class="lineno">14 </span>    <span class="tok-n">mSessions</span><span class="tok-o">.</span><span class="tok-na">add</span><span class="tok-o">(</span><span class="tok-s">&quot;S1&quot;</span><span class="tok-o">);</span>
@@ -1031,10 +1031,18 @@ it is converted into EventBus message and sent on UniqueServiceId (Steps 2-3).</
 <span class="lineno">20 </span>
 <span class="lineno">21 </span>  <span class="tok-nd">@Override</span>
 <span class="lineno">22 </span>  <span class="tok-kd">public</span> <span class="tok-kt">void</span> <span class="tok-nf">process</span><span class="tok-o">(</span><span class="tok-n">Message</span><span class="tok-o">&lt;</span><span class="tok-n">JsonObject</span><span class="tok-o">&gt;</span> <span class="tok-n">pMessage</span><span class="tok-o">)</span> <span class="tok-o">{</span>
-<span class="lineno">23 </span>    <span class="tok-n">pMessage</span><span class="tok-o">.</span><span class="tok-na">reply</span><span class="tok-o">(</span><span class="tok-k">new</span> <span class="tok-n">JsonObject</span><span class="tok-o">().</span><span class="tok-na">put</span><span class="tok-o">(</span><span class="tok-n">FramworkConstants</span><span class="tok-o">.</span><span class="tok-na">RoutingContext</span><span class="tok-o">.</span><span class="tok-na">Json</span><span class="tok-o">.</span><span class="tok-na">BODY</span><span class="tok-o">,</span> <span class="tok-n">mSessions</span><span class="tok-o">));</span>
+<span class="lineno">23 </span>    <span class="tok-n">pMessage</span><span class="tok-o">.</span><span class="tok-na">reply</span><span class="tok-o">(</span><span class="tok-k">new</span> <span class="tok-n">JsonObject</span><span class="tok-o">().</span><span class="tok-na">put</span><span class="tok-o">(</span><span class="tok-n">FramworkConstants</span><span class="tok-o">.</span><span class="tok-na">RoutingContext</span><span class="tok-o">.</span><span class="tok-na">Json</span><span class="tok-o">.</span><span class="tok-na">BODY</span><span class="tok-o">,</span> <span class="tok-n">getSessions</span><span class="tok-o">()));</span>
 <span class="lineno">24 </span>  <span class="tok-o">}</span>
 <span class="lineno">25 </span>
-<span class="lineno">26 </span><span class="tok-o">}</span></code></pre>
+<span class="lineno">26 </span>  <span class="tok-kd">public</span> <span class="tok-n">JsonArray</span> <span class="tok-nf">getSessions</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+<span class="lineno">27 </span>    <span class="tok-k">return</span> <span class="tok-n">mSessions</span><span class="tok-o">;</span>
+<span class="lineno">28 </span>  <span class="tok-o">}</span>
+<span class="lineno">29 </span>
+<span class="lineno">30 </span>  <span class="tok-kd">public</span> <span class="tok-kt">void</span> <span class="tok-nf">setSessions</span><span class="tok-o">(</span><span class="tok-n">JsonArray</span> <span class="tok-n">pSessions</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+<span class="lineno">31 </span>    <span class="tok-k">this</span><span class="tok-o">.</span><span class="tok-na">mSessions</span> <span class="tok-o">=</span> <span class="tok-n">pSessions</span><span class="tok-o">;</span>
+<span class="lineno">32 </span>  <span class="tok-o">}</span>
+<span class="lineno">33 </span>
+<span class="lineno">34 </span><span class="tok-o">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
