@@ -1,14 +1,26 @@
 package in.erail.tutorial;
 
+import in.erail.common.FramworkConstants;
 import in.erail.service.RESTServiceImpl;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.eventbus.Message;
 
 public class SessionService extends RESTServiceImpl {
 
+  private final JsonArray mSessions = new JsonArray();
+
+  public SessionService() {
+    mSessions.add("S1");
+    mSessions.add("S2");
+    mSessions.add("S3");
+    mSessions.add("S4");
+    mSessions.add("S5");
+  }
+
   @Override
   public void process(Message<JsonObject> pMessage) {
-    pMessage.reply(new JsonObject().put("status", "done"));
+    pMessage.reply(new JsonObject().put(FramworkConstants.RoutingContext.Json.BODY, mSessions));
   }
 
 }

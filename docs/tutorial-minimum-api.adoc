@@ -79,6 +79,15 @@ As parameter, Message Object provides JsonObject. JsonObject contains below fiel
 | body            | In case of POST request, contains body
 |===
 
+Reply JSON Object you can have below fields
+[%header]
+|===
+| Field Name | Default | Description
+| header        | No headers are added | Headers will be added to response header
+| body            | Response content is blank | Body is sent in response
+| statusCode | 200 |  Response HTTP status
+|===
+
 ===== Create Service Component
 
 Create below Component configuration file and place it in

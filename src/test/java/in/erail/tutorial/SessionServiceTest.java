@@ -2,7 +2,7 @@ package in.erail.tutorial;
 
 import in.erail.glue.Glue;
 import in.erail.server.Server;
-
+import io.vertx.core.json.JsonArray;
 
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
@@ -21,7 +21,7 @@ public class SessionServiceTest {
   @Test
   public void testProcess(TestContext context) {
 
-    Async async = context.async();
+    Async async = context.async(2);
 
     Server server = Glue.instance().<Server>resolve("/in/erail/server/Server");
 
@@ -31,7 +31,12 @@ public class SessionServiceTest {
             .get(server.getPort(), server.getHost(), "/v1/session")
             .handler(response -> {
               context.assertEquals(response.statusCode(), 200, response.statusMessage());
-              async.complete();
+              response.bodyHandler((event) -> {
+                JsonArray data = event.toJsonArray();
+                context.assertEquals(5, data.size());
+                async.countDown();
+              });
+              async.countDown();
             })
             .end();
   }

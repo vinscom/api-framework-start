@@ -964,18 +964,30 @@ it is converted into EventBus message and sent on UniqueServiceId (Steps 2-3).</
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="lineno"> 1 </span><span class="tok-kn">package</span> <span class="tok-nn">in.erail.tutorial</span><span class="tok-o">;</span>
 <span class="lineno"> 2 </span>
-<span class="lineno"> 3 </span><span class="tok-kn">import</span> <span class="tok-nn">in.erail.service.RESTServiceImpl</span><span class="tok-o">;</span>
-<span class="lineno"> 4 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.core.json.JsonObject</span><span class="tok-o">;</span>
-<span class="lineno"> 5 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.reactivex.core.eventbus.Message</span><span class="tok-o">;</span>
-<span class="lineno"> 6 </span>
-<span class="lineno"> 7 </span><span class="tok-kd">public</span> <span class="tok-kd">class</span> <span class="tok-nc">SessionService</span> <span class="tok-kd">extends</span> <span class="tok-n">RESTServiceImpl</span> <span class="tok-o">{</span>
+<span class="lineno"> 3 </span><span class="tok-kn">import</span> <span class="tok-nn">in.erail.common.FramworkConstants</span><span class="tok-o">;</span>
+<span class="lineno"> 4 </span><span class="tok-kn">import</span> <span class="tok-nn">in.erail.service.RESTServiceImpl</span><span class="tok-o">;</span>
+<span class="lineno"> 5 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.core.json.JsonArray</span><span class="tok-o">;</span>
+<span class="lineno"> 6 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.core.json.JsonObject</span><span class="tok-o">;</span>
+<span class="lineno"> 7 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.reactivex.core.eventbus.Message</span><span class="tok-o">;</span>
 <span class="lineno"> 8 </span>
-<span class="lineno"> 9 </span>  <span class="tok-nd">@Override</span>
-<span class="lineno">10 </span>  <span class="tok-kd">public</span> <span class="tok-kt">void</span> <span class="tok-nf">process</span><span class="tok-o">(</span><span class="tok-n">Message</span><span class="tok-o">&lt;</span><span class="tok-n">JsonObject</span><span class="tok-o">&gt;</span> <span class="tok-n">pMessage</span><span class="tok-o">)</span> <span class="tok-o">{</span>
-<span class="lineno">11 </span>    <span class="tok-n">pMessage</span><span class="tok-o">.</span><span class="tok-na">reply</span><span class="tok-o">(</span><span class="tok-k">new</span> <span class="tok-n">JsonObject</span><span class="tok-o">().</span><span class="tok-na">put</span><span class="tok-o">(</span><span class="tok-s">&quot;status&quot;</span><span class="tok-o">,</span> <span class="tok-s">&quot;done&quot;</span><span class="tok-o">));</span>
-<span class="lineno">12 </span>  <span class="tok-o">}</span>
-<span class="lineno">13 </span>
-<span class="lineno">14 </span><span class="tok-o">}</span></code></pre>
+<span class="lineno"> 9 </span><span class="tok-kd">public</span> <span class="tok-kd">class</span> <span class="tok-nc">SessionService</span> <span class="tok-kd">extends</span> <span class="tok-n">RESTServiceImpl</span> <span class="tok-o">{</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span>  <span class="tok-kd">private</span> <span class="tok-kd">final</span> <span class="tok-n">JsonArray</span> <span class="tok-n">mSessions</span> <span class="tok-o">=</span> <span class="tok-k">new</span> <span class="tok-n">JsonArray</span><span class="tok-o">();</span>
+<span class="lineno">12 </span>
+<span class="lineno">13 </span>  <span class="tok-kd">public</span> <span class="tok-nf">SessionService</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+<span class="lineno">14 </span>    <span class="tok-n">mSessions</span><span class="tok-o">.</span><span class="tok-na">add</span><span class="tok-o">(</span><span class="tok-s">&quot;S1&quot;</span><span class="tok-o">);</span>
+<span class="lineno">15 </span>    <span class="tok-n">mSessions</span><span class="tok-o">.</span><span class="tok-na">add</span><span class="tok-o">(</span><span class="tok-s">&quot;S2&quot;</span><span class="tok-o">);</span>
+<span class="lineno">16 </span>    <span class="tok-n">mSessions</span><span class="tok-o">.</span><span class="tok-na">add</span><span class="tok-o">(</span><span class="tok-s">&quot;S3&quot;</span><span class="tok-o">);</span>
+<span class="lineno">17 </span>    <span class="tok-n">mSessions</span><span class="tok-o">.</span><span class="tok-na">add</span><span class="tok-o">(</span><span class="tok-s">&quot;S4&quot;</span><span class="tok-o">);</span>
+<span class="lineno">18 </span>    <span class="tok-n">mSessions</span><span class="tok-o">.</span><span class="tok-na">add</span><span class="tok-o">(</span><span class="tok-s">&quot;S5&quot;</span><span class="tok-o">);</span>
+<span class="lineno">19 </span>  <span class="tok-o">}</span>
+<span class="lineno">20 </span>
+<span class="lineno">21 </span>  <span class="tok-nd">@Override</span>
+<span class="lineno">22 </span>  <span class="tok-kd">public</span> <span class="tok-kt">void</span> <span class="tok-nf">process</span><span class="tok-o">(</span><span class="tok-n">Message</span><span class="tok-o">&lt;</span><span class="tok-n">JsonObject</span><span class="tok-o">&gt;</span> <span class="tok-n">pMessage</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+<span class="lineno">23 </span>    <span class="tok-n">pMessage</span><span class="tok-o">.</span><span class="tok-na">reply</span><span class="tok-o">(</span><span class="tok-k">new</span> <span class="tok-n">JsonObject</span><span class="tok-o">().</span><span class="tok-na">put</span><span class="tok-o">(</span><span class="tok-n">FramworkConstants</span><span class="tok-o">.</span><span class="tok-na">RoutingContext</span><span class="tok-o">.</span><span class="tok-na">Json</span><span class="tok-o">.</span><span class="tok-na">BODY</span><span class="tok-o">,</span> <span class="tok-n">mSessions</span><span class="tok-o">));</span>
+<span class="lineno">24 </span>  <span class="tok-o">}</span>
+<span class="lineno">25 </span>
+<span class="lineno">26 </span><span class="tok-o">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1012,6 +1024,40 @@ provided to ease development <code>in.erail.service.RESTServiceImpl</code></p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">body</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">In case of POST request, contains body</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Reply JSON Object you can have below fields</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field Name</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">header</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No headers are added</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Headers will be added to response header</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">body</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Response content is blank</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Body is sent in response</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">statusCode</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Response HTTP status</p></td>
 </tr>
 </tbody>
 </table>
@@ -1068,7 +1114,7 @@ component via EventBus.</p>
 <span class="lineno"> 2 </span>
 <span class="lineno"> 3 </span><span class="tok-kn">import</span> <span class="tok-nn">in.erail.glue.Glue</span><span class="tok-o">;</span>
 <span class="lineno"> 4 </span><span class="tok-kn">import</span> <span class="tok-nn">in.erail.server.Server</span><span class="tok-o">;</span>
-<span class="lineno"> 5 </span>
+<span class="lineno"> 5 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.core.json.JsonArray</span><span class="tok-o">;</span>
 <span class="lineno"> 6 </span>
 <span class="lineno"> 7 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.ext.unit.Async</span><span class="tok-o">;</span>
 <span class="lineno"> 8 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.ext.unit.TestContext</span><span class="tok-o">;</span>
@@ -1087,7 +1133,7 @@ component via EventBus.</p>
 <span class="lineno">21 </span>  <span class="tok-nd">@Test</span>
 <span class="lineno">22 </span>  <span class="tok-kd">public</span> <span class="tok-kt">void</span> <span class="tok-nf">testProcess</span><span class="tok-o">(</span><span class="tok-n">TestContext</span> <span class="tok-n">context</span><span class="tok-o">)</span> <span class="tok-o">{</span>
 <span class="lineno">23 </span>
-<span class="lineno">24 </span>    <span class="tok-n">Async</span> <span class="tok-n">async</span> <span class="tok-o">=</span> <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">async</span><span class="tok-o">();</span>
+<span class="lineno">24 </span>    <span class="tok-n">Async</span> <span class="tok-n">async</span> <span class="tok-o">=</span> <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">async</span><span class="tok-o">(</span><span class="tok-mi">2</span><span class="tok-o">);</span>
 <span class="lineno">25 </span>
 <span class="lineno">26 </span>    <span class="tok-n">Server</span> <span class="tok-n">server</span> <span class="tok-o">=</span> <span class="tok-n">Glue</span><span class="tok-o">.</span><span class="tok-na">instance</span><span class="tok-o">().&lt;</span><span class="tok-n">Server</span><span class="tok-o">&gt;</span><span class="tok-n">resolve</span><span class="tok-o">(</span><span class="tok-s">&quot;/in/erail/server/Server&quot;</span><span class="tok-o">);</span>
 <span class="lineno">27 </span>
@@ -1097,12 +1143,17 @@ component via EventBus.</p>
 <span class="lineno">31 </span>            <span class="tok-o">.</span><span class="tok-na">get</span><span class="tok-o">(</span><span class="tok-n">server</span><span class="tok-o">.</span><span class="tok-na">getPort</span><span class="tok-o">(),</span> <span class="tok-n">server</span><span class="tok-o">.</span><span class="tok-na">getHost</span><span class="tok-o">(),</span> <span class="tok-s">&quot;/v1/session&quot;</span><span class="tok-o">)</span>
 <span class="lineno">32 </span>            <span class="tok-o">.</span><span class="tok-na">handler</span><span class="tok-o">(</span><span class="tok-n">response</span> <span class="tok-o">-&gt;</span> <span class="tok-o">{</span>
 <span class="lineno">33 </span>              <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">assertEquals</span><span class="tok-o">(</span><span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">statusCode</span><span class="tok-o">(),</span> <span class="tok-mi">200</span><span class="tok-o">,</span> <span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">statusMessage</span><span class="tok-o">());</span>
-<span class="lineno">34 </span>              <span class="tok-n">async</span><span class="tok-o">.</span><span class="tok-na">complete</span><span class="tok-o">();</span>
-<span class="lineno">35 </span>            <span class="tok-o">})</span>
-<span class="lineno">36 </span>            <span class="tok-o">.</span><span class="tok-na">end</span><span class="tok-o">();</span>
-<span class="lineno">37 </span>  <span class="tok-o">}</span>
-<span class="lineno">38 </span>
-<span class="lineno">39 </span><span class="tok-o">}</span></code></pre>
+<span class="lineno">34 </span>              <span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">bodyHandler</span><span class="tok-o">((</span><span class="tok-n">event</span><span class="tok-o">)</span> <span class="tok-o">-&gt;</span> <span class="tok-o">{</span>
+<span class="lineno">35 </span>                <span class="tok-n">JsonArray</span> <span class="tok-n">data</span> <span class="tok-o">=</span> <span class="tok-n">event</span><span class="tok-o">.</span><span class="tok-na">toJsonArray</span><span class="tok-o">();</span>
+<span class="lineno">36 </span>                <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">assertEquals</span><span class="tok-o">(</span><span class="tok-mi">5</span><span class="tok-o">,</span> <span class="tok-n">data</span><span class="tok-o">.</span><span class="tok-na">size</span><span class="tok-o">());</span>
+<span class="lineno">37 </span>                <span class="tok-n">async</span><span class="tok-o">.</span><span class="tok-na">countDown</span><span class="tok-o">();</span>
+<span class="lineno">38 </span>              <span class="tok-o">});</span>
+<span class="lineno">39 </span>              <span class="tok-n">async</span><span class="tok-o">.</span><span class="tok-na">countDown</span><span class="tok-o">();</span>
+<span class="lineno">40 </span>            <span class="tok-o">})</span>
+<span class="lineno">41 </span>            <span class="tok-o">.</span><span class="tok-na">end</span><span class="tok-o">();</span>
+<span class="lineno">42 </span>  <span class="tok-o">}</span>
+<span class="lineno">43 </span>
+<span class="lineno">44 </span><span class="tok-o">}</span></code></pre>
 </div>
 </div>
 </div>
