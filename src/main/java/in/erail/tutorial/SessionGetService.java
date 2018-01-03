@@ -8,7 +8,7 @@ import io.vertx.reactivex.core.eventbus.Message;
 
 public class SessionGetService extends RESTServiceImpl {
 
-  private final JsonArray mSessions = new JsonArray();
+  private JsonArray mSessions = new JsonArray();
 
   public SessionGetService() {
     mSessions.add("S1");
@@ -20,7 +20,15 @@ public class SessionGetService extends RESTServiceImpl {
 
   @Override
   public void process(Message<JsonObject> pMessage) {
-    pMessage.reply(new JsonObject().put(FramworkConstants.RoutingContext.Json.BODY, mSessions));
+    pMessage.reply(new JsonObject().put(FramworkConstants.RoutingContext.Json.BODY, getSessions()));
+  }
+
+  public JsonArray getSessions() {
+    return mSessions;
+  }
+
+  public void setSessions(JsonArray pSessions) {
+    this.mSessions = pSessions;
   }
 
 }
