@@ -136,7 +136,7 @@ After running maven install. You should have build folder inside target folder.
  +++ dependencies
  ++ config
  +++ api-framwork-1.0-SNAPSHOT-common-config.zip
- +++ api-framwork-start-1.0-SNAPSHOT-common-config.zip
+ +++ api-framwork-start-1.0-SNAPSHOT-tutorial-simple-get-api-config.zip
 }
 }
 @endsalt
