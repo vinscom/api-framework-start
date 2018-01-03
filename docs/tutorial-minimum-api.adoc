@@ -119,3 +119,46 @@ Now, our API is ready to use. Lets create a test class to test our service.
 ----
 include::./../src/test/java/in/erail/tutorial/SessionServiceTest.java[]
 ----
+
+=== Step 4: Run API Server
+
+After running maven install. You should have build folder inside target folder.
+
+.Build folder structure
+[plantuml,./assets/build-folder-structure, png]
+....
+@startsalt
+{
+{T
+ + **build**
+ ++ api-framwork-start-1.0-SNAPSHOT.jar
+ ++ api-framwork-start-1.0-SNAPSHOT-lib
+ +++ dependencies
+ ++ config
+ +++ api-framwork-1.0-SNAPSHOT-common-config.zip
+ +++ api-framwork-start-1.0-SNAPSHOT-common-config.zip
+}
+}
+@endsalt
+....
+
+.Run Server (Assuming you are inside build folder)
+[source,bash,linenums]
+----
+java \
+-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory \
+-Dglue.layers=\
+./config/api-framwork-1.0-SNAPSHOT-common-config.zip,\
+./config/api-framwork-start-1.0-SNAPSHOT-common-config.zip \
+-jar api-framwork-start-1.0-SNAPSHOT.jar
+----
+
+.Test API
+Go to command prompt
+[source,bash,linenums]
+----
+curl http://localhost:8888/v1/session
+----
+
+.Result
+ ["S1","S2","S3","S4","S5"]

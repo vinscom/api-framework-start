@@ -5,12 +5,15 @@
     <artifactId>api-framwork-start</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+
     <dependencies>
+        <!-- tag::requiredDependencies[] -->
         <dependency>
             <groupId>in.erail</groupId>
             <artifactId>glue</artifactId>
@@ -21,6 +24,15 @@
             <artifactId>api-framwork</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>in.erail</groupId>
+            <artifactId>api-framwork</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <classifier>common-config</classifier>
+            <type>zip</type>
+        </dependency>
+        <!-- end::requiredDependencies[] -->
+        <!-- tag::optionalDependencies[] -->
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-unit</artifactId>
@@ -33,9 +45,11 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <!-- end::optionalDependencies[] -->
     </dependencies>
     <build>
         <plugins>
+            <!-- tag::plugin[] -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.5.3</version>
@@ -47,12 +61,13 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/build</outputDirectory>
+                            <outputDirectory>${project.build.directory}/build/config</outputDirectory>
                             <descriptor>src/assembly/common-config.xml</descriptor>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            <!-- tag::argLine[] -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -60,6 +75,33 @@
                 <configuration>
                     <argLine>-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dglue.layers=${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-common-config.zip,${project.basedir}/config-layers/common,${project.basedir}/config-layers/test</argLine>
                 </configuration>
+            </plugin>
+            <!-- end::argLine[] -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+                <executions>
+                    <execution>
+                        <id>copy-installed</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>in.erail</groupId>
+                                    <artifactId>api-framwork</artifactId>
+                                    <version>1.0-SNAPSHOT</version>
+                                    <classifier>common-config</classifier>
+                                    <type>zip</type>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/build/config</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -96,6 +138,7 @@
                     </archive>
                 </configuration>
             </plugin>
+            <!-- end::plugin[] -->
         </plugins>
     </build>
 </project>
