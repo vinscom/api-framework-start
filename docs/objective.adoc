@@ -1,2 +1,0 @@
-== Objective
-. Create simple session API to get list of dummy session.

@@ -507,37 +507,64 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_objective">Objective</a></li>
-<li><a href="#_create_maven_project_using_netbean">Create Maven Project using Netbean</a></li>
 <li><a href="#_basic_concepts">Basic Concepts</a>
 <ul class="sectlevel2">
 <li><a href="#_how_framework_is_structured">How framework is structured ?</a></li>
 </ul>
 </li>
-<li><a href="#_step_1_create_open_api_3_service_definition">Step 1:Create Open API 3 Service Definition</a>
+<li><a href="#_create_maven_project_using_netbean">Create Maven Project using Netbean</a></li>
+<li><a href="#_simple_get_api">Simple GET API</a>
 <ul class="sectlevel2">
-<li><a href="#_configure_api_framework_to_use_service_definition">Configure API Framework to use service definition</a></li>
-</ul>
-</li>
-<li><a href="#_step_2_write_api_request_handling">Step 2: Write API Request Handling</a>
-<ul class="sectlevel2">
-<li><a href="#_handle_get_method_called_on_session_url">Handle GET method called on /session URL</a></li>
-</ul>
-</li>
+<li><a href="#_step_1_create_open_api_3_service_definition">Step 1: Create Open API 3 Service Definition</a></li>
+<li><a href="#_step_2_write_api_request_handling">Step 2: Write API Request Handling</a></li>
 <li><a href="#_step_3_write_test_to_test_our_service">Step 3: Write Test to test our service</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_objective">Objective</h2>
+<h2 id="_basic_concepts">Basic Concepts</h2>
 <div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Create simple session API to get list of dummy session.</p>
-</li>
-</ol>
+<div class="paragraph">
+<p>API Framework is less framework and more development pattern. Where majority of
+development patterns are already implemented as part of framework. And any
+new functionality can easily be added or extended based on exiting patterns.</p>
+</div>
+<div class="paragraph">
+<p>Idea is to provide structure to development project, so, that with minimum learning
+programmers can become productive. Vertx knowledge and API Framwork
+project setup is enough to build complex application.</p>
+</div>
+<div class="sect2">
+<h3 id="_how_framework_is_structured">How framework is structured ?</h3>
+<div class="paragraph">
+<p>API Framework has clean separation between <em>Code</em> and <em>Configuration</em>. In fact
+not only configuration, but, class dependencies itself is also configurable. This is major
+problem with Vertx implementation.</p>
+</div>
+<div class="paragraph">
+<p>Once you have configuration separate from Code, next challenge is management of
+configuration itself.  How do you make sure that thousands of component configuration
+is managed in a way where developers and dev ops can manage configuration in
+simple and reliable fashion. In API Framework, we use Glue to manage configuration
+in simple <strong>properties</strong> file.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./assets/project-structure.png" alt="project structure" width="146" height="152">
+</div>
+<div class="title">Figure 1. Project Structure</div>
+</div>
+<div class="paragraph">
+<p>API Framework has its own configuration layer and our project has its own
+configuration layer. In our configuration layer, we can override any API Framework
+configuration. Any number of layers can be added to API Framework, and
+each layer can override configuration of all previous layers (For example, during unit
+testing we add test layer containing any specific configuration required for testing). For
+more details, check Glue project.</p>
+</div>
 </div>
 </div>
 </div>
@@ -685,8 +712,8 @@ and installed as artefact in maven repository.
 <span class="lineno">21 </span>        <span class="tok-nt">&lt;artifactId&gt;</span>maven-surefire-plugin<span class="tok-nt">&lt;/artifactId&gt;</span>
 <span class="lineno">22 </span>        <span class="tok-nt">&lt;version&gt;</span>2.20.1<span class="tok-nt">&lt;/version&gt;</span>
 <span class="lineno">23 </span>        <span class="tok-nt">&lt;configuration&gt;</span>
-<span class="lineno">24 </span>            <span class="tok-nt">&lt;argLine&gt;</span>-Dhazelcast.jmx=true -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dglue.layers=${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-common-config.zip,${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-debug-config.zip,${project.basedir}/config-layers/common,${project.basedir}/config-layers/test<span class="tok-nt">&lt;/argLine&gt;</span>
-<span class="lineno">25 </span>        <span class="tok-nt">&lt;/configuration&gt;</span>
+<span class="lineno">24 </span><span class="hll">            <span class="tok-nt">&lt;argLine&gt;</span>-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dglue.layers=${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-common-config.zip,${project.basedir}/config-layers/common,${project.basedir}/config-layers/test<span class="tok-nt">&lt;/argLine&gt;</span>
+</span><span class="lineno">25 </span>        <span class="tok-nt">&lt;/configuration&gt;</span>
 <span class="lineno">26 </span>    <span class="tok-nt">&lt;/plugin&gt;</span>
 <span class="lineno">27 </span>    <span class="tok-nt">&lt;plugin&gt;</span>
 <span class="lineno">28 </span>        <span class="tok-nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="tok-nt">&lt;/groupId&gt;</span>
@@ -726,53 +753,95 @@ and installed as artefact in maven repository.
 <span class="lineno">62 </span><span class="tok-nt">&lt;/plugins&gt;</span></code></pre>
 </div>
 </div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. Argument Line</caption>
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 33.3333%;">
+<col style="width: 50.0001%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Argument</th>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">vertx.logger-delegate-factory-class-name</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>io.vertx.core.logging.Log4j2LogDelegateFactory</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>Enable Log4J based logging.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dglue.layers</p></td>
+<td class="tableblock halign-left valign-top"><div><table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Layer</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-common-config.zip</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API Framework Configuration Layer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">${project.basedir}/config-layers/common</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Our project configuration layer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">${project.basedir}/config-layers/test</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Our project test configuration layer. Any test specific configuration can be done in this
+layer</p></td>
+</tr>
+</tbody>
+</table></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>All configuration layers. Configuration layers are read in same order as defined in
+argument. Layer configuration is read from right to left. Means, left configuration will
+override right configuration, if same configuration is also present in right layer.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Configuration are managed at individual property level. So, if two
+properties file have same configuration file, but, different property inside those
+configuration file, then configuration file is merged. For more information read
+Glue documentation.
+</td>
+</tr>
+</table>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 </li>
 </ol>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_basic_concepts">Basic Concepts</h2>
+<h2 id="_simple_get_api">Simple GET API</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>API Framework is less framework and more development pattern. Where majority of
-development patterns are already implemented as part of framework. And any
-new functionality can easily be added or extended based on exiting patterns.</p>
+<p>We will create simple session API to get list of dummy session.</p>
 </div>
 <div class="sect2">
-<h3 id="_how_framework_is_structured">How framework is structured ?</h3>
-<div class="paragraph">
-<p>API Framework has clean separation between <em>Code</em> and <em>Configuration</em>. In fact
-not only configuration, but, class dependencies itself is also configurable. This is major
-problem with Vertx implementation.</p>
-</div>
-<div class="paragraph">
-<p>Once you have configuration separate from Code, next challenge is management of
-configuration itself.  How do you make sure that thousands of component configuration
-is managed in a way where developers and dev ops can manage configuration in
-simple and reliable fashion. In API Framework, we use Glue to manage configuration
-in simple <strong>properties</strong> file.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./assets/project-structure.png" alt="project structure" width="146" height="152">
-</div>
-<div class="title">Figure 1. Project Structure</div>
-</div>
-<div class="paragraph">
-<p>API Framework has its own configuration layer and our project has its own
-configuration layer. In our configuration layer, we can override any API Framework
-configuration. Any number of layers can be added to API Framework, and
-each layer can override configuration of all previous layers (For example, during unit
-testing we add test layer containing any specific configuration required for testing). For
-more details, check Glue project.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_step_1_create_open_api_3_service_definition">Step 1:Create Open API 3 Service Definition</h2>
-<div class="sectionbody">
+<h3 id="_step_1_create_open_api_3_service_definition">Step 1: Create Open API 3 Service Definition</h3>
 <div class="paragraph">
 <p>To make life easy, we have used <a href="https://studio.apicur.io">Apicurio</a> to create Open API 3
 definition. Below is definition</p>
@@ -851,8 +920,8 @@ is used for processing request from method.
 </tr>
 </table>
 </div>
-<div class="sect2">
-<h3 id="_configure_api_framework_to_use_service_definition">Configure API Framework to use service definition</h3>
+<div class="sect3">
+<h4 id="_configure_api_framework_to_use_service_definition">Configure API Framework to use service definition</h4>
 <div class="paragraph">
 <p>Copy openapi3.json to <strong>config-layers/common/in/erail/route/openapi3.json</strong>. Now
 API Framework is configured to handle API Request. Next step is to write code to handle
@@ -860,10 +929,8 @@ request.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_step_2_write_api_request_handling">Step 2: Write API Request Handling</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_step_2_write_api_request_handling">Step 2: Write API Request Handling</h3>
 <div class="paragraph">
 <p>Basic request handling flow</p>
 </div>
@@ -889,10 +956,10 @@ it is converted into EventBus message and sent on UniqueServiceId (Steps 2-3).</
 </li>
 </ol>
 </div>
-<div class="sect2">
-<h3 id="_handle_get_method_called_on_session_url">Handle GET method called on /session URL</h3>
 <div class="sect3">
-<h4 id="_create_service_class">Create Service Class</h4>
+<h4 id="_handle_get_method_called_on_session_url">Handle GET method called on /session URL</h4>
+<div class="sect4">
+<h5 id="_create_service_class">Create Service Class</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="lineno"> 1 </span><span class="tok-kn">package</span> <span class="tok-nn">in.erail.tutorial</span><span class="tok-o">;</span>
@@ -949,8 +1016,8 @@ provided to ease development <code>in.erail.service.RESTServiceImpl</code></p>
 </tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_create_service_component">Create Service Component</h4>
+<div class="sect4">
+<h5 id="_create_service_component">Create Service Component</h5>
 <div class="paragraph">
 <p>Create below Component configuration file and place it in
 <strong>/config-layers/common/in/erail/tutorial/SessionService</strong></p>
@@ -993,10 +1060,8 @@ component via EventBus.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_step_3_write_test_to_test_our_service">Step 3: Write Test to test our service</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_step_3_write_test_to_test_our_service">Step 3: Write Test to test our service</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="lineno"> 1 </span><span class="tok-kn">package</span> <span class="tok-nn">in.erail.tutorial</span><span class="tok-o">;</span>
@@ -1043,10 +1108,11 @@ component via EventBus.</p>
 </div>
 </div>
 </div>
+</div>
 <div id="footer">
 <div id="footer-text">
 Version 0.1<br>
-Last updated 2018-01-02 13:29:34 GMT
+Last updated 2018-01-03 11:21:17 GMT
 </div>
 </div>
 </body>

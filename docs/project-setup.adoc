@@ -73,7 +73,7 @@ and installed as artefact in maven repository.
 
 . Add plugins to Maven
 +
-[source, xml,linenums]
+[source, xml,linenums,highlight='24']
 ----
 <plugins>
     <plugin>
@@ -98,7 +98,7 @@ and installed as artefact in maven repository.
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.20.1</version>
         <configuration>
-            <argLine>-Dhazelcast.jmx=true -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dglue.layers=${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-common-config.zip,${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-debug-config.zip,${project.basedir}/config-layers/common,${project.basedir}/config-layers/test</argLine>
+            <argLine>-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dglue.layers=${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-common-config.zip,${project.basedir}/config-layers/common,${project.basedir}/config-layers/test</argLine>
         </configuration>
     </plugin>
     <plugin>
@@ -139,3 +139,33 @@ and installed as artefact in maven repository.
 </plugins>
 ----
 +
+
+.Argument Line
+[%header,cols="1,2a,3a"]
+|===
+| Argument | Value | Description
+| vertx.logger-delegate-factory-class-name
+| io.vertx.core.logging.Log4j2LogDelegateFactory
+| Enable Log4J based logging.
+| Dglue.layers
+|
+[%header]
+!===
+! Layer ! Description
+! ${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-common-config.zip
+! API Framework Configuration Layer
+! ${project.basedir}/config-layers/common
+! Our project configuration layer
+! ${project.basedir}/config-layers/test
+! Our project test configuration layer. Any test specific configuration can be done in this
+layer
+!===
+| All configuration layers. Configuration layers are read in same order as defined in
+argument. Layer configuration is read from right to left. Means, left configuration will
+override right configuration, if same configuration is also present in right layer.
+
+NOTE: Configuration are managed at individual property level. So, if two
+properties file have same configuration file, but, different property inside those
+configuration file, then configuration file is merged. For more information read
+Glue documentation.
+|===
