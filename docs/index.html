@@ -508,7 +508,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_objective">Objective</a></li>
-<li><a href="#_project_setup_in_netbean">Project setup in Netbean</a></li>
+<li><a href="#_create_maven_project_using_netbean">Create Maven Project using Netbean</a></li>
 <li><a href="#_basic_concepts">Basic Concepts</a>
 <ul class="sectlevel2">
 <li><a href="#_how_framework_is_structured">How framework is structured ?</a></li>
@@ -535,23 +535,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Create Site Hello World</p>
-</li>
-<li>
-<p>Site will have chat box using which you can chat with site.</p>
-</li>
-<li>
-<p>Create chat API</p>
-</li>
-<li>
-<p>User will have to login using Google before using site</p>
+<p>Create simple session API to get list of dummy session.</p>
 </li>
 </ol>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_project_setup_in_netbean">Project setup in Netbean</h2>
+<h2 id="_create_maven_project_using_netbean">Create Maven Project using Netbean</h2>
 <div class="sectionbody">
 <div class="admonitionblock note">
 <table>
@@ -569,14 +560,14 @@ Below steps are optional. You can clone this project from
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Create Project Folder <strong>helloworldservice</strong>. This will be used as base folder.</p>
+<p>Create Project Folder <strong>api-framwork-start</strong>. This will be used as base folder.</p>
 </li>
 <li>
 <p>Create new project<br>
 <span class="image"><img src="./tutorial-images/netbean-project-wizard-1.png" alt="netbean project wizard 1"></span></p>
 </li>
 <li>
-<p>Save project to <strong>helloworldservice</strong> location<br>
+<p>Save project to <strong>api-framwork-start</strong> location<br>
 <span class="image"><img src="./tutorial-images/netbean-project-wizard-2.png" alt="netbean project wizard 2"></span></p>
 </li>
 <li>
@@ -611,19 +602,13 @@ Below steps are optional. You can clone this project from
 <span class="lineno"> 9 </span>    <span class="tok-nt">&lt;artifactId&gt;</span>junit<span class="tok-nt">&lt;/artifactId&gt;</span>
 <span class="lineno">10 </span>    <span class="tok-nt">&lt;version&gt;</span>4.12<span class="tok-nt">&lt;/version&gt;</span>
 <span class="lineno">11 </span>    <span class="tok-nt">&lt;scope&gt;</span>test<span class="tok-nt">&lt;/scope&gt;</span>
-<span class="lineno">12 </span><span class="tok-nt">&lt;/dependency&gt;</span>
-<span class="lineno">13 </span><span class="tok-nt">&lt;dependency&gt;</span>
-<span class="lineno">14 </span>    <span class="tok-nt">&lt;groupId&gt;</span>org.hamcrest<span class="tok-nt">&lt;/groupId&gt;</span>
-<span class="lineno">15 </span>    <span class="tok-nt">&lt;artifactId&gt;</span>hamcrest-core<span class="tok-nt">&lt;/artifactId&gt;</span>
-<span class="lineno">16 </span>    <span class="tok-nt">&lt;version&gt;</span>1.3<span class="tok-nt">&lt;/version&gt;</span>
-<span class="lineno">17 </span>    <span class="tok-nt">&lt;scope&gt;</span>test<span class="tok-nt">&lt;/scope&gt;</span>
-<span class="lineno">18 </span><span class="tok-nt">&lt;/dependency&gt;</span></code></pre>
+<span class="lineno">12 </span><span class="tok-nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Create <strong>helloworldservice/config-layers/common</strong> and
-<strong>helloworldservice/config-layers/test</strong> folder to store all configuration</p>
+<p>Create <strong>api-framwork-start/config-layers/common</strong> and
+<strong>api-framwork-start/config-layers/test</strong> folder to store all configuration</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -639,7 +624,7 @@ Below steps are optional. You can clone this project from
 </div>
 </li>
 <li>
-<p>Create <strong>helloworldservice/src/assembly/common-config.xml</strong></p>
+<p>Create <strong>api-framwork-start/src/assembly/common-config.xml</strong></p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="xml"><span></span><span class="lineno"> 1 </span><span class="tok-cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
@@ -666,8 +651,8 @@ Below steps are optional. You can clone this project from
 <div class="title">Note</div>
 </td>
 <td class="content">
-This configuration will make sure that your <strong>common</strong> config layers is copied
-          for production use.
+This configuration will make sure that your <strong>common</strong> config layers is packed
+and installed as artefact in maven repository.
 </td>
 </tr>
 </table>
@@ -700,7 +685,7 @@ This configuration will make sure that your <strong>common</strong> config layer
 <span class="lineno">21 </span>        <span class="tok-nt">&lt;artifactId&gt;</span>maven-surefire-plugin<span class="tok-nt">&lt;/artifactId&gt;</span>
 <span class="lineno">22 </span>        <span class="tok-nt">&lt;version&gt;</span>2.20.1<span class="tok-nt">&lt;/version&gt;</span>
 <span class="lineno">23 </span>        <span class="tok-nt">&lt;configuration&gt;</span>
-<span class="lineno">24 </span>            <span class="tok-nt">&lt;argLine&gt;</span>-Dhazelcast.jmx=true -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dglue.layers=${project.basedir}/config-layers/common,${project.basedir}/config-layers/debug,${project.basedir}/config-layers/test<span class="tok-nt">&lt;/argLine&gt;</span>
+<span class="lineno">24 </span>            <span class="tok-nt">&lt;argLine&gt;</span>-Dhazelcast.jmx=true -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dglue.layers=${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-common-config.zip,${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-debug-config.zip,${project.basedir}/config-layers/common,${project.basedir}/config-layers/test<span class="tok-nt">&lt;/argLine&gt;</span>
 <span class="lineno">25 </span>        <span class="tok-nt">&lt;/configuration&gt;</span>
 <span class="lineno">26 </span>    <span class="tok-nt">&lt;/plugin&gt;</span>
 <span class="lineno">27 </span>    <span class="tok-nt">&lt;plugin&gt;</span>
@@ -752,15 +737,14 @@ This configuration will make sure that your <strong>common</strong> config layer
 <div class="paragraph">
 <p>API Framework is less framework and more development pattern. Where majority of
 development patterns are already implemented as part of framework. And any
-new functionality can easily be added following exiting patterns.</p>
+new functionality can easily be added or extended based on exiting patterns.</p>
 </div>
 <div class="sect2">
 <h3 id="_how_framework_is_structured">How framework is structured ?</h3>
 <div class="paragraph">
 <p>API Framework has clean separation between <em>Code</em> and <em>Configuration</em>. In fact
 not only configuration, but, class dependencies itself is also configurable. This is major
-problem with Vertx implementation. API Framework uses IoC (Inversion of Control)
-concept (same as Spring) to achieve its goal.</p>
+problem with Vertx implementation.</p>
 </div>
 <div class="paragraph">
 <p>Once you have configuration separate from Code, next challenge is management of
@@ -769,12 +753,19 @@ is managed in a way where developers and dev ops can manage configuration in
 simple and reliable fashion. In API Framework, we use Glue to manage configuration
 in simple <strong>properties</strong> file.</p>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="./assets/project-structure.png" alt="project structure" width="146" height="152">
+</div>
+<div class="title">Figure 1. Project Structure</div>
+</div>
 <div class="paragraph">
 <p>API Framework has its own configuration layer and our project has its own
 configuration layer. In our configuration layer, we can override any API Framework
 configuration. Any number of layers can be added to API Framework, and
 each layer can override configuration of all previous layers (For example, during unit
-testing we add test layer containing any specific configuration required for testing).</p>
+testing we add test layer containing any specific configuration required for testing). For
+more details, check Glue project.</p>
 </div>
 </div>
 </div>
@@ -841,16 +832,11 @@ definition. Below is definition</p>
 </div>
 <div class="paragraph">
 <p>Our API will have single URL /session (like <a href="http://localhost:8080/session" class="bare">http://localhost:8080/session</a>). Session is not
-related to actual Vertx session. This session API support two methods.</p>
+related to actual Vertx session.</p>
 </div>
 <div class="paragraph">
 <div class="title">GET</div>
 <p>On get request, session API will return all session messages.</p>
-</div>
-<div class="paragraph">
-<div class="title">POST</div>
-<p>To post any message in session, we can call post on session API. Post request payload will
-contain message to be posted.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -925,6 +911,43 @@ it is converted into EventBus message and sent on UniqueServiceId (Steps 2-3).</
 <span class="lineno">14 </span><span class="tok-o">}</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Service class must implement <code>in.erail.service.RESTService</code> interface. A helper class is
+provided to ease development <code>in.erail.service.RESTServiceImpl</code></p>
+</div>
+<div class="paragraph">
+<p>As parameter, Message Object provides JsonObject. JsonObject contains below fields</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">header</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Contains all request headers</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">param</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Contains all request parameters</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">query</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Contains all query parameters</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">body</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">In case of POST request, contains body</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_create_service_component">Create Service Component</h4>
@@ -945,6 +968,10 @@ it is converted into EventBus message and sent on UniqueServiceId (Steps 2-3).</
 </div>
 </div>
 <div class="paragraph">
+<p><code>operationId</code> and <code>serviceUniqueId</code> are same. <code>serviceUniqueId</code> can be different and it
+must be unique across all services.</p>
+</div>
+<div class="paragraph">
 <p>Add service to <strong>OpenAPI3RouteBuilder</strong></p>
 </div>
 <div class="listingblock">
@@ -956,7 +983,12 @@ it is converted into EventBus message and sent on UniqueServiceId (Steps 2-3).</
 </div>
 </div>
 <div class="paragraph">
-<p>Our API is ready to use. Lets create a test class to test our service.</p>
+<p><code>OpenAPI3RouteBuilder</code> will make sure, that, request received on URL and method with
+<code>operationId</code> as defined in <code>SessionService</code> component is forwarded to <code>serviceUniqueId</code>
+component via EventBus.</p>
+</div>
+<div class="paragraph">
+<p>Now, our API is ready to use. Lets create a test class to test our service.</p>
 </div>
 </div>
 </div>

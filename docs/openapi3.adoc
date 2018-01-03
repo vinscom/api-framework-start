@@ -11,14 +11,10 @@ include::./../config-layers/common/in/erail/route/openapi3.json[]
 ----
 
 Our API will have single URL /session (like http://localhost:8080/session). Session is not
-related to actual Vertx session. This session API support two methods.
+related to actual Vertx session.
 
 .GET
 On get request, session API will return all session messages.
-
-.POST
-To post any message in session, we can call post on session API. Post request payload will
-contain message to be posted.
 
 NOTE: Each method requiring processing must have *unique OperationId*. OperationId
 is used for processing request from method.

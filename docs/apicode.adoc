@@ -34,6 +34,20 @@ it is converted into EventBus message and sent on UniqueServiceId (Steps 2-3).
 include::./../src/main/java/in/erail/tutorial/SessionService.java[]
 ----
 
+Service class must implement `in.erail.service.RESTService` interface. A helper class is
+provided to ease development `in.erail.service.RESTServiceImpl`
+
+As parameter, Message Object provides JsonObject. JsonObject contains below fields
+
+[%header]
+|===
+| Field Name | Description
+| header        | Contains all request headers
+| param         | Contains all request parameters
+| query           | Contains all query parameters
+| body            | In case of POST request, contains body
+|===
+
 ==== Create Service Component
 
 Create below Component configuration file and place it in
@@ -44,13 +58,20 @@ Create below Component configuration file and place it in
 include::./../config-layers/common/in/erail/tutorial/SessionService.properties[]
 ----
 
+`operationId` and `serviceUniqueId` are same. `serviceUniqueId` can be different and it
+must be unique across all services.
+
 Add service to *OpenAPI3RouteBuilder*
 [source,ini,linenums]
 ----
 include::./../config-layers/common/in/erail/route/OpenAPI3RouteBuilder.properties[]
 ----
 
-Our API is ready to use. Lets create a test class to test our service.
+`OpenAPI3RouteBuilder` will make sure, that, request received on URL and method with
+`operationId` as defined in `SessionService` component is forwarded to `serviceUniqueId`
+component via EventBus.
+
+Now, our API is ready to use. Lets create a test class to test our service.
 
 == Step 3: Write Test to test our service
 
