@@ -6,11 +6,11 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.eventbus.Message;
 
-public class SessionService extends RESTServiceImpl {
+public class SessionGetService extends RESTServiceImpl {
 
   private final JsonArray mSessions = new JsonArray();
 
-  public SessionService() {
+  public SessionGetService() {
     mSessions.add("S1");
     mSessions.add("S2");
     mSessions.add("S3");
