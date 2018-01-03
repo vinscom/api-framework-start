@@ -13,18 +13,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(VertxUnitRunner.class)
-public class SessionGetServiceTest {
+public class SessionTest {
 
   @Rule
   public Timeout rule = Timeout.seconds(2000);
 
   @Test
-  public void testProcess(TestContext context) {
+  public void getRequest(TestContext context) {
 
     Async async = context.async(2);
-
     Server server = Glue.instance().<Server>resolve("/in/erail/server/Server");
-
     server
             .getVertx()
             .createHttpClient()
