@@ -1,0 +1,143 @@
+ifndef::toc[:toc: left]
+ifndef::source-highlighter[:source-highlighter: pygments]
+ifndef::pygments-linenums-mode[:pygments-linenums-mode: inline]
+ifndef::imagesdir[:imagesdir: ./../../docs/images]
+
+
+= Simple POST API
+
+In this tutorial, we will extend last tutorial to create POST method on */session* URL.
+Using POST request, we will update session and using GET request we will get
+all sessions.
+
+== Step 1: Extend Open API 3 Service Definition
+
+We have extended Open API 3 definition created in last tutorial. We have added
+post method.
+
+.openapi3.json
+[source,json,linenums]
+----
+include::./../config-layers/common/in/erail/route/openapi3.json[]
+----
+
+- POST : You can post data to session using post request.
++
+.Post Data Format
+[source,json]
+----
+{
+  "session" : "random"
+}
+----
+
+- GET : On get request, session API will return all session messages.
++
+.Get Data Format
+[source,json]
+----
+[
+  {"session" : "random"},
+  {"session" : "random"},
+  {"session" : "random"},
+  {"session" : "random"}
+]
+----
+
+NOTE: Each method requiring processing must have *unique OperationId*. OperationId
+is used for processing request from method.
+
+== Step 2: Create POST Service Class
+[source,java,linenums]
+----
+include::./../src/main/java/in/erail/tutorial/SessionPostService.java[]
+----
+
+=== Create Service Component
+
+Create below Component configuration file and place it in
+*config-layers/common/in/erail/tutorial/SessionPostService.properties*
+
+[source,ini,linenums]
+----
+include::./../config-layers/common/in/erail/tutorial/SessionPostService.properties[]
+----
+
+Add service to *OpenAPI3RouteBuilder*
+[source,ini,linenums]
+----
+include::./../config-layers/common/in/erail/route/OpenAPI3RouteBuilder.properties[]
+----
+
+== Step 3: Update Get Service
+We will update Get service to return sessions stored by post request. Instead of updating
+existing *SessionGetService* class. We will create new class.
+
+[source,java,linenums]
+----
+include::./../src/main/java/in/erail/tutorial/SessionGetServiceV2.java[]
+----
+
+To use our new class, we have to simply change component class
+
+[source,ini,linenums,highlight='2']
+----
+include::./../config-layers/common/in/erail/tutorial/SessionGetService.properties[]
+----
+
+Now, our API is ready to use. Lets create a test class to test our service.
+
+== Step 4: Write Test to test our service
+
+[source,java,linenums]
+----
+include::./../src/test/java/in/erail/tutorial/SessionTest.java[]
+----
+
+== Step 4: Run API Server
+
+After running maven install. You should have build folder inside target folder.
+
+.Build folder structure
+[plantuml,uml/build-folder-structure, png]
+....
+@startsalt
+{
+{T
+ + **build**
+ ++ tutorial-simple-post-api-1.0-SNAPSHOT.jar
+ ++ tutorial-simple-post-api-1.0-SNAPSHOT-lib
+ +++ dependencies
+ ++ config
+ +++ api-framwork-1.0-SNAPSHOT-common-config.zip
+ +++ tutorial-simple-post-api-1.0-SNAPSHOT-common-config.zip
+}
+}
+@endsalt
+....
+
+.Run Server (Assuming you are inside build folder)
+[source,bash,linenums]
+----
+java \
+-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory \
+-Dglue.layers=\
+./config/api-framwork-1.0-SNAPSHOT-common-config.zip,\
+./config/tutorial-simple-post-api-1.0-SNAPSHOT-common-config.zip \
+-jar tutorial-simple-post-api-1.0-SNAPSHOT.jar
+----
+
+.Test API
+Go to command prompt
+[source,bash,linenums]
+----
+#Post data
+curl -XPOST -H "Content-type: application/json" -d '{"session" : "message1"}' 'http://localhost:8888/v1/session'
+curl -XPOST -H "Content-type: application/json" -d '{"session" : "message2"}' 'http://localhost:8888/v1/session'
+
+#Get data
+curl http://localhost:8888/v1/session
+----
+
+.Result
+ ["message1","message2"]
