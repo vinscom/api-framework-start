@@ -4,6 +4,6 @@ v0.1
 :toc: left
 :source-highlighter: pygments
 :pygments-linenums-mode: inline
-ifndef::imagesdir[:imagesdir: ./images]
+:imagesdir: ./images
 
 include::./../tutorial-simple-get-api/docs/tutorial-simple-get-api.adoc[leveloffset=+1]

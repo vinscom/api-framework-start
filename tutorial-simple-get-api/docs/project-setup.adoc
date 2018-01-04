@@ -1,7 +1,10 @@
+ifndef::toc[:toc: left]
+ifndef::source-highlighter[:source-highlighter: pygments]
+ifndef::pygments-linenums-mode[:pygments-linenums-mode: inline]
+ifndef::imagesdir[:imagesdir: ./../../docs/images]
 :att_project_name: tutorial-simple-get-api
 :att_project_git_repository: https://github.com/vinscom/api-framwork-start.git
 :att_project_git_name: API Framwork Start
-ifndef::imagesdir[:imagesdir: ./../../docs/images]
 
 = Create Maven Project using Netbean
 
