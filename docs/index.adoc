@@ -4,11 +4,6 @@ v0.1
 :toc: left
 :source-highlighter: pygments
 :pygments-linenums-mode: inline
+:imagesdir: ./images
 
-include::basic-concept.adoc[]
-
-include::project-setup.adoc[]
-
-include::tutorial-simple-get-api.adoc[]
-
-include::tutorial-simple-post-api.adoc[]
+include::./../tutorial-simple-get-api/docs/tutorial-simple-get-api.adoc[leveloffset=+1]

@@ -5,8 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
-<meta name="author" content="Vinay Kumar">
-<title>API Framework Tutorial - Draft</title>
+<title>Simple GET API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -499,35 +498,37 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>API Framework Tutorial - Draft</h1>
-<div class="details">
-<span id="author" class="author">Vinay Kumar</span><br>
-<span id="revnumber">version 0.1</span>
-</div>
+<h1>Simple GET API</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_simple_get_api">Simple GET API</a>
-<ul class="sectlevel2">
 <li><a href="#_create_maven_project_using_netbean">Create Maven Project using Netbean</a></li>
-<li><a href="#_step_1_create_open_api_3_service_definition">Step 1: Create Open API 3 Service Definition</a></li>
-<li><a href="#_step_2_write_api_request_handling">Step 2: Write API Request Handling</a></li>
-<li><a href="#_step_3_write_test_to_test_our_service">Step 3: Write Test to test our service</a></li>
-<li><a href="#_step_4_run_api_server">Step 4: Run API Server</a></li>
+<li><a href="#_step_1_create_open_api_3_service_definition">Step 1: Create Open API 3 Service Definition</a>
+<ul class="sectlevel2">
+<li><a href="#_configure_api_framework_to_use_service_definition">Configure API Framework to use service definition</a></li>
 </ul>
 </li>
+<li><a href="#_step_2_write_api_request_handling">Step 2: Write API Request Handling</a>
+<ul class="sectlevel2">
+<li><a href="#_handle_get_method_called_on_session_url">Handle GET method called on /session URL</a></li>
+</ul>
+</li>
+<li><a href="#_step_3_write_test_to_test_our_service">Step 3: Write Test to test our service</a></li>
+<li><a href="#_step_4_run_api_server">Step 4: Run API Server</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_simple_get_api">Simple GET API</h2>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>We will create simple session API to get list of dummy session.</p>
 </div>
-<div class="sect2">
-<h3 id="_create_maven_project_using_netbean">Create Maven Project using Netbean</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_maven_project_using_netbean">Create Maven Project using Netbean</h2>
+<div class="sectionbody">
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -549,11 +550,11 @@ Below steps are optional. You can clone
 </li>
 <li>
 <p>Create new project<br>
-<span class="image"><img src="./images/netbean-project-wizard-1.png" alt="netbean project wizard 1"></span></p>
+<span class="image"><img src="./../../docs/images/netbean-project-wizard-1.png" alt="netbean project wizard 1"></span></p>
 </li>
 <li>
 <p>Save project to <strong>tutorial-simple-get-api</strong> location<br>
-<span class="image"><img src="./images/netbean-project-wizard-2.png" alt="netbean project wizard 2"></span></p>
+<span class="image"><img src="./../../docs/images/netbean-project-wizard-2.png" alt="netbean project wizard 2"></span></p>
 </li>
 <li>
 <p>Add required dependencies to POM</p>
@@ -825,8 +826,10 @@ Glue documentation.
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_step_1_create_open_api_3_service_definition">Step 1: Create Open API 3 Service Definition</h3>
+</div>
+<div class="sect1">
+<h2 id="_step_1_create_open_api_3_service_definition">Step 1: Create Open API 3 Service Definition</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>To make life easy, we have used <a href="https://studio.apicur.io">Apicurio</a> to create Open API 3
 definition. Below is definition</p>
@@ -905,8 +908,8 @@ is used for processing request from method.
 </tr>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_configure_api_framework_to_use_service_definition">Configure API Framework to use service definition</h4>
+<div class="sect2">
+<h3 id="_configure_api_framework_to_use_service_definition">Configure API Framework to use service definition</h3>
 <div class="paragraph">
 <p>Copy openapi3.json to <strong>config-layers/common/in/erail/route/openapi3.json</strong>. Now
 API Framework is configured to handle API Request. Next step is to write code to handle
@@ -914,14 +917,16 @@ request.</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_step_2_write_api_request_handling">Step 2: Write API Request Handling</h3>
+</div>
+<div class="sect1">
+<h2 id="_step_2_write_api_request_handling">Step 2: Write API Request Handling</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Basic request handling flow</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/uml/basic-request-handling.png" alt="basic request handling" width="570" height="445">
+<img src="./../../docs/images/uml/basic-request-handling.png" alt="basic request handling" width="570" height="445">
 </div>
 </div>
 <div class="olist arabic">
@@ -941,10 +946,10 @@ it is converted into EventBus message and sent on UniqueServiceId (Steps 2-3).</
 </li>
 </ol>
 </div>
+<div class="sect2">
+<h3 id="_handle_get_method_called_on_session_url">Handle GET method called on /session URL</h3>
 <div class="sect3">
-<h4 id="_handle_get_method_called_on_session_url">Handle GET method called on /session URL</h4>
-<div class="sect4">
-<h5 id="_create_service_class">Create Service Class</h5>
+<h4 id="_create_service_class">Create Service Class</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="lineno"> 1 </span><span class="tok-kn">package</span> <span class="tok-nn">in.erail.tutorial</span><span class="tok-o">;</span>
@@ -1055,8 +1060,8 @@ provided to ease development <code>in.erail.service.RESTServiceImpl</code></p>
 </tbody>
 </table>
 </div>
-<div class="sect4">
-<h5 id="_create_service_component">Create Service Component</h5>
+<div class="sect3">
+<h4 id="_create_service_component">Create Service Component</h4>
 <div class="paragraph">
 <p>Create below Component configuration file and place it in
 <strong>/config-layers/common/in/erail/tutorial/SessionGetService</strong></p>
@@ -1099,8 +1104,10 @@ component via EventBus.</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_step_3_write_test_to_test_our_service">Step 3: Write Test to test our service</h3>
+</div>
+<div class="sect1">
+<h2 id="_step_3_write_test_to_test_our_service">Step 3: Write Test to test our service</h2>
+<div class="sectionbody">
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="java"><span></span><span class="lineno"> 1 </span><span class="tok-kn">package</span> <span class="tok-nn">in.erail.tutorial</span><span class="tok-o">;</span>
@@ -1148,14 +1155,16 @@ component via EventBus.</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_step_4_run_api_server">Step 4: Run API Server</h3>
+</div>
+<div class="sect1">
+<h2 id="_step_4_run_api_server">Step 4: Run API Server</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>After running maven install. You should have build folder inside target folder.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/uml/build-folder-structure.png" alt="build folder structure" width="392" height="109">
+<img src="./../../docs/images/uml/build-folder-structure.png" alt="build folder structure" width="392" height="109">
 </div>
 <div class="title">Figure 1. Build folder structure</div>
 </div>
@@ -1188,11 +1197,9 @@ component via EventBus.</p>
 </div>
 </div>
 </div>
-</div>
 <div id="footer">
 <div id="footer-text">
-Version 0.1<br>
-Last updated 2018-01-04 15:11:13 GMT
+Last updated 2018-01-04 17:41:09 GMT
 </div>
 </div>
 </body>
