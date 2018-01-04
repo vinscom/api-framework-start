@@ -7,3 +7,5 @@ v0.1
 :imagesdir: ./images
 
 include::./../tutorial-simple-get-api/docs/tutorial-simple-get-api.adoc[leveloffset=+1]
+
+include::./../tutorial-simple-post-api/docs/tutorial-simple-post-api.adoc[leveloffset=+1]
