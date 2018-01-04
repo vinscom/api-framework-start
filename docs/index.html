@@ -516,6 +516,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_step_4_run_api_server">Step 4: Run API Server</a></li>
 </ul>
 </li>
+<li><a href="#_simple_post_api">Simple POST API</a>
+<ul class="sectlevel2">
+<li><a href="#_step_1_extend_open_api_3_service_definition">Step 1: Extend Open API 3 Service Definition</a></li>
+<li><a href="#_step_2_create_post_service_class">Step 2: Create POST Service Class</a></li>
+<li><a href="#_step_3_update_get_service">Step 3: Update Get Service</a></li>
+<li><a href="#_step_4_write_test_to_test_our_service">Step 4: Write Test to test our service</a></li>
+<li><a href="#_step_4_run_api_server_2">Step 4: Run API Server</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1188,11 +1197,384 @@ component via EventBus.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_simple_post_api">Simple POST API</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this tutorial, we will extend last tutorial to create POST method on <strong>/session</strong> URL.
+Using POST request, we will update session and using GET request we will get
+all sessions.</p>
+</div>
+<div class="sect2">
+<h3 id="_step_1_extend_open_api_3_service_definition">Step 1: Extend Open API 3 Service Definition</h3>
+<div class="paragraph">
+<p>We have extended Open API 3 definition created in last tutorial. We have added
+post method.</p>
+</div>
+<div class="listingblock">
+<div class="title">openapi3.json</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span><span class="lineno"> 1 </span><span class="tok-p">{</span>
+<span class="lineno"> 2 </span>    <span class="tok-nt">&quot;openapi&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;3.0.0&quot;</span><span class="tok-p">,</span>
+<span class="lineno"> 3 </span>    <span class="tok-nt">&quot;info&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno"> 4 </span>        <span class="tok-nt">&quot;title&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;tutorial-api&quot;</span><span class="tok-p">,</span>
+<span class="lineno"> 5 </span>        <span class="tok-nt">&quot;version&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;1.0.0&quot;</span>
+<span class="lineno"> 6 </span>    <span class="tok-p">},</span>
+<span class="lineno"> 7 </span>    <span class="tok-nt">&quot;paths&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno"> 8 </span>        <span class="tok-nt">&quot;/session&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno"> 9 </span>            <span class="tok-nt">&quot;get&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">10 </span>                <span class="tok-nt">&quot;summary&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;Get all session messages&quot;</span><span class="tok-p">,</span>
+<span class="lineno">11 </span>                <span class="tok-nt">&quot;description&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;Return all session messages&quot;</span><span class="tok-p">,</span>
+<span class="lineno">12 </span>                <span class="tok-nt">&quot;operationId&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;API_SESSION_GET&quot;</span><span class="tok-p">,</span>
+<span class="lineno">13 </span>                <span class="tok-nt">&quot;responses&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">14 </span>                    <span class="tok-nt">&quot;200&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">15 </span>                        <span class="tok-nt">&quot;description&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;Return all messages&quot;</span><span class="tok-p">,</span>
+<span class="lineno">16 </span>                        <span class="tok-nt">&quot;content&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">17 </span>                            <span class="tok-nt">&quot;application/json&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">18 </span>                                <span class="tok-nt">&quot;schema&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">19 </span>                                    <span class="tok-nt">&quot;type&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;array&quot;</span><span class="tok-p">,</span>
+<span class="lineno">20 </span>                                    <span class="tok-nt">&quot;items&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">21 </span>                                        <span class="tok-nt">&quot;$ref&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;#/components/schemas/message&quot;</span>
+<span class="lineno">22 </span>                                    <span class="tok-p">}</span>
+<span class="lineno">23 </span>                                <span class="tok-p">}</span>
+<span class="lineno">24 </span>                            <span class="tok-p">}</span>
+<span class="lineno">25 </span>                        <span class="tok-p">}</span>
+<span class="lineno">26 </span>                    <span class="tok-p">}</span>
+<span class="lineno">27 </span>                <span class="tok-p">}</span>
+<span class="lineno">28 </span>            <span class="tok-p">},</span>
+<span class="lineno">29 </span>            <span class="tok-nt">&quot;post&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">30 </span>                <span class="tok-nt">&quot;summary&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;Post message on session&quot;</span><span class="tok-p">,</span>
+<span class="lineno">31 </span>                <span class="tok-nt">&quot;description&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;Post message on session&quot;</span><span class="tok-p">,</span>
+<span class="lineno">32 </span>                <span class="tok-nt">&quot;operationId&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;API_SESSION_POST&quot;</span><span class="tok-p">,</span>
+<span class="lineno">33 </span>                <span class="tok-nt">&quot;responses&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">34 </span>                    <span class="tok-nt">&quot;200&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">35 </span>                        <span class="tok-nt">&quot;description&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;Post Message&quot;</span><span class="tok-p">,</span>
+<span class="lineno">36 </span>                        <span class="tok-nt">&quot;content&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">37 </span>                            <span class="tok-nt">&quot;application/json&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">38 </span>                                <span class="tok-nt">&quot;schema&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">39 </span>                                    <span class="tok-nt">&quot;type&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;string&quot;</span>
+<span class="lineno">40 </span>                                <span class="tok-p">}</span>
+<span class="lineno">41 </span>                            <span class="tok-p">}</span>
+<span class="lineno">42 </span>                        <span class="tok-p">}</span>
+<span class="lineno">43 </span>                    <span class="tok-p">}</span>
+<span class="lineno">44 </span>                <span class="tok-p">},</span>
+<span class="lineno">45 </span>                <span class="tok-nt">&quot;requestBody&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">46 </span>                    <span class="tok-nt">&quot;content&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">47 </span>                        <span class="tok-nt">&quot;application/json&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">48 </span>                            <span class="tok-nt">&quot;schema&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">49 </span>                                <span class="tok-nt">&quot;$ref&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;#/components/schemas/message&quot;</span>
+<span class="lineno">50 </span>                            <span class="tok-p">}</span>
+<span class="lineno">51 </span>                        <span class="tok-p">}</span>
+<span class="lineno">52 </span>                    <span class="tok-p">},</span>
+<span class="lineno">53 </span>                    <span class="tok-nt">&quot;required&quot;</span><span class="tok-p">:</span> <span class="tok-kc">true</span>
+<span class="lineno">54 </span>                <span class="tok-p">}</span>
+<span class="lineno">55 </span>            <span class="tok-p">}</span>
+<span class="lineno">56 </span>        <span class="tok-p">}</span>
+<span class="lineno">57 </span>    <span class="tok-p">},</span>
+<span class="lineno">58 </span>    <span class="tok-nt">&quot;components&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">59 </span>        <span class="tok-nt">&quot;schemas&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">60 </span>            <span class="tok-nt">&quot;message&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">61 </span>                <span class="tok-nt">&quot;title&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;Root Type for message&quot;</span><span class="tok-p">,</span>
+<span class="lineno">62 </span>                <span class="tok-nt">&quot;description&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;The root of the message type&#39;s schema.&quot;</span><span class="tok-p">,</span>
+<span class="lineno">63 </span>                <span class="tok-nt">&quot;type&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;object&quot;</span><span class="tok-p">,</span>
+<span class="lineno">64 </span>                <span class="tok-nt">&quot;properties&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">65 </span>                    <span class="tok-nt">&quot;message&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">66 </span>                        <span class="tok-nt">&quot;type&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;string&quot;</span>
+<span class="lineno">67 </span>                    <span class="tok-p">},</span>
+<span class="lineno">68 </span>                    <span class="tok-nt">&quot;time&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno">69 </span>                        <span class="tok-nt">&quot;type&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;string&quot;</span>
+<span class="lineno">70 </span>                    <span class="tok-p">}</span>
+<span class="lineno">71 </span>                <span class="tok-p">}</span>
+<span class="lineno">72 </span>            <span class="tok-p">}</span>
+<span class="lineno">73 </span>        <span class="tok-p">}</span>
+<span class="lineno">74 </span>    <span class="tok-p">}</span>
+<span class="lineno">75 </span><span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>POST : You can post data to session using post request.</p>
+<div class="listingblock">
+<div class="title">Post Data Format</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span><span class="tok-p">{</span>
+  <span class="tok-nt">&quot;session&quot;</span> <span class="tok-p">:</span> <span class="tok-s2">&quot;random&quot;</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>GET : On get request, session API will return all session messages.</p>
+<div class="listingblock">
+<div class="title">Get Data Format</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span><span class="tok-p">[</span>
+  <span class="tok-p">{</span><span class="tok-nt">&quot;session&quot;</span> <span class="tok-p">:</span> <span class="tok-s2">&quot;random&quot;</span><span class="tok-p">},</span>
+  <span class="tok-p">{</span><span class="tok-nt">&quot;session&quot;</span> <span class="tok-p">:</span> <span class="tok-s2">&quot;random&quot;</span><span class="tok-p">},</span>
+  <span class="tok-p">{</span><span class="tok-nt">&quot;session&quot;</span> <span class="tok-p">:</span> <span class="tok-s2">&quot;random&quot;</span><span class="tok-p">},</span>
+  <span class="tok-p">{</span><span class="tok-nt">&quot;session&quot;</span> <span class="tok-p">:</span> <span class="tok-s2">&quot;random&quot;</span><span class="tok-p">}</span>
+<span class="tok-p">]</span></code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Each method requiring processing must have <strong>unique OperationId</strong>. OperationId
+is used for processing request from method.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_2_create_post_service_class">Step 2: Create POST Service Class</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="lineno"> 1 </span><span class="tok-kn">package</span> <span class="tok-nn">in.erail.tutorial</span><span class="tok-o">;</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="tok-kn">import</span> <span class="tok-nn">com.google.common.base.Joiner</span><span class="tok-o">;</span>
+<span class="lineno"> 4 </span><span class="tok-kn">import</span> <span class="tok-nn">com.google.common.base.Splitter</span><span class="tok-o">;</span>
+<span class="lineno"> 5 </span><span class="tok-kn">import</span> <span class="tok-nn">in.erail.common.FramworkConstants</span><span class="tok-o">;</span>
+<span class="lineno"> 6 </span><span class="tok-kn">import</span> <span class="tok-nn">in.erail.service.RESTServiceImpl</span><span class="tok-o">;</span>
+<span class="lineno"> 7 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.core.json.JsonObject</span><span class="tok-o">;</span>
+<span class="lineno"> 8 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.reactivex.core.eventbus.Message</span><span class="tok-o">;</span>
+<span class="lineno"> 9 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.reactivex.core.shareddata.LocalMap</span><span class="tok-o">;</span>
+<span class="lineno">10 </span><span class="tok-kn">import</span> <span class="tok-nn">java.util.List</span><span class="tok-o">;</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span><span class="tok-cm">/**</span>
+<span class="lineno">13 </span><span class="tok-cm"> * Store session data in LocalMap.</span>
+<span class="lineno">14 </span><span class="tok-cm"> */</span>
+<span class="lineno">15 </span><span class="tok-kd">public</span> <span class="tok-kd">class</span> <span class="tok-nc">SessionPostService</span> <span class="tok-kd">extends</span> <span class="tok-n">RESTServiceImpl</span> <span class="tok-o">{</span>
+<span class="lineno">16 </span>
+<span class="lineno">17 </span>  <span class="tok-nd">@Override</span>
+<span class="lineno">18 </span>  <span class="tok-kd">public</span> <span class="tok-kt">void</span> <span class="tok-nf">process</span><span class="tok-o">(</span><span class="tok-n">Message</span><span class="tok-o">&lt;</span><span class="tok-n">JsonObject</span><span class="tok-o">&gt;</span> <span class="tok-n">pMessage</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+<span class="lineno">19 </span>    <span class="tok-n">LocalMap</span><span class="tok-o">&lt;</span><span class="tok-n">String</span><span class="tok-o">,</span> <span class="tok-n">String</span><span class="tok-o">&gt;</span> <span class="tok-n">data</span> <span class="tok-o">=</span> <span class="tok-n">getVertx</span><span class="tok-o">().</span><span class="tok-na">sharedData</span><span class="tok-o">().</span><span class="tok-na">getLocalMap</span><span class="tok-o">(</span><span class="tok-s">&quot;data&quot;</span><span class="tok-o">);</span>
+<span class="lineno">20 </span>    <span class="tok-n">String</span> <span class="tok-n">sessions</span> <span class="tok-o">=</span> <span class="tok-n">data</span><span class="tok-o">.</span><span class="tok-na">getOrDefault</span><span class="tok-o">(</span><span class="tok-s">&quot;sessions&quot;</span><span class="tok-o">,</span> <span class="tok-s">&quot;&quot;</span><span class="tok-o">);</span>
+<span class="lineno">21 </span>    <span class="tok-n">JsonObject</span> <span class="tok-n">paramSession</span> <span class="tok-o">=</span> <span class="tok-n">pMessage</span><span class="tok-o">.</span><span class="tok-na">body</span><span class="tok-o">().</span><span class="tok-na">getJsonObject</span><span class="tok-o">(</span><span class="tok-n">FramworkConstants</span><span class="tok-o">.</span><span class="tok-na">RoutingContext</span><span class="tok-o">.</span><span class="tok-na">Json</span><span class="tok-o">.</span><span class="tok-na">BODY</span><span class="tok-o">);</span>
+<span class="lineno">22 </span>    <span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">String</span><span class="tok-o">&gt;</span> <span class="tok-n">items</span> <span class="tok-o">=</span> <span class="tok-n">Splitter</span><span class="tok-o">.</span><span class="tok-na">on</span><span class="tok-o">(</span><span class="tok-s">&quot;,&quot;</span><span class="tok-o">).</span><span class="tok-na">omitEmptyStrings</span><span class="tok-o">().</span><span class="tok-na">trimResults</span><span class="tok-o">().</span><span class="tok-na">splitToList</span><span class="tok-o">(</span><span class="tok-n">sessions</span> <span class="tok-o">+</span> <span class="tok-s">&quot;,&quot;</span> <span class="tok-o">+</span> <span class="tok-n">paramSession</span><span class="tok-o">.</span><span class="tok-na">getString</span><span class="tok-o">(</span><span class="tok-s">&quot;session&quot;</span><span class="tok-o">));</span>
+<span class="lineno">23 </span>    <span class="tok-n">data</span><span class="tok-o">.</span><span class="tok-na">put</span><span class="tok-o">(</span><span class="tok-s">&quot;sessions&quot;</span><span class="tok-o">,</span> <span class="tok-n">Joiner</span><span class="tok-o">.</span><span class="tok-na">on</span><span class="tok-o">(</span><span class="tok-s">&quot;,&quot;</span><span class="tok-o">).</span><span class="tok-na">join</span><span class="tok-o">(</span><span class="tok-n">items</span><span class="tok-o">));</span>
+<span class="lineno">24 </span>    <span class="tok-n">pMessage</span><span class="tok-o">.</span><span class="tok-na">reply</span><span class="tok-o">(</span><span class="tok-k">new</span> <span class="tok-n">JsonObject</span><span class="tok-o">());</span>
+<span class="lineno">25 </span>  <span class="tok-o">}</span>
+<span class="lineno">26 </span>
+<span class="lineno">27 </span><span class="tok-o">}</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_create_service_component_2">Create Service Component</h4>
+<div class="paragraph">
+<p>Create below Component configuration file and place it in
+<strong>config-layers/common/in/erail/tutorial/SessionPostService.properties</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="ini"><span></span><span class="lineno">1 </span><span class="tok-c1">#/in/erail/tutorial/SessionPostService</span>
+<span class="lineno">2 </span><span class="tok-na">$class</span><span class="tok-o">=</span><span class="tok-s">in.erail.tutorial.SessionPostService</span>
+<span class="lineno">3 </span>
+<span class="lineno">4 </span><span class="tok-na">operationId</span><span class="tok-o">=</span><span class="tok-s">API_SESSION_POST</span>
+<span class="lineno">5 </span><span class="tok-na">serviceUniqueId</span><span class="tok-o">=</span><span class="tok-s">API_SESSION_POST</span>
+<span class="lineno">6 </span><span class="tok-na">vertx^</span><span class="tok-o">=</span><span class="tok-s">/io/vertx/core/VertxInstance.vertx</span>
+<span class="lineno">7 </span><span class="tok-na">enable</span><span class="tok-o">=</span><span class="tok-s">true</span>
+<span class="lineno">8 </span><span class="tok-na">log</span><span class="tok-o">=</span><span class="tok-s">true</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add service to <strong>OpenAPI3RouteBuilder</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="ini"><span></span><span class="lineno">1 </span><span class="tok-c1">#/in/erail/route/OpenAPI3RouteBuilder</span>
+<span class="lineno">2 </span>
+<span class="lineno">3 </span><span class="tok-na">services+</span><span class="tok-o">=</span><span class="tok-s">\</span>
+<span class="lineno">4 </span><span class="tok-s">    /in/erail/tutorial/SessionGetService,\</span>
+<span class="lineno">5 </span><span class="tok-s">    /in/erail/tutorial/SessionPostService</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_3_update_get_service">Step 3: Update Get Service</h3>
+<div class="paragraph">
+<p>We will update Get service to return sessions stored by post request. Instead of updating
+existing <strong>SessionGetService</strong> class. We will create new class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="lineno"> 1 </span><span class="tok-kn">package</span> <span class="tok-nn">in.erail.tutorial</span><span class="tok-o">;</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.core.json.JsonArray</span><span class="tok-o">;</span>
+<span class="lineno"> 4 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.reactivex.core.shareddata.LocalMap</span><span class="tok-o">;</span>
+<span class="lineno"> 5 </span><span class="tok-kn">import</span> <span class="tok-nn">java.util.Arrays</span><span class="tok-o">;</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span><span class="tok-kd">public</span> <span class="tok-kd">class</span> <span class="tok-nc">SessionGetServiceV2</span> <span class="tok-kd">extends</span> <span class="tok-n">SessionGetService</span> <span class="tok-o">{</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span>  <span class="tok-nd">@Override</span>
+<span class="lineno">10 </span>  <span class="tok-kd">public</span> <span class="tok-n">JsonArray</span> <span class="tok-nf">getSessions</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+<span class="lineno">11 </span>    <span class="tok-n">LocalMap</span><span class="tok-o">&lt;</span><span class="tok-n">String</span><span class="tok-o">,</span> <span class="tok-n">String</span><span class="tok-o">&gt;</span> <span class="tok-n">data</span> <span class="tok-o">=</span> <span class="tok-n">getVertx</span><span class="tok-o">().</span><span class="tok-na">sharedData</span><span class="tok-o">().&lt;</span><span class="tok-n">String</span><span class="tok-o">,</span> <span class="tok-n">String</span><span class="tok-o">&gt;</span><span class="tok-n">getLocalMap</span><span class="tok-o">(</span><span class="tok-s">&quot;data&quot;</span><span class="tok-o">);</span>
+<span class="lineno">12 </span>    <span class="tok-n">String</span> <span class="tok-n">sessions</span> <span class="tok-o">=</span> <span class="tok-n">data</span><span class="tok-o">.</span><span class="tok-na">getOrDefault</span><span class="tok-o">(</span><span class="tok-s">&quot;sessions&quot;</span><span class="tok-o">,</span> <span class="tok-s">&quot;&quot;</span><span class="tok-o">);</span>
+<span class="lineno">13 </span>
+<span class="lineno">14 </span>    <span class="tok-n">JsonArray</span> <span class="tok-n">result</span> <span class="tok-o">=</span> <span class="tok-k">new</span> <span class="tok-n">JsonArray</span><span class="tok-o">();</span>
+<span class="lineno">15 </span>    <span class="tok-n">Arrays</span><span class="tok-o">.</span><span class="tok-na">stream</span><span class="tok-o">(</span><span class="tok-n">sessions</span><span class="tok-o">.</span><span class="tok-na">split</span><span class="tok-o">(</span><span class="tok-s">&quot;,&quot;</span><span class="tok-o">)).</span><span class="tok-na">forEach</span><span class="tok-o">((</span><span class="tok-n">s</span><span class="tok-o">)</span> <span class="tok-o">-&gt;</span> <span class="tok-o">{</span>
+<span class="lineno">16 </span>      <span class="tok-n">result</span><span class="tok-o">.</span><span class="tok-na">add</span><span class="tok-o">(</span><span class="tok-n">s</span><span class="tok-o">);</span>
+<span class="lineno">17 </span>    <span class="tok-o">});</span>
+<span class="lineno">18 </span>
+<span class="lineno">19 </span>    <span class="tok-k">return</span> <span class="tok-n">result</span><span class="tok-o">;</span>
+<span class="lineno">20 </span>  <span class="tok-o">}</span>
+<span class="lineno">21 </span>
+<span class="lineno">22 </span><span class="tok-o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To use our new class, we have to simply change component class</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="ini"><span></span><span class="lineno">1 </span><span class="tok-c1">#/in/erail/tutorial/SessionGetService</span>
+<span class="lineno">2 </span><span class="hll"><span class="tok-na">$class</span><span class="tok-o">=</span><span class="tok-s">in.erail.tutorial.SessionGetServiceV2</span>
+</span><span class="lineno">3 </span>
+<span class="lineno">4 </span><span class="tok-na">operationId</span><span class="tok-o">=</span><span class="tok-s">API_SESSION_GET</span>
+<span class="lineno">5 </span><span class="tok-na">serviceUniqueId</span><span class="tok-o">=</span><span class="tok-s">API_SESSION_GET</span>
+<span class="lineno">6 </span><span class="tok-na">vertx^</span><span class="tok-o">=</span><span class="tok-s">/io/vertx/core/VertxInstance.vertx</span>
+<span class="lineno">7 </span><span class="tok-na">enable</span><span class="tok-o">=</span><span class="tok-s">true</span>
+<span class="lineno">8 </span><span class="tok-na">log</span><span class="tok-o">=</span><span class="tok-s">true</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, our API is ready to use. Lets create a test class to test our service.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_4_write_test_to_test_our_service">Step 4: Write Test to test our service</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="lineno"> 1 </span><span class="tok-kn">package</span> <span class="tok-nn">in.erail.tutorial</span><span class="tok-o">;</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="tok-kn">import</span> <span class="tok-nn">in.erail.glue.Glue</span><span class="tok-o">;</span>
+<span class="lineno"> 4 </span><span class="tok-kn">import</span> <span class="tok-nn">in.erail.server.Server</span><span class="tok-o">;</span>
+<span class="lineno"> 5 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.core.json.JsonArray</span><span class="tok-o">;</span>
+<span class="lineno"> 6 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.core.json.JsonObject</span><span class="tok-o">;</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.ext.unit.Async</span><span class="tok-o">;</span>
+<span class="lineno"> 9 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.ext.unit.TestContext</span><span class="tok-o">;</span>
+<span class="lineno">10 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.ext.unit.junit.Timeout</span><span class="tok-o">;</span>
+<span class="lineno">11 </span><span class="tok-kn">import</span> <span class="tok-nn">io.vertx.ext.unit.junit.VertxUnitRunner</span><span class="tok-o">;</span>
+<span class="lineno">12 </span><span class="tok-kn">import</span> <span class="tok-nn">org.junit.Rule</span><span class="tok-o">;</span>
+<span class="lineno">13 </span><span class="tok-kn">import</span> <span class="tok-nn">org.junit.Test</span><span class="tok-o">;</span>
+<span class="lineno">14 </span><span class="tok-kn">import</span> <span class="tok-nn">org.junit.runner.RunWith</span><span class="tok-o">;</span>
+<span class="lineno">15 </span>
+<span class="lineno">16 </span><span class="tok-nd">@RunWith</span><span class="tok-o">(</span><span class="tok-n">VertxUnitRunner</span><span class="tok-o">.</span><span class="tok-na">class</span><span class="tok-o">)</span>
+<span class="lineno">17 </span><span class="tok-kd">public</span> <span class="tok-kd">class</span> <span class="tok-nc">SessionTest</span> <span class="tok-o">{</span>
+<span class="lineno">18 </span>
+<span class="lineno">19 </span>  <span class="tok-nd">@Rule</span>
+<span class="lineno">20 </span>  <span class="tok-kd">public</span> <span class="tok-n">Timeout</span> <span class="tok-n">rule</span> <span class="tok-o">=</span> <span class="tok-n">Timeout</span><span class="tok-o">.</span><span class="tok-na">seconds</span><span class="tok-o">(</span><span class="tok-mi">2000</span><span class="tok-o">);</span>
+<span class="lineno">21 </span>
+<span class="lineno">22 </span>  <span class="tok-nd">@Test</span>
+<span class="lineno">23 </span>  <span class="tok-kd">public</span> <span class="tok-kt">void</span> <span class="tok-nf">testPostRequest</span><span class="tok-o">(</span><span class="tok-n">TestContext</span> <span class="tok-n">context</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+<span class="lineno">24 </span>
+<span class="lineno">25 </span>    <span class="tok-n">Async</span> <span class="tok-n">async</span> <span class="tok-o">=</span> <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">async</span><span class="tok-o">(</span><span class="tok-mi">5</span><span class="tok-o">);</span>
+<span class="lineno">26 </span>
+<span class="lineno">27 </span>    <span class="tok-n">Server</span> <span class="tok-n">server</span> <span class="tok-o">=</span> <span class="tok-n">Glue</span><span class="tok-o">.</span><span class="tok-na">instance</span><span class="tok-o">().&lt;</span><span class="tok-n">Server</span><span class="tok-o">&gt;</span><span class="tok-n">resolve</span><span class="tok-o">(</span><span class="tok-s">&quot;/in/erail/server/Server&quot;</span><span class="tok-o">);</span>
+<span class="lineno">28 </span>    <span class="tok-n">String</span> <span class="tok-n">content</span> <span class="tok-o">=</span> <span class="tok-k">new</span> <span class="tok-n">JsonObject</span><span class="tok-o">().</span><span class="tok-na">put</span><span class="tok-o">(</span><span class="tok-s">&quot;session&quot;</span><span class="tok-o">,</span> <span class="tok-s">&quot;random&quot;</span><span class="tok-o">).</span><span class="tok-na">toString</span><span class="tok-o">();</span>
+<span class="lineno">29 </span>
+<span class="lineno">30 </span>    <span class="tok-k">for</span> <span class="tok-o">(</span><span class="tok-kt">int</span> <span class="tok-n">i</span> <span class="tok-o">=</span> <span class="tok-mi">0</span><span class="tok-o">;</span> <span class="tok-n">i</span> <span class="tok-o">&lt;</span> <span class="tok-mi">5</span><span class="tok-o">;</span> <span class="tok-o">++</span><span class="tok-n">i</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+<span class="lineno">31 </span>      <span class="tok-n">server</span>
+<span class="lineno">32 </span>              <span class="tok-o">.</span><span class="tok-na">getVertx</span><span class="tok-o">()</span>
+<span class="lineno">33 </span>              <span class="tok-o">.</span><span class="tok-na">createHttpClient</span><span class="tok-o">()</span>
+<span class="lineno">34 </span>              <span class="tok-o">.</span><span class="tok-na">post</span><span class="tok-o">(</span><span class="tok-n">server</span><span class="tok-o">.</span><span class="tok-na">getPort</span><span class="tok-o">(),</span> <span class="tok-n">server</span><span class="tok-o">.</span><span class="tok-na">getHost</span><span class="tok-o">(),</span> <span class="tok-s">&quot;/v1/session&quot;</span><span class="tok-o">)</span>
+<span class="lineno">35 </span>              <span class="tok-o">.</span><span class="tok-na">putHeader</span><span class="tok-o">(</span><span class="tok-s">&quot;content-type&quot;</span><span class="tok-o">,</span> <span class="tok-s">&quot;application/json&quot;</span><span class="tok-o">)</span>
+<span class="lineno">36 </span>              <span class="tok-o">.</span><span class="tok-na">putHeader</span><span class="tok-o">(</span><span class="tok-s">&quot;content-length&quot;</span><span class="tok-o">,</span> <span class="tok-n">Integer</span><span class="tok-o">.</span><span class="tok-na">toString</span><span class="tok-o">(</span><span class="tok-n">content</span><span class="tok-o">.</span><span class="tok-na">length</span><span class="tok-o">()))</span>
+<span class="lineno">37 </span>              <span class="tok-o">.</span><span class="tok-na">handler</span><span class="tok-o">(</span><span class="tok-n">response</span> <span class="tok-o">-&gt;</span> <span class="tok-o">{</span>
+<span class="lineno">38 </span>                <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">assertEquals</span><span class="tok-o">(</span><span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">statusCode</span><span class="tok-o">(),</span> <span class="tok-mi">200</span><span class="tok-o">,</span> <span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">statusMessage</span><span class="tok-o">());</span>
+<span class="lineno">39 </span>                <span class="tok-n">async</span><span class="tok-o">.</span><span class="tok-na">countDown</span><span class="tok-o">();</span>
+<span class="lineno">40 </span>              <span class="tok-o">})</span>
+<span class="lineno">41 </span>              <span class="tok-o">.</span><span class="tok-na">write</span><span class="tok-o">(</span><span class="tok-n">content</span><span class="tok-o">)</span>
+<span class="lineno">42 </span>              <span class="tok-o">.</span><span class="tok-na">end</span><span class="tok-o">();</span>
+<span class="lineno">43 </span>    <span class="tok-o">}</span>
+<span class="lineno">44 </span>
+<span class="lineno">45 </span>  <span class="tok-o">}</span>
+<span class="lineno">46 </span>
+<span class="lineno">47 </span>  <span class="tok-nd">@Test</span>
+<span class="lineno">48 </span>  <span class="tok-kd">public</span> <span class="tok-kt">void</span> <span class="tok-nf">testGetRequest</span><span class="tok-o">(</span><span class="tok-n">TestContext</span> <span class="tok-n">context</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+<span class="lineno">49 </span>
+<span class="lineno">50 </span>    <span class="tok-n">Async</span> <span class="tok-n">async</span> <span class="tok-o">=</span> <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">async</span><span class="tok-o">(</span><span class="tok-mi">2</span><span class="tok-o">);</span>
+<span class="lineno">51 </span>    <span class="tok-n">Server</span> <span class="tok-n">server</span> <span class="tok-o">=</span> <span class="tok-n">Glue</span><span class="tok-o">.</span><span class="tok-na">instance</span><span class="tok-o">().&lt;</span><span class="tok-n">Server</span><span class="tok-o">&gt;</span><span class="tok-n">resolve</span><span class="tok-o">(</span><span class="tok-s">&quot;/in/erail/server/Server&quot;</span><span class="tok-o">);</span>
+<span class="lineno">52 </span>    <span class="tok-n">server</span>
+<span class="lineno">53 </span>            <span class="tok-o">.</span><span class="tok-na">getVertx</span><span class="tok-o">()</span>
+<span class="lineno">54 </span>            <span class="tok-o">.</span><span class="tok-na">createHttpClient</span><span class="tok-o">()</span>
+<span class="lineno">55 </span>            <span class="tok-o">.</span><span class="tok-na">get</span><span class="tok-o">(</span><span class="tok-n">server</span><span class="tok-o">.</span><span class="tok-na">getPort</span><span class="tok-o">(),</span> <span class="tok-n">server</span><span class="tok-o">.</span><span class="tok-na">getHost</span><span class="tok-o">(),</span> <span class="tok-s">&quot;/v1/session&quot;</span><span class="tok-o">)</span>
+<span class="lineno">56 </span>            <span class="tok-o">.</span><span class="tok-na">handler</span><span class="tok-o">(</span><span class="tok-n">response</span> <span class="tok-o">-&gt;</span> <span class="tok-o">{</span>
+<span class="lineno">57 </span>              <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">assertEquals</span><span class="tok-o">(</span><span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">statusCode</span><span class="tok-o">(),</span> <span class="tok-mi">200</span><span class="tok-o">,</span> <span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">statusMessage</span><span class="tok-o">());</span>
+<span class="lineno">58 </span>              <span class="tok-n">response</span><span class="tok-o">.</span><span class="tok-na">bodyHandler</span><span class="tok-o">((</span><span class="tok-n">event</span><span class="tok-o">)</span> <span class="tok-o">-&gt;</span> <span class="tok-o">{</span>
+<span class="lineno">59 </span>                <span class="tok-n">JsonArray</span> <span class="tok-n">data</span> <span class="tok-o">=</span> <span class="tok-n">event</span><span class="tok-o">.</span><span class="tok-na">toJsonArray</span><span class="tok-o">();</span>
+<span class="lineno">60 </span>                <span class="tok-n">context</span><span class="tok-o">.</span><span class="tok-na">assertEquals</span><span class="tok-o">(</span><span class="tok-mi">5</span><span class="tok-o">,</span> <span class="tok-n">data</span><span class="tok-o">.</span><span class="tok-na">size</span><span class="tok-o">());</span>
+<span class="lineno">61 </span>                <span class="tok-n">async</span><span class="tok-o">.</span><span class="tok-na">countDown</span><span class="tok-o">();</span>
+<span class="lineno">62 </span>              <span class="tok-o">});</span>
+<span class="lineno">63 </span>              <span class="tok-n">async</span><span class="tok-o">.</span><span class="tok-na">countDown</span><span class="tok-o">();</span>
+<span class="lineno">64 </span>            <span class="tok-o">})</span>
+<span class="lineno">65 </span>            <span class="tok-o">.</span><span class="tok-na">end</span><span class="tok-o">();</span>
+<span class="lineno">66 </span>  <span class="tok-o">}</span>
+<span class="lineno">67 </span>
+<span class="lineno">68 </span><span class="tok-o">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_4_run_api_server_2">Step 4: Run API Server</h3>
+<div class="paragraph">
+<p>After running maven install. You should have build folder inside target folder.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/uml/build-folder-structure.png" alt="build folder structure" width="399" height="109">
+</div>
+<div class="title">Figure 2. Build folder structure</div>
+</div>
+<div class="listingblock">
+<div class="title">Run Server (Assuming you are inside build folder)</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span><span class="lineno">1 </span>java <span class="tok-se">\</span>
+<span class="lineno">2 </span>-Dvertx.logger-delegate-factory-class-name<span class="tok-o">=</span>io.vertx.core.logging.Log4j2LogDelegateFactory <span class="tok-se">\</span>
+<span class="lineno">3 </span>-Dglue.layers<span class="tok-o">=</span><span class="tok-se">\</span>
+<span class="lineno">4 </span>./config/api-framwork-1.0-SNAPSHOT-common-config.zip,<span class="tok-se">\</span>
+<span class="lineno">5 </span>./config/tutorial-simple-post-api-1.0-SNAPSHOT-common-config.zip <span class="tok-se">\</span>
+<span class="lineno">6 </span>-jar tutorial-simple-post-api-1.0-SNAPSHOT.jar</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">Test API</div>
+<p>Go to command prompt</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span><span class="lineno">1 </span><span class="tok-c1">#Post data</span>
+<span class="lineno">2 </span>curl -XPOST -H <span class="tok-s2">&quot;Content-type: application/json&quot;</span> -d <span class="tok-s1">&#39;{&quot;session&quot; : &quot;message1&quot;}&#39;</span> <span class="tok-s1">&#39;http://localhost:8888/v1/session&#39;</span>
+<span class="lineno">3 </span>curl -XPOST -H <span class="tok-s2">&quot;Content-type: application/json&quot;</span> -d <span class="tok-s1">&#39;{&quot;session&quot; : &quot;message2&quot;}&#39;</span> <span class="tok-s1">&#39;http://localhost:8888/v1/session&#39;</span>
+<span class="lineno">4 </span>
+<span class="lineno">5 </span><span class="tok-c1">#Get data</span>
+<span class="lineno">6 </span>curl http://localhost:8888/v1/session</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">Result</div>
+<div class="content">
+<pre>["message1","message2"]</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.1<br>
-Last updated 2018-01-04 15:11:13 GMT
+Last updated 2018-01-04 18:21:23 GMT
 </div>
 </div>
 </body>

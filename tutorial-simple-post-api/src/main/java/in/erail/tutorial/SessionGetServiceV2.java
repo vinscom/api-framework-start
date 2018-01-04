@@ -4,10 +4,6 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.reactivex.core.shareddata.LocalMap;
 import java.util.Arrays;
 
-/**
- *
- * @author vinay
- */
 public class SessionGetServiceV2 extends SessionGetService {
 
   @Override
