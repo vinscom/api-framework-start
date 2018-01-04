@@ -1,0 +1,164 @@
+
+== Simple GET API
+
+We will create simple session API to get list of dummy session.
+
+=== Step 1: Create Open API 3 Service Definition
+
+To make life easy, we have used https://studio.apicur.io[Apicurio] to create Open API 3
+definition. Below is definition
+
+.openapi3.json
+[source,json,linenums]
+----
+include::./../config-layers/tutorial-simple-get-api/in/erail/route/openapi3.json[]
+----
+
+Our API will have single URL /session (like http://localhost:8888/v1/session). Session is not
+related to actual Vertx session.
+
+.GET
+On get request, session API will return all session messages.
+
+NOTE: Each method requiring processing must have *unique OperationId*. OperationId
+is used for processing request from method.
+
+==== Configure API Framework to use service definition
+
+Copy openapi3.json to *config-layers/tutorial-simple-get-api/in/erail/route/openapi3.json*. Now
+API Framework is configured to handle API Request. Next step is to write code to handle
+request.
+
+=== Step 2: Write API Request Handling
+
+Basic request handling flow
+
+[plantuml,./assets/basic-request-handling, png]
+....
+actor User
+autonumber
+
+User -> Server: /session
+activate Server
+Server -> EventBus:	Send message on \n**OperationId** (Open API)
+EventBus -> Service:	**OperationId** is mapped to \n**ServiceUnquieId**. Service \n\
+listen on **ServiceUniqueId** \n for any API Request
+Service --> EventBus:Service sends response \nas reply to EventBus Message
+EventBus --> Server
+Server --> User
+deactivate Server
+....
+
+. Request Processing (Step 1 and 6) is synchronous.  In case Service fails to response
+within predefined time limit (/io/vertx/core/eventbus/DeliveryOptions.sendTimeout).
+request is canceled and fail response is sent back.
+. For each operationId defined in Open API definition, a service is registered. Service
+contains mapping of Operation Id and UniqueServiceId. Whenever request comes
+it is converted into EventBus message and sent on UniqueServiceId (Steps 2-3).
+. Step 2-5 are asynchronous.
+
+==== Handle GET method called on /session URL
+
+===== Create Service Class
+[source,java,linenums]
+----
+include::./../src/main/java/in/erail/tutorial/SessionGetService.java[]
+----
+
+Service class must implement `in.erail.service.RESTService` interface. A helper class is
+provided to ease development `in.erail.service.RESTServiceImpl`
+
+As parameter, Message Object provides JsonObject. JsonObject contains below fields
+
+[%header]
+|===
+| Field Name | Description
+| header        | Contains all request headers
+| param         | Contains all request parameters
+| query           | Contains all query parameters
+| body            | In case of POST request, contains body
+|===
+
+Reply JSON Object you can have below fields
+[%header]
+|===
+| Field Name | Default | Description
+| header        | No headers are added | Headers will be added to response header
+| body            | Response content is blank | Body is sent in response
+| statusCode | 200 |  Response HTTP status
+|===
+
+===== Create Service Component
+
+Create below Component configuration file and place it in
+*/config-layers/tutorial-simple-get-api/in/erail/tutorial/SessionGetService*
+
+[source,ini,linenums]
+----
+include::./../config-layers/tutorial-simple-get-api/in/erail/tutorial/SessionGetService.properties[]
+----
+
+`operationId` and `serviceUniqueId` are same. `serviceUniqueId` can be different and it
+must be unique across all services.
+
+Add service to *OpenAPI3RouteBuilder*
+[source,ini,linenums]
+----
+include::./../config-layers/tutorial-simple-get-api/in/erail/route/OpenAPI3RouteBuilder.properties[]
+----
+
+`OpenAPI3RouteBuilder` will make sure, that, request received on URL and method with
+`operationId` as defined in `SessionService` component is forwarded to `serviceUniqueId`
+component via EventBus.
+
+Now, our API is ready to use. Lets create a test class to test our service.
+
+=== Step 3: Write Test to test our service
+
+[source,java,linenums]
+----
+include::./../src/test/java/in/erail/tutorial/SessionTest.java[]
+----
+
+=== Step 4: Run API Server
+
+After running maven install. You should have build folder inside target folder.
+
+.Build folder structure
+[plantuml,./assets/build-folder-structure, png]
+....
+@startsalt
+{
+{T
+ + **build**
+ ++ api-framwork-start-1.0-SNAPSHOT.jar
+ ++ api-framwork-start-1.0-SNAPSHOT-lib
+ +++ dependencies
+ ++ config
+ +++ api-framwork-1.0-SNAPSHOT-common-config.zip
+ +++ api-framwork-start-1.0-SNAPSHOT-tutorial-simple-get-api-config.zip
+}
+}
+@endsalt
+....
+
+.Run Server (Assuming you are inside build folder)
+[source,bash,linenums]
+----
+java \
+-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory \
+-Dglue.layers=\
+./config/api-framwork-1.0-SNAPSHOT-common-config.zip,\
+./config/api-framwork-start-1.0-SNAPSHOT-tutorial-simple-get-api-config.zip \
+-jar api-framwork-start-1.0-SNAPSHOT.jar
+----
+
+.Test API
+Go to command prompt
+[source,bash,linenums]
+----
+curl http://localhost:8888/v1/session
+----
+
+.Result
+ ["S1","S2","S3","S4","S5"]

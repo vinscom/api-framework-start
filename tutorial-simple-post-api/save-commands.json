@@ -1,0 +1,5 @@
+{
+    "commands": [
+        "tutorial/*.adoc : asciidoctor -r asciidoctor-diagram tutorial/tutorial.adoc"
+    ]
+}
