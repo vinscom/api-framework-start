@@ -9,21 +9,18 @@ import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.Timeout;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 
 @RunWith(VertxUnitRunner.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SessionTest {
 
   @Rule
   public Timeout rule = Timeout.seconds(2000);
 
   @Test
-  public void testAPostRequest(TestContext context) {
+  public void testPostRequest(TestContext context) {
 
     Async async = context.async(5);
 
@@ -48,7 +45,7 @@ public class SessionTest {
   }
 
   @Test
-  public void testBGetRequest(TestContext context) {
+  public void testGetRequest(TestContext context) {
 
     Async async = context.async(2);
     Server server = Glue.instance().<Server>resolve("/in/erail/server/Server");

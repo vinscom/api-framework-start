@@ -6,6 +6,26 @@
     },
     "paths": {
         "/session": {
+            "get": {
+                "summary": "Get all session messages",
+                "description": "Return all session messages",
+                "operationId": "API_SESSION_GET",
+                "responses": {
+                    "200": {
+                        "description": "Return all messages",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/message"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "summary": "Post message on session",
                 "description": "Post message on session",
