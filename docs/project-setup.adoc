@@ -35,8 +35,9 @@ NOTE: *common* configuration is for production use. *test* configuration can be
 ----
 include::./../src/assembly/tutorial-simple-get-api-config.xml[]
 ----
-NOTE: This configuration will make sure that your *common* config layers is packed
-and installed as artefact in maven repository.
+
+This configuration will make sure that your *tutorial-simple-get-api-config* config layers
+is packed and installed as artefact in maven repository.
 
 . Add plugins to Maven
 +

@@ -54,6 +54,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.5.3</version>
                 <executions>
+                    <!-- tag::assembly-tutorial-simple-get-api-config[] -->
                     <execution>
                         <id>tutorial-simple-get-api-config</id>
                         <phase>package</phase>
@@ -65,6 +66,7 @@
                             <descriptor>src/assembly/tutorial-simple-get-api-config.xml</descriptor>
                         </configuration>
                     </execution>
+                    <!-- end::assembly-tutorial-simple-get-api-config[] -->
                 </executions>
             </plugin>
             <!-- tag::argLine[] -->
