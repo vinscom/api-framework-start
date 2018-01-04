@@ -1,3 +1,4 @@
 docs/.asciidoctor
 nbproject
 target
+tutorial-simple-get-api/docs/.asciidoctor

@@ -1,13 +1,19 @@
-== Create Maven Project using Netbean
+:att_project_name: tutorial-simple-get-api
+:att_project_git_repository: https://github.com/vinscom/api-framwork-start.git
+:att_project_git_name: API Framwork Start
+ifndef::imagesdir[:imagesdir: ./../../docs/images]
 
-NOTE: Below steps are optional. You can clone this project from
-          https://github.com/vinscom/api-framwork-start.git
+= Create Maven Project using Netbean
 
-. Create Project Folder *api-framwork-start*. This will be used as base folder.
+NOTE: Below steps are optional. You can clone
+          {att_project_git_repository}[{att_project_git_name}]
+          project and use *{att_project_name}* project.
+
+. Create Project Folder *{att_project_name}*. This will be used as base folder.
 . Create new project +
-image:./tutorial-images/netbean-project-wizard-1.png[]
-. Save project to *api-framwork-start* location +
-image:./tutorial-images/netbean-project-wizard-2.png[]
+image:netbean-project-wizard-1.png[]
+. Save project to *{att_project_name}* location +
+image:netbean-project-wizard-2.png[]
 
 . Add required dependencies to POM
 +
@@ -23,20 +29,20 @@ include::./../pom.xml[tag=requiredDependencies]
 include::./../pom.xml[tag=optionalDependencies]
 ----
 
-. Create *api-framwork-start/config-layers/tutorial-simple-get-api* and
-  *api-framwork-start/config-layers/test* folder to store all configuration
+. Create *{att_project_name}/config-layers/common* and
+  *{att_project_name}/config-layers/test* folder to store all configuration
 +
 NOTE: *common* configuration is for production use. *test* configuration can be
-          used to add new or override *common* configuration during unit test
+          used to add new or override any configuration during unit test
 
-. Create *api-framwork-start/src/assembly/tutorial-simple-get-api-config.xml*
+. Create *{att_project_name}/src/assembly/common-config.xml*
 +
 [source, xml,linenums,indent=0]
 ----
-include::./../src/assembly/tutorial-simple-get-api-config.xml[]
+include::./../src/assembly/common-config.xml[]
 ----
 
-This configuration will make sure that your *tutorial-simple-get-api-config* config layers
+This configuration will make sure that your *common-config* config layers
 is packed and installed as artefact in maven repository.
 
 . Add plugins to Maven
@@ -67,7 +73,7 @@ include::./../pom.xml[tag=argLine]
 ! Layer ! Description
 ! ${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-common-config.zip
 ! API Framework Configuration Layer
-! ${project.basedir}/config-layers/tutorial-simple-get-api
+! ${project.basedir}/config-layers/common
 ! Our project configuration layer
 ! ${project.basedir}/config-layers/test
 ! Our project test configuration layer. Any test specific configuration can be done in this
