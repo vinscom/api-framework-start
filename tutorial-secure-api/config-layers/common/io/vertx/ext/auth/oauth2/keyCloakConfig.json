@@ -1,2 +1,12 @@
 {
-}
+    "realm": "master",
+    "auth-server-url": "http://localhost:8080/auth",
+    "realm-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAweS+2PCSDDfGzgXPSElqFFMddkGkNU3Vb44V2TTcsyl9S02RPR+e0QRttKcn17lLzgRBs65ayxlHN5Mi/n5UD/B5Xvtz+uVCwDJ9ltQSCNUsvcuf0NI3SBNu1G23xrOv+rBmyDprykorjUUqoQi4ss/VuqN2S2R+toeB5gRIVcul/xaGDOLHVPJOqWkvMjNO1NCMVAneeBsqru8/EZP6lbipBORvIkPJ8kinkTaoFdEgnDQeyICgg6ONYb5CCQY0B5vvTXMsTePAD0etCJUZbcVfT2p31KL8I3wpIkptL2AtTn1XpKpEm8guax/80CUmSCf5KhfQe39YNt5FC2OLjQIDAQAB",
+    "ssl-required": "external",
+    "resource": "tutorial-secure-api-client",
+    "credentials": {
+      "secret": "92867ec4-d23b-4dc8-8910-c80bdc0a8b36"
+    },
+    "confidential-port": 0
+  }
+  

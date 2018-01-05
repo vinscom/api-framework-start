@@ -4,27 +4,23 @@
     <title>Secure API</title>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
         crossorigin="anonymous"></script>
+    <script src="index.js" /></script>
 </head>
 <body>
     <div>
-        <a href="http://localhost:8080/">Login</a>
-    </div>
-    <div>
         <h1>Update Session</h1>
-        <div id="postError">Errors</div>
         <form id="sessionForm">
             <label for="session">Enter data you want to submit to session</label>
             <input id="session" name="session" />
-            <button type="submit">Submit</button>
+            <button type="submit" onclick="callPostAPI(event)">Submit</button>
         </form>
     </div>
     <div>
         <h1>Session Data</h1>
-        <div id="getError">Errors</div>
+        <a href="#" onclick="callGetAPI(event)">Get Session Data</a>
         <ul id="sessionData">
             <li>Dummy</li>
         </ul>
     </div>
-    <script src="index.js" /></script>
 </body>
 </html>
