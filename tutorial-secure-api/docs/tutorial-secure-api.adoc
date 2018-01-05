@@ -22,3 +22,11 @@ include::keycloak-setup.adoc[leveloffset=+1]
 == Configure API for authentication
 
 == Update site to use Authentication
+
+== Run Server
+java \
+-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory \
+-Dglue.layers=\
+./config/api-framwork-1.0-SNAPSHOT-common-config.zip,\
+./config/tutorial-secure-api-1.0-SNAPSHOT-common-config.zip \
+-jar tutorial-secure-api-1.0-SNAPSHOT.jar

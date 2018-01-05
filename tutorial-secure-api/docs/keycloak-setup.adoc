@@ -5,6 +5,7 @@ ifndef::imagesdir[:imagesdir: ./../../docs/images]
 :att_project_name: tutorial-secure-api
 :att_project_git_repository: https://github.com/vinscom/api-framwork-start.git
 :att_project_git_name: API Framwork Start
+:att_keycloak_url: http://localhost:8080/auth/admin/
 
 = Keycloak Setup
 
@@ -25,7 +26,74 @@ include::./../docker/docker-compose.yml[]
 docker-compose up
 ----
 
-.Once started, you can access Keycloak at http://localhost:8080/auth/admin/
-image::keycloak/home-screen.png[alt]
+.Once started, you can access Keycloak at {att_keycloak_url}
+image::keycloak/home-screen.png[]
 
 == Configuration
+
+Got to {att_keycloak_url} and login using *admin* and password provided in docker-compose.yml
+
+image::keycloak/step1-client-home.png[]
+
+=== Add Open ID Connect Client
+image::keycloak/step2-add-client.png[]
+
+=== Update Settings
+
+image::keycloak/step3-client-settings-part1.png[]
+image::keycloak/step3-client-settings-part2.png[]
+
+=== Generate Keycloak configuration JSON
+
+image::keycloak/step3-client-installation.png[]
+
+[source,json,linenums]
+----
+{
+  "realm": "master",
+  "auth-server-url": "http://localhost:8080/auth",
+  "ssl-required": "external",
+  "resource": "tutorial-secure-api-client",
+  "credentials": {
+    "secret": "92867ec4-d23b-4dc8-8910-c80bdc0a8b36"
+  },
+  "confidential-port": 0
+}
+----
+
+==== Add *realm-public-key* to above configuration
+
+Go to Realm settings
+
+image::keycloak/step4-realm-keys.png[]
+
+And press *Public Key* button to see *realm-public-key*
+
+image::keycloak/step5-realm-public-key.png[]
+
+[source,json,linenums]
+----
+{
+  "realm": "master",
+  "auth-server-url": "http://localhost:8080/auth",
+  "realm-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAweS+2PCSDDfGzgXPSElqFFMddkGkNU3Vb44V2TTcsyl9S02RPR+e0QRttKcn17lLzgRBs65ayxlHN5Mi/n5UD/B5Xvtz+uVCwDJ9ltQSCNUsvcuf0NI3SBNu1G23xrOv+rBmyDprykorjUUqoQi4ss/VuqN2S2R+toeB5gRIVcul/xaGDOLHVPJOqWkvMjNO1NCMVAneeBsqru8/EZP6lbipBORvIkPJ8kinkTaoFdEgnDQeyICgg6ONYb5CCQY0B5vvTXMsTePAD0etCJUZbcVfT2p31KL8I3wpIkptL2AtTn1XpKpEm8guax/80CUmSCf5KhfQe39YNt5FC2OLjQIDAQAB",
+  "ssl-required": "external",
+  "resource": "tutorial-secure-api-client",
+  "credentials": {
+    "secret": "92867ec4-d23b-4dc8-8910-c80bdc0a8b36"
+  },
+  "confidential-port": 0
+}
+----
+
+Copy above configuration to */io/vertx/ext/auth/oauth2/keyCloakConfig.json* in
+*common* configuration layer.
+
+Now our Keyclock server is fully setup.
+
+IMPORTANT: *realm-public-key* and *secret* value will depend on your installation. So,
+don't simply copy-paste above JSON.
+
+NOTE: To know all URLs supported by Realm got to
+http://localhost:8080/auth/realms/master/.well-known/openid-configuration[OpenID Endpoint Configuration].
+This information can be accessed from Realm Settings -> General -> Endpoint
