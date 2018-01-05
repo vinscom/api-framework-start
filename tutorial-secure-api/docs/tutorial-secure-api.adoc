@@ -1,0 +1,24 @@
+ifndef::toc[:toc: left]
+ifndef::source-highlighter[:source-highlighter: pygments]
+ifndef::pygments-linenums-mode[:pygments-linenums-mode: inline]
+ifndef::imagesdir[:imagesdir: ./../../docs/images]
+
+
+= Secure API
+
+In last tutorial, we created, Get and Post request. Now, in this tutorial we will use
+Open Id Connect pattern to secure both API.
+
+Things we will do in this tutorial:
+
+. Setup and configure Keycloak instance
+. Authenticate with Google Auth using Keycloak
+. Create small website to showcase authenticated API working
+
+include::keycloak-setup.adoc[leveloffset=+1]
+
+== Create site to use API (No Authentication)
+
+== Configure API for authentication
+
+== Update site to use Authentication

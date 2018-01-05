@@ -1,0 +1,31 @@
+ifndef::toc[:toc: left]
+ifndef::source-highlighter[:source-highlighter: pygments]
+ifndef::pygments-linenums-mode[:pygments-linenums-mode: inline]
+ifndef::imagesdir[:imagesdir: ./../../docs/images]
+:att_project_name: tutorial-secure-api
+:att_project_git_repository: https://github.com/vinscom/api-framwork-start.git
+:att_project_git_name: API Framwork Start
+
+= Keycloak Setup
+
+== Install
+
+To reduce complexity of installation. We will run Keycloak in docker.
+Depending on your OS, install https://www.docker.com/community-edition#/download[Docker]
+
+Create docker compose file at {att_project_name}/docker
+[source,yml,linenums]
+----
+include::./../docker/docker-compose.yml[]
+----
+
+.Run (From inside {att_project_name}/docker)
+[source,bash,linenums]
+----
+docker-compose up
+----
+
+.Once started, you can access Keycloak at http://localhost:8080/auth/admin/
+image::keycloak/home-screen.png[alt]
+
+== Configuration
