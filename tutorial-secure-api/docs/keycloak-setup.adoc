@@ -98,6 +98,50 @@ NOTE: To know all URLs supported by Realm got to
 http://localhost:8080/auth/realms/master/.well-known/openid-configuration[OpenID Endpoint Configuration].
 This information can be accessed from Realm Settings -> General -> Endpoint
 
+=== Add Role for each API Operation
+In Open API 3 definition, we have Operation Id for each operation. Corresponding to each
+operation, we will create Role in Keycloak. To access any operation, user must have
+role assigned to him in Keycloak.
+
+[%header]
+|===
+| Group | Role(=Operation Id) | Description
+.2+.^| Full Access | API_SESSION_GET | User will be use GET request
+| API_SESSION_POST | User will be able to use POST request
+|===
+
+Lets create Role for our APIs. Go to *Roles* section
+
+. Add new role
++
+image::keycloak/step11-role-home.png[]
+
+. Create *API_SESSION_GET* and *API_SESSION_POST* roles
++
+.API_SESSION_POST Role example
+image::keycloak/step12-role-create.png[]
++
+.All role list
+image::keycloak/step13-role-all.png[]
+
+=== Add Group
+Though roles can be assigned to user directly. *Group* concept is nice way of managing
+user groups and roles associated to groups are automatically inherited by its users.
+
+. Add group
++
+image::keycloak/step14-group-home.png[]
+
+. Create group
++
+image::keycloak/step15-group-create.png[]
+
+. Group and role mapping
++
+.Add both *API_SESSION_GET* and *API_SESSION_POST* roles
+image::keycloak/step16-group-role-mapping.png[]
+
+
 === Add user
 
 We will use this user to login
@@ -117,6 +161,11 @@ image::keycloak/step8-change-password-1.png[]
 . Confirm
 +
 image::keycloak/step8-change-password-2.png[]
+
+. Add user to group
++
+.Add user to *Full Access* group
+image::keycloak/step9-user-groups.png[]
 
 === Update Hosts file
 As our API Server and Keycloak are running on same system with same

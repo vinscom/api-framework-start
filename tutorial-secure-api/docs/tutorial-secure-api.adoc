@@ -76,6 +76,7 @@ http://localhost:8888/content/index.html
 java \
 -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory \
 -Dglue.layers=\
+-agentlib:jdwp=transport=dt_socket,address=9999,server=y,suspend=n \
 ./config/api-framwork-1.0-SNAPSHOT-common-config.zip,\
 ./config/tutorial-secure-api-1.0-SNAPSHOT-common-config.zip \
 -jar tutorial-secure-api-1.0-SNAPSHOT.jar
