@@ -142,7 +142,7 @@ image::keycloak/step15-group-create.png[]
 image::keycloak/step16-group-role-mapping.png[]
 
 
-=== Add user
+=== Add User
 
 We will use this user to login
 
