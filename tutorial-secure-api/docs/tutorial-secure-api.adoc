@@ -66,20 +66,31 @@ A dummy site is already provided */src/main/resources/webroot*. You can submit
 and fetch session updates using API. To access page, goto
 http://localhost:8888/content/index.html
 
-== Enable API authentication
+== Create site to use API only after authentication
 
+Same location where we provided Index.html. We have provided Indexsecure.html
+file. This file is exactly same as Index. But, has Login line with URL.
+To access page, goto http://localhost:8888/content/indexsecure.html
 
+== Enable API Authentication
 
-== Update site to use Authentication
+We have already done all the configuration as part of Keycloak setup. Simple enable
+*OAuth2AuthInstance* component  at */io/vertx/ext/auth/oauth2/OAuth2AuthInstance*
 
 == Run Server
+
+[source,bash,linenums]
+----
 java \
 -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory \
 -Dglue.layers=\
--agentlib:jdwp=transport=dt_socket,address=9999,server=y,suspend=n \
 ./config/api-framwork-1.0-SNAPSHOT-common-config.zip,\
 ./config/tutorial-secure-api-1.0-SNAPSHOT-common-config.zip \
 -jar tutorial-secure-api-1.0-SNAPSHOT.jar
+----
 
+== Test
 
-http://openidserver:8080/auth/realms/master/protocol/openid-connect/auth?client_id=tutorial-secure-api-client&response_type=code&scope=openid&redirect_uri=http://localhost:8888/callback
+If *OAuth2AuthInstance* component is disabled, then you should be able to use API
+without authentication. If *OAuth2AuthInstance* component is enable, then without login,
+you can't access APIs.
