@@ -1,0 +1,96 @@
+ifndef::toc[:toc: left]
+ifndef::source-highlighter[:source-highlighter: pygments]
+ifndef::pygments-linenums-mode[:pygments-linenums-mode: inline]
+ifndef::imagesdir[:imagesdir: ./../../docs/images]
+
+
+= Secure API
+
+In last tutorial, we created, Get and Post request. Now, in this tutorial we will use
+Open Id Connect pattern to secure both API.
+
+Things we will do in this tutorial:
+
+. Setup and configure Keycloak instance
+. Create small website to showcase authenticated API working
+. Authenticate with Google Auth using Keycloak
+
+include::keycloak-setup.adoc[leveloffset=+1]
+
+== Create site to use API (No Authentication)
+
+Ideally, you will run only API on API Framwork and content will be delivered from
+somewhere else like below.
+
+[plantuml,uml/simple-api-and-content-infra-setup, png]
+....
+@startuml
+cloud Internet
+node Nginx
+node APIServer
+node ContentServer
+Internet -- Nginx
+Nginx -- APIServer
+Nginx -- ContentServer
+@enduml
+....
+
+To keep things simple, for the time been, we will delivery static content from our API
+server. And overall setup will look as show below
+
+[plantuml,uml/simple-local-infa-setup, png]
+....
+@startuml
+actor User
+node Browser
+node APIServer
+node KeyclockServer
+User -- Browser
+Browser -- APIServer
+Browser -- KeyclockServer
+@enduml
+....
+
+Vertx already support static content handling. To enable static content handling,
+add static content handler to */in/erail/server/Server* component
+
+[source,ini,linenums]
+----
+include::./../config-layers/common/in/erail/server/Server.properties[]
+----
+
+Above configuration will make sure that any content in
+*/src/main/resources/webroot* is available at http://localhost:8888/content/ url.
+
+A dummy site is already provided */src/main/resources/webroot*. You can submit
+and fetch session updates using API. To access page, goto
+http://localhost:8888/content/index.html
+
+== Create site to use API only after authentication
+
+Same location where we provided Index.html. We have provided Indexsecure.html
+file. This file is exactly same as Index. But, has Login line with URL.
+To access page, goto http://localhost:8888/content/indexsecure.html
+
+== Enable API Authentication
+
+We have already done all the configuration as part of Keycloak setup. Simple enable
+*OAuth2AuthInstance* component  at */io/vertx/ext/auth/oauth2/OAuth2AuthInstance*
+
+== Run Server
+
+[source,bash,linenums]
+----
+java \
+-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory \
+-Dglue.layers=\
+./config/api-framwork-1.0-SNAPSHOT-common-config.zip,\
+./config/tutorial-secure-api-1.0-SNAPSHOT-common-config.zip \
+-jar tutorial-secure-api-1.0-SNAPSHOT.jar
+----
+
+== Test
+
+If *OAuth2AuthInstance* component is disabled, then you should be able to use API
+without authentication. If *OAuth2AuthInstance* component is enable, then without login,
+you can't access APIs.

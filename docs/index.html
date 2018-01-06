@@ -510,8 +510,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_simple_get_api">Simple GET API</a>
 <ul class="sectlevel2">
 <li><a href="#_create_maven_project_using_netbean">Create Maven Project using Netbean</a></li>
-<li><a href="#_step_1_create_open_api_3_service_definition">Step 1: Create Open API 3 Service Definition</a></li>
-<li><a href="#_step_2_write_api_request_handling">Step 2: Write API Request Handling</a></li>
+<li><a href="#_step_1_create_open_api_3_service_definition">Step 1: Create Open API 3 Service Definition</a>
+<ul class="sectlevel3">
+<li><a href="#_configure_api_framework_to_use_service_definition">Configure API Framework to use service definition</a></li>
+</ul>
+</li>
+<li><a href="#_step_2_write_api_request_handling">Step 2: Write API Request Handling</a>
+<ul class="sectlevel3">
+<li><a href="#_handle_get_method_called_on_session_url">Handle GET method called on /session URL</a>
+<ul class="sectlevel4">
+<li><a href="#_create_service_class">Create Service Class</a></li>
+<li><a href="#_create_service_component">Create Service Component</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#_step_3_write_test_to_test_our_service">Step 3: Write Test to test our service</a></li>
 <li><a href="#_step_4_run_api_server">Step 4: Run API Server</a></li>
 </ul>
@@ -519,10 +532,39 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_simple_post_api">Simple POST API</a>
 <ul class="sectlevel2">
 <li><a href="#_step_1_extend_open_api_3_service_definition">Step 1: Extend Open API 3 Service Definition</a></li>
-<li><a href="#_step_2_create_post_service_class">Step 2: Create POST Service Class</a></li>
+<li><a href="#_step_2_create_post_service_class">Step 2: Create POST Service Class</a>
+<ul class="sectlevel3">
+<li><a href="#_create_service_component_2">Create Service Component</a></li>
+</ul>
+</li>
 <li><a href="#_step_3_update_get_service">Step 3: Update Get Service</a></li>
 <li><a href="#_step_4_write_test_to_test_our_service">Step 4: Write Test to test our service</a></li>
 <li><a href="#_step_4_run_api_server_2">Step 4: Run API Server</a></li>
+</ul>
+</li>
+<li><a href="#_secure_api">Secure API</a>
+<ul class="sectlevel2">
+<li><a href="#_keycloak_setup">Keycloak Setup</a>
+<ul class="sectlevel3">
+<li><a href="#_install">Install</a></li>
+<li><a href="#_configuration">Configuration</a>
+<ul class="sectlevel4">
+<li><a href="#_add_open_id_connect_client">Add Open ID Connect Client</a></li>
+<li><a href="#_update_settings">Update Settings</a></li>
+<li><a href="#_generate_keycloak_configuration_json">Generate Keycloak configuration JSON</a></li>
+<li><a href="#_add_role_for_each_api_operation">Add Role for each API Operation</a></li>
+<li><a href="#_add_group">Add Group</a></li>
+<li><a href="#_add_user">Add User</a></li>
+<li><a href="#_update_hosts_file">Update Hosts file</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_create_site_to_use_api_no_authentication">Create site to use API (No Authentication)</a></li>
+<li><a href="#_create_site_to_use_api_only_after_authentication">Create site to use API only after authentication</a></li>
+<li><a href="#_enable_api_authentication">Enable API Authentication</a></li>
+<li><a href="#_run_server">Run Server</a></li>
+<li><a href="#_test">Test</a></li>
 </ul>
 </li>
 </ul>
@@ -1570,11 +1612,488 @@ existing <strong>SessionGetService</strong> class. We will create new class.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_secure_api">Secure API</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In last tutorial, we created, Get and Post request. Now, in this tutorial we will use
+Open Id Connect pattern to secure both API.</p>
+</div>
+<div class="paragraph">
+<p>Things we will do in this tutorial:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Setup and configure Keycloak instance</p>
+</li>
+<li>
+<p>Create small website to showcase authenticated API working</p>
+</li>
+<li>
+<p>Authenticate with Google Auth using Keycloak</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_keycloak_setup">Keycloak Setup</h3>
+<div class="sect3">
+<h4 id="_install">Install</h4>
+<div class="paragraph">
+<p>To reduce complexity of installation. We will run Keycloak in docker.
+Depending on your OS, install <a href="https://www.docker.com/community-edition#/download">Docker</a></p>
+</div>
+<div class="paragraph">
+<p>Create docker compose file at tutorial-secure-api/docker</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yml"><span></span><span class="lineno"> 1 </span>version: &#39;3.2&#39;
+<span class="lineno"> 2 </span>services:
+<span class="lineno"> 3 </span>    openidserver:
+<span class="lineno"> 4 </span>        image: jboss/keycloak:3.4.3.Final
+<span class="lineno"> 5 </span>        hostname: openidserver
+<span class="lineno"> 6 </span>        expose:
+<span class="lineno"> 7 </span>            - 8080
+<span class="lineno"> 8 </span>        ports:
+<span class="lineno"> 9 </span>            - &quot;8080:8080&quot;
+<span class="lineno">10 </span>        environment:
+<span class="lineno">11 </span>            - KEYCLOAK_USER=admin
+<span class="lineno">12 </span>            - KEYCLOAK_PASSWORD=RM99Q330Tg
+<span class="lineno">13 </span>            - KEYCLOAK_LOGLEVEL=DEBUG
+<span class="lineno">14 </span>            - DB_VENDOR=MYSQL
+<span class="lineno">15 </span>            - MYSQL_DATABASE=keycloak
+<span class="lineno">16 </span>            - MYSQL_USER=keycloak
+<span class="lineno">17 </span>            - MYSQL_PASSWORD=8HVcBB5FMv
+<span class="lineno">18 </span>            - MYSQL_PORT_3306_TCP_ADDR=mysql
+<span class="lineno">19 </span>            - MYSQL_PORT_3306_TCP_PORT=3306
+<span class="lineno">20 </span>        depends_on:
+<span class="lineno">21 </span>            - mysql
+<span class="lineno">22 </span>    mysql:
+<span class="lineno">23 </span>        image: mysql:5.7
+<span class="lineno">24 </span>        hostname: mysql
+<span class="lineno">25 </span>        expose:
+<span class="lineno">26 </span>            - 3306
+<span class="lineno">27 </span>        volumes:
+<span class="lineno">28 </span>            - ./data/mysql/keycloak/data:/var/lib/mysql
+<span class="lineno">29 </span>        environment:
+<span class="lineno">30 </span>            - MYSQL_ROOT_PASSWORD=KgWVt9jCUq
+<span class="lineno">31 </span>            - MYSQL_DATABASE=keycloak
+<span class="lineno">32 </span>            - MYSQL_USER=keycloak
+<span class="lineno">33 </span>            - MYSQL_PASSWORD=8HVcBB5FMv</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Run (From inside tutorial-secure-api/docker)</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span><span class="lineno">1 </span>docker-compose up</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/home-screen.png" alt="home screen">
+</div>
+<div class="title">Figure 3. Once started, you can access Keycloak at http://localhost:8080/auth/admin/</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuration">Configuration</h4>
+<div class="paragraph">
+<p>Got to <a href="http://localhost:8080/auth/admin/" class="bare">http://localhost:8080/auth/admin/</a> and login using <strong>admin</strong> and password provided in docker-compose.yml</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step1-client-home.png" alt="step1 client home">
+</div>
+</div>
+<div class="sect4">
+<h5 id="_add_open_id_connect_client">Add Open ID Connect Client</h5>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step2-add-client.png" alt="step2 add client">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_update_settings">Update Settings</h5>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step3-client-settings-part1.png" alt="step3 client settings part1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step3-client-settings-part2.png" alt="step3 client settings part2">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_generate_keycloak_configuration_json">Generate Keycloak configuration JSON</h5>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step3-client-installation.png" alt="step3 client installation">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span><span class="lineno"> 1 </span><span class="tok-p">{</span>
+<span class="lineno"> 2 </span>  <span class="tok-nt">&quot;realm&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;master&quot;</span><span class="tok-p">,</span>
+<span class="lineno"> 3 </span>  <span class="tok-nt">&quot;auth-server-url&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;http://localhost:8080/auth&quot;</span><span class="tok-p">,</span>
+<span class="lineno"> 4 </span>  <span class="tok-nt">&quot;ssl-required&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;external&quot;</span><span class="tok-p">,</span>
+<span class="lineno"> 5 </span>  <span class="tok-nt">&quot;resource&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;tutorial-secure-api-client&quot;</span><span class="tok-p">,</span>
+<span class="lineno"> 6 </span>  <span class="tok-nt">&quot;credentials&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno"> 7 </span>    <span class="tok-nt">&quot;secret&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;92867ec4-d23b-4dc8-8910-c80bdc0a8b36&quot;</span>
+<span class="lineno"> 8 </span>  <span class="tok-p">},</span>
+<span class="lineno"> 9 </span>  <span class="tok-nt">&quot;confidential-port&quot;</span><span class="tok-p">:</span> <span class="tok-mi">0</span>
+<span class="lineno">10 </span><span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_add_strong_realm_public_key_strong_to_above_configuration">Add <strong>realm-public-key</strong> to above configuration</h6>
+<div class="paragraph">
+<p>Go to Realm settings</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step4-realm-keys.png" alt="step4 realm keys">
+</div>
+</div>
+<div class="paragraph">
+<p>And press <strong>Public Key</strong> button to see <strong>realm-public-key</strong></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step5-realm-public-key.png" alt="step5 realm public key">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span><span class="lineno"> 1 </span><span class="tok-p">{</span>
+<span class="lineno"> 2 </span>  <span class="tok-nt">&quot;realm&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;master&quot;</span><span class="tok-p">,</span>
+<span class="lineno"> 3 </span>  <span class="tok-nt">&quot;auth-server-url&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;http://localhost:8080/auth&quot;</span><span class="tok-p">,</span>
+<span class="lineno"> 4 </span>  <span class="tok-nt">&quot;realm-public-key&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAweS+2PCSDDfGzgXPSElqFFMddkGkNU3Vb44V2TTcsyl9S02RPR+e0QRttKcn17lLzgRBs65ayxlHN5Mi/n5UD/B5Xvtz+uVCwDJ9ltQSCNUsvcuf0NI3SBNu1G23xrOv+rBmyDprykorjUUqoQi4ss/VuqN2S2R+toeB5gRIVcul/xaGDOLHVPJOqWkvMjNO1NCMVAneeBsqru8/EZP6lbipBORvIkPJ8kinkTaoFdEgnDQeyICgg6ONYb5CCQY0B5vvTXMsTePAD0etCJUZbcVfT2p31KL8I3wpIkptL2AtTn1XpKpEm8guax/80CUmSCf5KhfQe39YNt5FC2OLjQIDAQAB&quot;</span><span class="tok-p">,</span>
+<span class="lineno"> 5 </span>  <span class="tok-nt">&quot;ssl-required&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;external&quot;</span><span class="tok-p">,</span>
+<span class="lineno"> 6 </span>  <span class="tok-nt">&quot;resource&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;tutorial-secure-api-client&quot;</span><span class="tok-p">,</span>
+<span class="lineno"> 7 </span>  <span class="tok-nt">&quot;credentials&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<span class="lineno"> 8 </span>    <span class="tok-nt">&quot;secret&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;92867ec4-d23b-4dc8-8910-c80bdc0a8b36&quot;</span>
+<span class="lineno"> 9 </span>  <span class="tok-p">},</span>
+<span class="lineno">10 </span>  <span class="tok-nt">&quot;confidential-port&quot;</span><span class="tok-p">:</span> <span class="tok-mi">0</span>
+<span class="lineno">11 </span><span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Copy above configuration to <strong>/io/vertx/ext/auth/oauth2/keyCloakConfig.json</strong> in
+<strong>common</strong> configuration layer.</p>
+</div>
+<div class="paragraph">
+<p>Now our Keyclock server is fully setup.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+<strong>realm-public-key</strong> and <strong>secret</strong> value will depend on your installation. So,
+don&#8217;t simply copy-paste above JSON.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+To know all URLs supported by Realm got to
+<a href="http://localhost:8080/auth/realms/master/.well-known/openid-configuration">OpenID Endpoint Configuration</a>.
+This information can be accessed from Realm Settings &#8594; General &#8594; Endpoint
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_add_role_for_each_api_operation">Add Role for each API Operation</h5>
+<div class="paragraph">
+<p>In Open API 3 definition, we have Operation Id for each operation. Corresponding to each
+operation, we will create Role in Keycloak. To access any operation, user must have
+role assigned to him in Keycloak.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Group</th>
+<th class="tableblock halign-left valign-top">Role(=Operation Id)</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle" rowspan="2"><p class="tableblock">Full Access</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API_SESSION_GET</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User will be use GET request</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API_SESSION_POST</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User will be able to use POST request</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Lets create Role for our APIs. Go to <strong>Roles</strong> section</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Add new role</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step11-role-home.png" alt="step11 role home">
+</div>
+</div>
+</li>
+<li>
+<p>Create <strong>API_SESSION_GET</strong> and <strong>API_SESSION_POST</strong> roles</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step12-role-create.png" alt="step12 role create">
+</div>
+<div class="title">Figure 4. API_SESSION_POST Role example</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step13-role-all.png" alt="step13 role all">
+</div>
+<div class="title">Figure 5. All role list</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_add_group">Add Group</h5>
+<div class="paragraph">
+<p>Though roles can be assigned to user directly. <strong>Group</strong> concept is nice way of managing
+user groups and roles associated to groups are automatically inherited by its users.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Add group</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step14-group-home.png" alt="step14 group home">
+</div>
+</div>
+</li>
+<li>
+<p>Create group</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step15-group-create.png" alt="step15 group create">
+</div>
+</div>
+</li>
+<li>
+<p>Group and role mapping</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step16-group-role-mapping.png" alt="step16 group role mapping">
+</div>
+<div class="title">Figure 6. Add both <strong>API_SESSION_GET</strong> and <strong>API_SESSION_POST</strong> roles</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_add_user">Add User</h5>
+<div class="paragraph">
+<p>We will use this user to login</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Go to <strong>Users</strong> section</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step6-users-home.png" alt="step6 users home">
+</div>
+</div>
+</li>
+<li>
+<p>Click on Add user</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step7-add-user.png" alt="step7 add user">
+</div>
+</div>
+</li>
+<li>
+<p>Update password</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step8-change-password-1.png" alt="step8 change password 1">
+</div>
+</div>
+</li>
+<li>
+<p>Confirm</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step8-change-password-2.png" alt="step8 change password 2">
+</div>
+</div>
+</li>
+<li>
+<p>Add user to group</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/keycloak/step9-user-groups.png" alt="step9 user groups">
+</div>
+<div class="title">Figure 7. Add user to <strong>Full Access</strong> group</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_update_hosts_file">Update Hosts file</h5>
+<div class="paragraph">
+<p>As our API Server and Keycloak are running on same system with same
+domain name (localhost). Keycloak authentication won&#8217;t work correctly. To fix this we
+will run Keycloak in its own domain</p>
+</div>
+<div class="paragraph">
+<p>Depending on your OS. Update hosts file with below two entries.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Server</th>
+<th class="tableblock halign-left valign-top">IP</th>
+<th class="tableblock halign-left valign-top">Domain</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Keycloak Server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">127.0.0.1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">openidserver</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Domain name for keycloak server</p></td>
+</tr>
+</tbody>
+</table>
+<div class="literalblock">
+<div class="title">Example hosts file content</div>
+<div class="content">
+<pre>127.0.0.1   openidserver</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_create_site_to_use_api_no_authentication">Create site to use API (No Authentication)</h3>
+<div class="paragraph">
+<p>Ideally, you will run only API on API Framwork and content will be delivered from
+somewhere else like below.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/uml/simple-api-and-content-infra-setup.png" alt="simple api and content infra setup" width="305" height="267">
+</div>
+</div>
+<div class="paragraph">
+<p>To keep things simple, for the time been, we will delivery static content from our API
+server. And overall setup will look as show below</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/uml/simple-local-infa-setup.png" alt="simple local infa setup" width="309" height="314">
+</div>
+</div>
+<div class="paragraph">
+<p>Vertx already support static content handling. To enable static content handling,
+add static content handler to <strong>/in/erail/server/Server</strong> component</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="ini"><span></span><span class="lineno">1 </span><span class="tok-c1">#/in/erail/server/Server</span>
+<span class="lineno">2 </span><span class="tok-na">routerBuilder+</span><span class="tok-o">=</span><span class="tok-s">\</span>
+<span class="lineno">3 </span><span class="tok-s">    /content/=/in/erail/route/StaticContentRouteBuillder</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Above configuration will make sure that any content in
+<strong>/src/main/resources/webroot</strong> is available at <a href="http://localhost:8888/content/" class="bare">http://localhost:8888/content/</a> url.</p>
+</div>
+<div class="paragraph">
+<p>A dummy site is already provided <strong>/src/main/resources/webroot</strong>. You can submit
+and fetch session updates using API. To access page, goto
+<a href="http://localhost:8888/content/index.html" class="bare">http://localhost:8888/content/index.html</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_create_site_to_use_api_only_after_authentication">Create site to use API only after authentication</h3>
+<div class="paragraph">
+<p>Same location where we provided Index.html. We have provided Indexsecure.html
+file. This file is exactly same as Index. But, has Login line with URL.
+To access page, goto <a href="http://localhost:8888/content/indexsecure.html" class="bare">http://localhost:8888/content/indexsecure.html</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_enable_api_authentication">Enable API Authentication</h3>
+<div class="paragraph">
+<p>We have already done all the configuration as part of Keycloak setup. Simple enable
+<strong>OAuth2AuthInstance</strong> component  at <strong>/io/vertx/ext/auth/oauth2/OAuth2AuthInstance</strong></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_run_server">Run Server</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span><span class="lineno">1 </span>java <span class="tok-se">\</span>
+<span class="lineno">2 </span>-Dvertx.logger-delegate-factory-class-name<span class="tok-o">=</span>io.vertx.core.logging.Log4j2LogDelegateFactory <span class="tok-se">\</span>
+<span class="lineno">3 </span>-Dglue.layers<span class="tok-o">=</span><span class="tok-se">\</span>
+<span class="lineno">4 </span>./config/api-framwork-1.0-SNAPSHOT-common-config.zip,<span class="tok-se">\</span>
+<span class="lineno">5 </span>./config/tutorial-secure-api-1.0-SNAPSHOT-common-config.zip <span class="tok-se">\</span>
+<span class="lineno">6 </span>-jar tutorial-secure-api-1.0-SNAPSHOT.jar</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_test">Test</h3>
+<div class="paragraph">
+<p>If <strong>OAuth2AuthInstance</strong> component is disabled, then you should be able to use API
+without authentication. If <strong>OAuth2AuthInstance</strong> component is enable, then without login,
+you can&#8217;t access APIs.</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.1<br>
-Last updated 2018-01-04 18:21:23 GMT
+Last updated 2018-01-06 00:33:47 GMT
 </div>
 </div>
 </body>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure API</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+    <script src="index.js" /></script>
+</head>
+<body>
+    <div>
+        <a href="http://openidserver:8080/auth/realms/master/protocol/openid-connect/auth?client_id=tutorial-secure-api-client&response_type=code&scope=openid&redirect_uri=http://localhost:8888/callback">Login</a>
+    </div>
+    <div>
+        <h1>Update Session</h1>
+        <form id="sessionForm">
+            <label for="session">Enter data you want to submit to session</label>
+            <input id="session" name="session" />
+            <button type="submit" onclick="callPostAPI(event)">Submit</button>
+        </form>
+    </div>
+    <div>
+        <h1>Session Data</h1>
+        <a href="#" onclick="callGetAPI(event)">Get Session Data</a>
+        <ul id="sessionData">
+            <li>Dummy</li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure API</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+    <script src="index.js" /></script>
+</head>
+<body>
+    <div>
+        <h1>Update Session</h1>
+        <form id="sessionForm">
+            <label for="session">Enter data you want to submit to session</label>
+            <input id="session" name="session" />
+            <button type="submit" onclick="callPostAPI(event)">Submit</button>
+        </form>
+    </div>
+    <div>
+        <h1>Session Data</h1>
+        <a href="#" onclick="callGetAPI(event)">Get Session Data</a>
+        <ul id="sessionData">
+            <li>Dummy</li>
+        </ul>
+    </div>
+</body>
+</html>
