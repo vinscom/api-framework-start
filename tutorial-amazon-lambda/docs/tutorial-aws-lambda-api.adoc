@@ -156,4 +156,4 @@ Final API setup
 +
 image::amazon-api-gateway/amazon-api-gateway-get-action-test.png[]
 
-API is Working!!!
+Amazon Lambda based API is working!!!
