@@ -3,3 +3,11 @@ nbproject
 target
 tutorial-simple-get-api/docs/.asciidoctor
 tutorial-secure-api/docker/data
+/tutorial-amazon-lambda/.nb-gradle/
+/tutorial-amazon-lambda/build/
+tutorial-amazon-lambda/.idea
+tutorial-amazon-lambda/.gradle
+tutorial-simple-get-api/.settings
+.project
+.classpath
+tutorial-amazon-lambda/.settings

@@ -1,0 +1,24 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    compile (
+        'in.erail:api-framwork-amazon-lambda:1.0-SNAPSHOT',
+        'in.erail:tutorial-simple-get-api:1.0-SNAPSHOT',
+        'in.erail:tutorial-simple-get-api:1.0-SNAPSHOT:common-config@zip'
+    )
+}
+
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources              
+    into('lib') {
+        from configurations.runtime
+    }           
+}
+
+build.dependsOn buildZip
