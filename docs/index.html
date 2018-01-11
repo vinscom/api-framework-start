@@ -569,7 +569,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_amazon_lambda_api">Amazon Lambda API</a>
 <ul class="sectlevel2">
-<li><a href="#_create_lambda_code">Create Lambda Code</a></li>
+<li><a href="#_lambda_project_setup">Lambda Project Setup</a></li>
+<li><a href="#_gradle_project_files">Gradle Project Files</a>
+<ul class="sectlevel3">
+<li><a href="#_settings_gradle">settings.gradle</a></li>
+<li><a href="#_build_gradle">build.gradle</a></li>
+<li><a href="#_gradle_properties">gradle.properties</a></li>
+</ul>
+</li>
+<li><a href="#_create_lambda_function_code">Create Lambda Function Code</a>
+<ul class="sectlevel3">
+<li><a href="#_create_build">Create Build</a></li>
+</ul>
+</li>
 <li><a href="#_setup_lambda_function">Setup Lambda Function</a></li>
 <li><a href="#_setup_api_gateway">Setup API Gateway</a></li>
 </ul>
@@ -2099,17 +2111,365 @@ you can&#8217;t access APIs.</p>
 <div class="sect1">
 <h2 id="_amazon_lambda_api">Amazon Lambda API</h2>
 <div class="sectionbody">
+<div class="quoteblock">
+<div class="title">Serverless Architectures</div>
+<blockquote>
+Serverless architectures refer to applications that significantly depend on third-party
+services (knows as Backend as a Service or "BaaS") or on custom code that&#8217;s run in
+ephemeral containers (Function as a Service or "FaaS"), the best known vendor host of
+which currently is AWS Lambda.
+</blockquote>
+<div class="attribution">
+&#8212; Mike Roberts<br>
+<cite>https://martinfowler.com/articles/serverless.html</cite>
+</div>
+</div>
+<div class="paragraph">
+<p>API Framwork allows you to effortlessly run your API code as Lambda function in
+AWS ecosystem. In this tutorial, we will setup, Amazon API Gateway to access Session
+GET API (created as part of previous tutorial) and Amazon Lambda to execute Session
+GET logic.</p>
+</div>
 <div class="sect2">
-<h3 id="_create_lambda_code">Create Lambda Code</h3>
-
+<h3 id="_lambda_project_setup">Lambda Project Setup</h3>
+<div class="paragraph">
+<p>We will be extending
+<a href="https://docs.aws.amazon.com/lambda/latest/dg/create-deployment-pkg-zip-java.html">Amazon Lambda Example Project</a>
+to run <strong>Session GET API</strong>. Example Lambda project is setup in Gradle. So, instead of
+Maven, we will be using Gradle Project for this project.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gradle_project_files">Gradle Project Files</h3>
+<div class="sect3">
+<h4 id="_settings_gradle">settings.gradle</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="lineno">1 </span><span class="tok-n">rootProject</span><span class="tok-o">.</span><span class="tok-na">name</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;tutorial-amazon-lambda&#39;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This file only contain project name.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_build_gradle">build.gradle</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="lineno"> 1 </span><span class="tok-n">apply</span> <span class="tok-nl">plugin:</span> <span class="tok-s1">&#39;java&#39;</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="tok-n">repositories</span> <span class="tok-o">{</span>
+<span class="lineno"> 4 </span>    <span class="tok-n">mavenCentral</span><span class="tok-o">()</span>
+<span class="lineno"> 5 </span>    <span class="tok-n">mavenLocal</span><span class="tok-o">()</span>
+<span class="lineno"> 6 </span><span class="tok-o">}</span>
+<span class="lineno"> 7 </span>
+<span class="lineno"> 8 </span><span class="tok-n">dependencies</span> <span class="tok-o">{</span>
+<span class="lineno"> 9 </span>    <span class="tok-n">compile</span> <span class="tok-o">(</span>
+<span class="lineno">10 </span>        <span class="tok-c1">//Only Required Dependecy</span>
+<span class="lineno">11 </span>        <span class="tok-s1">&#39;in.erail:api-framwork-amazon-lambda:1.0-SNAPSHOT&#39;</span><span class="tok-o">,</span>
+<span class="lineno">12 </span>        <span class="tok-c1">//Already developed Session GET API Tutorial project</span>
+<span class="lineno">13 </span>        <span class="tok-s1">&#39;in.erail:tutorial-simple-get-api:1.0-SNAPSHOT&#39;</span><span class="tok-o">,</span>
+<span class="lineno">14 </span>        <span class="tok-c1">//Session GET API Tutorial project configuration</span>
+<span class="lineno">15 </span>        <span class="tok-s1">&#39;in.erail:tutorial-simple-get-api:1.0-SNAPSHOT:common-config@zip&#39;</span>
+<span class="lineno">16 </span>    <span class="tok-o">)</span>
+<span class="lineno">17 </span><span class="tok-o">}</span>
+<span class="lineno">18 </span>
+<span class="lineno">19 </span><span class="tok-n">task</span> <span class="tok-nf">buildZip</span><span class="tok-o">(</span><span class="tok-nl">type:</span> <span class="tok-n">Zip</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+<span class="lineno">20 </span>    <span class="tok-n">from</span> <span class="tok-n">compileJava</span>
+<span class="lineno">21 </span>    <span class="tok-n">from</span> <span class="tok-n">processResources</span>
+<span class="lineno">22 </span>    <span class="tok-nf">into</span><span class="tok-o">(</span><span class="tok-s1">&#39;lib&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+<span class="lineno">23 </span>        <span class="tok-n">from</span> <span class="tok-n">configurations</span><span class="tok-o">.</span><span class="tok-na">runtime</span>
+<span class="lineno">24 </span>    <span class="tok-o">}</span>
+<span class="lineno">25 </span><span class="tok-o">}</span>
+<span class="lineno">26 </span>
+<span class="lineno">27 </span><span class="tok-n">build</span><span class="tok-o">.</span><span class="tok-na">dependsOn</span> <span class="tok-n">buildZip</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>api-framwork-amazon-lambda</strong> is the required dependency. As we have already written
+our Session API Code. We have include <strong>tutorial-simple-get-api</strong> project and configuration.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_gradle_properties">gradle.properties</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="ini"><span></span><span class="lineno">1 </span><span class="tok-c1">#Compilation only for Java 1.8</span>
+<span class="lineno">2 </span><span class="tok-c1">#org.gradle.java.home=/Library/Java/JavaVirtualMachines/jdk1.8.0_152.jdk/Contents/Home</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Currently, Amazon Lambda only supports Java 1.8. In case you are having problem
+compiling project (Because you have installed Java 1.9). You can specifically set JDK here.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_create_lambda_function_code">Create Lambda Function Code</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"><span></span><span class="lineno"> 1 </span><span class="tok-kn">package</span> <span class="tok-nn">in.erail.tutorial.amazon.lambda</span><span class="tok-o">;</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="tok-kn">import</span> <span class="tok-nn">in.erail.amazon.lambda.AWSLambda</span><span class="tok-o">;</span>
+<span class="lineno"> 4 </span>
+<span class="lineno"> 5 </span><span class="tok-kd">public</span> <span class="tok-kd">class</span> <span class="tok-nc">SessionGetService</span> <span class="tok-kd">extends</span> <span class="tok-n">AWSLambda</span> <span class="tok-o">{</span>
+<span class="lineno"> 6 </span>
+<span class="lineno"> 7 </span>  <span class="tok-kd">public</span> <span class="tok-nf">SessionGetService</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+<span class="lineno"> 8 </span>    <span class="tok-kd">super</span><span class="tok-o">(</span><span class="tok-s">&quot;/in/erail/tutorial/SessionGetService&quot;</span><span class="tok-o">);</span>
+<span class="lineno"> 9 </span>  <span class="tok-o">}</span>
+<span class="lineno">10 </span>
+<span class="lineno">11 </span><span class="tok-o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To create Lambda function. Simply, create Java class extended <strong>AWSLambda</strong> class.
+And in constructor, pass service component path.</p>
+</div>
+<div class="paragraph">
+<p>Your Lambda Function Is Ready!</p>
+</div>
+<div class="sect3">
+<h4 id="_create_build">Create Build</h4>
+<div class="listingblock">
+<div class="title">Run</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sh"><span></span><span class="lineno">1 </span>gradle buildZip</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Your Lambda deployment package will get created at
+<code>build/distributions/tutorial-amazon-lambda.zip</code></p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_setup_lambda_function">Setup Lambda Function</h3>
-
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Go to AWS Management Console</p>
+</li>
+<li>
+<p>Goto Lambda</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-lambda/aws-lambda-home.png" alt="aws lambda home">
+</div>
+</div>
+<div class="paragraph">
+<p>Create lambda function using <strong>Create Function</strong></p>
+</div>
+</li>
+<li>
+<p>Create Function Screen</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-lambda/aws-lambda-author-from-scratch.png" alt="aws lambda author from scratch">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Name</strong> : handleProcess</p>
+</li>
+<li>
+<p><strong>Runtime</strong> : Java 8</p>
+</li>
+<li>
+<p><strong>Role</strong>* : We have already created role. Please create role if you don&#8217;t have one</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Function Code</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-lambda/aws-lambda-config.png" alt="aws lambda config">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Function Package</strong> : Upload <em>tutorial-amazon-lambda.zip</em> file ( You can upload larger
+then 10MB file)</p>
+</li>
+<li>
+<p><strong>Handle</strong> : Enter <em>in.erail.tutorial.amazon.lambda.SessionGetService</em> (Only class package
+and class name. No handle)</p>
+</li>
+<li>
+<p><strong>Environment Variable</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>GLUE_LAYERS</strong>  :  <em>./lib/api-framwork-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip</em></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Basic Settings</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-lambda/aws-lambda-basic-settings.png" alt="aws lambda basic settings">
+</div>
+</div>
+<div class="paragraph">
+<p>Ensure you set memory to 192MB minimum. Or else you will get memory out of exception</p>
+</div>
+</li>
+<li>
+<p>Create Test Event</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-lambda/aws-lambda-test.png" alt="aws lambda test">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Event Template</strong> : API Gateway AWS Proxy</p>
+</li>
+<li>
+<p><strong>Event Name</strong> : SessionGETAPITestEvent</p>
+</li>
+<li>
+<p><strong>Event Body</strong> : Though body is POST message. Keep it as it is. Lambda function gets
+everything as JSON Object. Mapping between correct URL and Method type and
+Lambda function is managed at API Gateway level. Here we just want to test our
+Lambda function.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Test Result</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-lambda/aws-lambda-test-result.png" alt="aws lambda test result">
+</div>
+</div>
+</li>
+</ol>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_setup_api_gateway">Setup API Gateway</h3>
-
+<div class="paragraph">
+<p>Now our Lambda function is setup. Lets use Amazon API Gateway to expose our API.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create API</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-api-gateway/amazon-api-gateway-home.png" alt="amazon api gateway home">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>API name</strong> : <em>Tutorial Session Get API</em></p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+API Gateway supports Swagger 2.0. API Framwork supports Open API 3
+specifications. As Open API 3 specification is becoming industry standard.
+Expectation is that Amazon will start supporting Open API 3 in future. Till then,
+you will have to create API manually.
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Create Resource</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-api-gateway/amazon-api-gateway-create-resource.png" alt="amazon api gateway create resource">
+</div>
+</div>
+<div class="paragraph">
+<p>Our API will be accessible on /session URL.</p>
+</div>
+</li>
+<li>
+<p>Configure Resource</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-api-gateway/amazon-api-gateway-resource-config.png" alt="amazon api gateway resource config">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Resource Name</strong> : <em>session</em> (This can any any name)</p>
+</li>
+<li>
+<p><strong>Resource Path</strong> : URL <em>/session</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Create Action</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-api-gateway/amazon-api-gateway-get-action.png" alt="amazon api gateway get action">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>GET Action</strong> : Create GET action. Configure action as per image.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Save Action</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-api-gateway/amazon-api-gateway-get-action-save.png" alt="amazon api gateway get action save">
+</div>
+</div>
+</li>
+<li>
+<p>Method Setup</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-api-gateway/amazon-api-gateway-get-action-created.png" alt="amazon api gateway get action created">
+</div>
+</div>
+<div class="paragraph">
+<p>Final API setup</p>
+</div>
+</li>
+<li>
+<p>Test API</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-api-gateway/amazon-api-gateway-get-action-test.png" alt="amazon api gateway get action test">
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>API is Working!!!</p>
+</div>
 </div>
 </div>
 </div>
