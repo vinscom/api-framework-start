@@ -12,3 +12,5 @@ include::./../tutorial-simple-get-api/docs/tutorial-simple-get-api.adoc[leveloff
 include::./../tutorial-simple-post-api/docs/tutorial-simple-post-api.adoc[leveloffset=+1]
 
 include::./../tutorial-secure-api/docs/tutorial-secure-api.adoc[leveloffset=+1]
+
+include::./../tutorial-amazon-lambda/docs/tutorial-aws-lambda-api.adoc[leveloffset=+1]
