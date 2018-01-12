@@ -12,7 +12,7 @@ services (knows as Backend as a Service or "BaaS") or on custom code that's run 
 ephemeral containers (Function as a Service or "FaaS"), the best known vendor host of
 which currently is AWS Lambda.
 
-API Framwork allows you to effortlessly run your API code as Lambda function in
+API Framework allows you to effortlessly run your API code as Lambda function in
 AWS ecosystem. In this tutorial, we will setup, Amazon API Gateway to access Session
 GET API (created as part of previous tutorial) and Amazon Lambda to execute Session
 GET logic.
@@ -38,7 +38,7 @@ This file only contain project name.
 ----
 include::./../build.gradle[]
 ----
-*api-framwork-amazon-lambda* is the required dependency. As we have already written
+*api-framework-amazon-lambda* is the required dependency. As we have already written
 our Session API Code. We have include *tutorial-simple-get-api* project and configuration.
 
 === gradle.properties
@@ -94,7 +94,7 @@ image::amazon-lambda/aws-lambda-config.png[]
   - *Handle* : Enter _in.erail.tutorial.amazon.lambda.SessionGetService_ (Only class package
   and class name. No handle)
   - *Environment Variable*
-    * *GLUE_LAYERS*  :  _./lib/api-framwork-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip_
+    * *GLUE_LAYERS*  :  _./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip_
 . Basic Settings
 +
 image::amazon-lambda/aws-lambda-basic-settings.png[]
@@ -122,7 +122,7 @@ image::amazon-api-gateway/amazon-api-gateway-home.png[]
 
   - *API name* : _Tutorial Session Get API_
 +
-NOTE:  API Gateway supports Swagger 2.0. API Framwork supports Open API 3
+NOTE:  API Gateway supports Swagger 2.0. API Framework supports Open API 3
 specifications. As Open API 3 specification is becoming industry standard.
 Expectation is that Amazon will start supporting Open API 3 in future. Till then,
 you will have to create API manually.

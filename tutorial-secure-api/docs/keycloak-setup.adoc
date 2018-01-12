@@ -3,8 +3,8 @@ ifndef::source-highlighter[:source-highlighter: pygments]
 ifndef::pygments-linenums-mode[:pygments-linenums-mode: inline]
 ifndef::imagesdir[:imagesdir: ./../../docs/images]
 :att_project_name: tutorial-secure-api
-:att_project_git_repository: https://github.com/vinscom/api-framwork-start.git
-:att_project_git_name: API Framwork Start
+:att_project_git_repository: https://github.com/vinscom/api-framework-start.git
+:att_project_git_name: API Framework Start
 :att_keycloak_url: http://localhost:8080/auth/admin/
 
 = Keycloak Setup

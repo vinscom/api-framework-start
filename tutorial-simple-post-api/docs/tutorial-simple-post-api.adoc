@@ -109,7 +109,7 @@ After running maven install. You should have build folder inside target folder.
  ++ tutorial-simple-post-api-1.0-SNAPSHOT-lib
  +++ dependencies
  ++ config
- +++ api-framwork-1.0-SNAPSHOT-common-config.zip
+ +++ api-framework-1.0-SNAPSHOT-common-config.zip
  +++ tutorial-simple-post-api-1.0-SNAPSHOT-common-config.zip
 }
 }
@@ -122,7 +122,7 @@ After running maven install. You should have build folder inside target folder.
 java \
 -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory \
 -Dglue.layers=\
-./config/api-framwork-1.0-SNAPSHOT-common-config.zip,\
+./config/api-framework-1.0-SNAPSHOT-common-config.zip,\
 ./config/tutorial-simple-post-api-1.0-SNAPSHOT-common-config.zip \
 -jar tutorial-simple-post-api-1.0-SNAPSHOT.jar
 ----

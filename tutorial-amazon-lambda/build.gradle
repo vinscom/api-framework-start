@@ -8,7 +8,7 @@ repositories {
 dependencies {
     compile (
         //Only Required Dependecy
-        'in.erail:api-framwork-amazon-lambda:1.0-SNAPSHOT',
+        'in.erail:api-framework-amazon-lambda:1.0-SNAPSHOT',
         //Already developed Session GET API Tutorial project
         'in.erail:tutorial-simple-get-api:1.0-SNAPSHOT',
         //Session GET API Tutorial project configuration

@@ -19,7 +19,7 @@ include::keycloak-setup.adoc[leveloffset=+1]
 
 == Create site to use API (No Authentication)
 
-Ideally, you will run only API on API Framwork and content will be delivered from
+Ideally, you will run only API on API Framework and content will be delivered from
 somewhere else like below.
 
 [plantuml,uml/simple-api-and-content-infra-setup, png]
@@ -84,7 +84,7 @@ We have already done all the configuration as part of Keycloak setup. Simple ena
 java \
 -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory \
 -Dglue.layers=\
-./config/api-framwork-1.0-SNAPSHOT-common-config.zip,\
+./config/api-framework-1.0-SNAPSHOT-common-config.zip,\
 ./config/tutorial-secure-api-1.0-SNAPSHOT-common-config.zip \
 -jar tutorial-secure-api-1.0-SNAPSHOT.jar
 ----

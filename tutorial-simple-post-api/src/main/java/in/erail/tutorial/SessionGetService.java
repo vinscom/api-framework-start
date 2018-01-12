@@ -1,6 +1,6 @@
 package in.erail.tutorial;
 
-import in.erail.common.FramworkConstants;
+import in.erail.common.FrameworkConstants;
 import in.erail.service.RESTServiceImpl;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -20,7 +20,7 @@ public class SessionGetService extends RESTServiceImpl {
 
   @Override
   public void process(Message<JsonObject> pMessage) {
-    pMessage.reply(new JsonObject().put(FramworkConstants.RoutingContext.Json.BODY, getSessions()));
+    pMessage.reply(new JsonObject().put(FrameworkConstants.RoutingContext.Json.BODY, getSessions()));
   }
 
   public JsonArray getSessions() {

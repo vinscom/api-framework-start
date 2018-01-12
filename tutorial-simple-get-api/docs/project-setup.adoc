@@ -3,8 +3,8 @@ ifndef::source-highlighter[:source-highlighter: pygments]
 ifndef::pygments-linenums-mode[:pygments-linenums-mode: inline]
 ifndef::imagesdir[:imagesdir: ./../../docs/images]
 :att_project_name: tutorial-simple-get-api
-:att_project_git_repository: https://github.com/vinscom/api-framwork-start.git
-:att_project_git_name: API Framwork Start
+:att_project_git_repository: https://github.com/vinscom/api-framework-start.git
+:att_project_git_name: API Framework Start
 
 = Create Maven Project using Netbean
 
@@ -74,7 +74,7 @@ include::./../pom.xml[tag=argLine]
 [%header]
 !===
 ! Layer ! Description
-! ${settings.localRepository}/in/erail/api-framwork/1.0-SNAPSHOT/api-framwork-1.0-SNAPSHOT-common-config.zip
+! ${settings.localRepository}/in/erail/api-framework/1.0-SNAPSHOT/api-framework-1.0-SNAPSHOT-common-config.zip
 ! API Framework Configuration Layer
 ! ${project.basedir}/config-layers/common
 ! Our project configuration layer
