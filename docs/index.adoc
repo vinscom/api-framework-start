@@ -2,7 +2,7 @@
 Vinay Kumar
 v0.1
 :toc: left
-:toclevels: 4
+:toclevels: 2
 :source-highlighter: pygments
 :pygments-linenums-mode: inline
 :imagesdir: ./images
