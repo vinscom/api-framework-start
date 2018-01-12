@@ -156,4 +156,34 @@ Final API setup
 +
 image::amazon-api-gateway/amazon-api-gateway-get-action-test.png[]
 
-Amazon Lambda based API is working!!!
+Our API is working!!!
+
+== Deploy API
+
+Now, lets make our API public. To make our API public, we will have to create stage.
+Stage will give us unique URL through which we can access our API (Later on, you can
+map this stage to your custom domain) .
+
+NOTE: As this is tutorial, we are not using any type of authentication. Please
+make sure you have right level of access in any stage API.
+
+. Deploy API
++
+image::amazon-api-gateway/amazon-api-gateway-deploy-api.png[]
+
+. Create new stage
++
+image::amazon-api-gateway/amazon-api-gateway-deploy-api-config.png[]
+  - *Deployment Stage* : _New Stage_
+  - *Stage Name* : _tutorial_
+
+. Stage Home
++
+image::amazon-api-gateway/amazon-api-gateway-stage-home.png[]
+
+Using *Invoka URL* we can access our API. To access API use below URL.
+----
+https://bhpdtkdfek.execute-api.us-east-2.amazonaws.com/tutorial/session
+----
+
+Done!!!

@@ -584,6 +584,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_setup_lambda_function">Setup Lambda Function</a></li>
 <li><a href="#_setup_api_gateway">Setup API Gateway</a></li>
+<li><a href="#_deploy_api">Deploy API</a></li>
 </ul>
 </li>
 </ul>
@@ -2468,7 +2469,77 @@ you will have to create API manually.
 </ol>
 </div>
 <div class="paragraph">
-<p>Amazon Lambda based API is working!!!</p>
+<p>Our API is working!!!</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deploy_api">Deploy API</h3>
+<div class="paragraph">
+<p>Now, lets make our API public. To make our API public, we will have to create stage.
+Stage will give us unique URL through which we can access our API (Later on, you can
+map this stage to your custom domain) .</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+As this is tutorial, we are not using any type of authentication. Please
+make sure you have right level of access in any stage API.
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Deploy API</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-api-gateway/amazon-api-gateway-deploy-api.png" alt="amazon api gateway deploy api">
+</div>
+</div>
+</li>
+<li>
+<p>Create new stage</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-api-gateway/amazon-api-gateway-deploy-api-config.png" alt="amazon api gateway deploy api config">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Deployment Stage</strong> : <em>New Stage</em></p>
+</li>
+<li>
+<p><strong>Stage Name</strong> : <em>tutorial</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Stage Home</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/amazon-api-gateway/amazon-api-gateway-stage-home.png" alt="amazon api gateway stage home">
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Using <strong>Invoka URL</strong> we can access our API. To access API use below URL.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>https://bhpdtkdfek.execute-api.us-east-2.amazonaws.com/tutorial/session</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Done!!!</p>
 </div>
 </div>
 </div>
