@@ -545,6 +545,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_deploy_api">Deploy API</a></li>
 </ul>
 </li>
+<li><a href="#_docker_deployment">Docker Deployment</a>
+<ul class="sectlevel2">
+<li><a href="#_project_setup">Project Setup</a></li>
+<li><a href="#_project_configuration_layer">Project configuration layer</a></li>
+<li><a href="#_build_project_structure">Build Project Structure</a></li>
+<li><a href="#_dockerfile">Dockerfile</a></li>
+<li><a href="#_docker_image">Docker Image</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -597,14 +606,7 @@ Below steps are optional. You can clone
 <span class="lineno"> 7 </span>    <span class="tok-nt">&lt;groupId&gt;</span>in.erail<span class="tok-nt">&lt;/groupId&gt;</span>
 <span class="lineno"> 8 </span>    <span class="tok-nt">&lt;artifactId&gt;</span>api-framework<span class="tok-nt">&lt;/artifactId&gt;</span>
 <span class="lineno"> 9 </span>    <span class="tok-nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="tok-nt">&lt;/version&gt;</span>
-<span class="lineno">10 </span><span class="tok-nt">&lt;/dependency&gt;</span>
-<span class="lineno">11 </span><span class="tok-nt">&lt;dependency&gt;</span>
-<span class="lineno">12 </span>    <span class="tok-nt">&lt;groupId&gt;</span>in.erail<span class="tok-nt">&lt;/groupId&gt;</span>
-<span class="lineno">13 </span>    <span class="tok-nt">&lt;artifactId&gt;</span>api-framework<span class="tok-nt">&lt;/artifactId&gt;</span>
-<span class="lineno">14 </span>    <span class="tok-nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="tok-nt">&lt;/version&gt;</span>
-<span class="lineno">15 </span>    <span class="tok-nt">&lt;classifier&gt;</span>common-config<span class="tok-nt">&lt;/classifier&gt;</span>
-<span class="lineno">16 </span>    <span class="tok-nt">&lt;type&gt;</span>zip<span class="tok-nt">&lt;/type&gt;</span>
-<span class="lineno">17 </span><span class="tok-nt">&lt;/dependency&gt;</span></code></pre>
+<span class="lineno">10 </span><span class="tok-nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 </li>
@@ -2502,11 +2504,205 @@ make sure you have right level of access in any stage API.
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_docker_deployment">Docker Deployment</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this tutorial, we will package our project created as part of <strong>Simple POST API</strong>  in
+Docker image.</p>
+</div>
+<div class="sect2">
+<h3 id="_project_setup">Project Setup</h3>
+<div class="paragraph">
+<p>We will use Maven project to create build ready for creation of Docker image.
+If you have done <strong>Simple POST API</strong>. Then you will find that our POM.xml is almost
+exactly same.</p>
+</div>
+<div class="paragraph">
+<p>Only main difference is configuration file. In docker project, we will generate three config
+files.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>API Framework configuration file</p>
+</li>
+<li>
+<p>Post API Tutorial configuration file</p>
+</li>
+<li>
+<p>Docker configuration file (This project)</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>We have update artefact section. So, after build, you will find 3 configuration files in
+<em>build/config</em> folder</p>
+</div>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span></span><span class="lineno"> 1 </span><span class="tok-nt">&lt;artifactItems&gt;</span>
+<span class="lineno"> 2 </span>    <span class="tok-nt">&lt;artifactItem&gt;</span>
+<span class="lineno"> 3 </span>        <span class="tok-nt">&lt;groupId&gt;</span>in.erail<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="lineno"> 4 </span>        <span class="tok-nt">&lt;artifactId&gt;</span>api-framework<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="lineno"> 5 </span>        <span class="tok-nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="tok-nt">&lt;/version&gt;</span>
+<span class="lineno"> 6 </span>        <span class="tok-nt">&lt;classifier&gt;</span>common-config<span class="tok-nt">&lt;/classifier&gt;</span>
+<span class="lineno"> 7 </span>        <span class="tok-nt">&lt;type&gt;</span>zip<span class="tok-nt">&lt;/type&gt;</span>
+<span class="lineno"> 8 </span>    <span class="tok-nt">&lt;/artifactItem&gt;</span>
+<span class="lineno"> 9 </span>    <span class="tok-nt">&lt;artifactItem&gt;</span>
+<span class="lineno">10 </span>        <span class="tok-nt">&lt;groupId&gt;</span>in.erail<span class="tok-nt">&lt;/groupId&gt;</span>
+<span class="lineno">11 </span>        <span class="tok-nt">&lt;artifactId&gt;</span>tutorial-simple-post-api<span class="tok-nt">&lt;/artifactId&gt;</span>
+<span class="lineno">12 </span>        <span class="tok-nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="tok-nt">&lt;/version&gt;</span>
+<span class="lineno">13 </span>        <span class="tok-nt">&lt;classifier&gt;</span>common-config<span class="tok-nt">&lt;/classifier&gt;</span>
+<span class="lineno">14 </span>        <span class="tok-nt">&lt;type&gt;</span>zip<span class="tok-nt">&lt;/type&gt;</span>
+<span class="lineno">15 </span>    <span class="tok-nt">&lt;/artifactItem&gt;</span>
+<span class="lineno">16 </span><span class="tok-nt">&lt;/artifactItems&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_project_configuration_layer">Project configuration layer</h3>
+<div class="paragraph">
+<p>Docker configuration layer contains single configuration file <strong>server.properties</strong>.
+This file overrides <em>host</em> property. By default, <em>host</em> property is configured to use
+<em>localhost</em>. This creates problem where URLs are not accessible from outside Docker
+container (from Host machine). Using <em>0.0.0.0</em>, we make sure that URL is accessible
+from outside also (from Host machine).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="ini"><span></span><span class="lineno">1 </span><span class="tok-c1">#/in/erail/server/Server</span>
+<span class="lineno">2 </span><span class="tok-c1">#If host is localhost, Server is not accessible from outside contaner.</span>
+<span class="lineno">3 </span><span class="tok-na">host</span><span class="tok-o">=</span><span class="tok-s">0.0.0.0</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_build_project_structure">Build Project Structure</h3>
+<div class="paragraph">
+<p>After build your maven project, you will find below structure in target/build folder</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/uml/docker-build-folder-structure.png" alt="docker build folder structure" width="399" height="124">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dockerfile">Dockerfile</h3>
+<div class="paragraph">
+<p>Docker file configuration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="docker"><span></span><span class="lineno"> 1 </span><span class="tok-k">FROM</span><span class="tok-s"> openjdk:8-jdk</span>
+<span class="lineno"> 2 </span>
+<span class="lineno"> 3 </span><span class="tok-c"># Vertx cache</span>
+<span class="lineno"> 4 </span><span class="tok-k">ENV</span><span class="tok-s"> VERTX_OPTS -Dvertx.cacheDirBase=/tmp/</span>
+<span class="lineno"> 5 </span>
+<span class="lineno"> 6 </span><span class="tok-c"># Set the location of the verticles</span>
+<span class="lineno"> 7 </span><span class="tok-k">ENV</span><span class="tok-s"> VERTICLE_HOME /usr/verticle</span>
+<span class="lineno"> 8 </span>
+<span class="lineno"> 9 </span>COPY ./target/build <span class="tok-nv">$VERTICLE_HOME</span>
+<span class="lineno">10 </span><span class="tok-k">WORKDIR</span><span class="tok-s"> $VERTICLE_HOME</span>
+<span class="lineno">11 </span>
+<span class="lineno">12 </span><span class="tok-k">ENTRYPOINT</span><span class="tok-s"> [&quot;sh&quot;,&quot;-c&quot;]</span>
+<span class="lineno">13 </span><span class="tok-k">CMD</span><span class="tok-s"> [&quot;java \</span>
+<span class="lineno">14 </span>        -Dglue.layers<span class="tok-o">=</span>./config/api-framework-1.0-SNAPSHOT-common-config.zip,./config/tutorial-simple-post-api-1.0-SNAPSHOT-common-config.zip,./config/tutorial-docker-1.0-SNAPSHOT-common-config.zip <span class="tok-se">\</span>
+<span class="lineno">15 </span>        -jar tutorial-docker-1.0-SNAPSHOT.jar<span class="tok-s2">&quot;]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For your reference, more configuration is provided for you.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="docker"><span></span><span class="lineno"> 1 </span><span class="tok-c"># Reference Config:</span>
+<span class="lineno"> 2 </span><span class="tok-c"># 1. Debug enable</span>
+<span class="lineno"> 3 </span><span class="tok-c"># 2. Vertx and Hazelcast JMX enable</span>
+<span class="lineno"> 4 </span><span class="tok-c"># 3. G1 garbage collector</span>
+<span class="lineno"> 5 </span><span class="tok-c"># 4. Set Vertx Logging to use Log4J</span>
+<span class="lineno"> 6 </span><span class="tok-c">#</span>
+<span class="lineno"> 7 </span><span class="tok-c">#===============================================================================</span>
+<span class="lineno"> 8 </span><span class="tok-c"># NOTE:</span>
+<span class="lineno"> 9 </span><span class="tok-c"># $RMI_PORT : RMI Port on which you want to access JMX. Map this port to Host</span>
+<span class="lineno">10 </span><span class="tok-c">#             Port also.</span>
+<span class="lineno">11 </span><span class="tok-c"># $HOST : Host IP Address. IP Address of your machine, not, docker</span>
+<span class="lineno">12 </span><span class="tok-c">#===============================================================================</span>
+<span class="lineno">13 </span><span class="tok-c">#</span>
+<span class="lineno">14 </span><span class="tok-c">#CMD [&quot;java \</span>
+<span class="lineno">15 </span><span class="tok-c">#        -Xmx1g \</span>
+<span class="lineno">16 </span><span class="tok-c">#        -Xms1g \</span>
+<span class="lineno">17 </span><span class="tok-c">#        -XX:+UseG1GC \</span>
+<span class="lineno">18 </span><span class="tok-c">#        -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory \</span>
+<span class="lineno">19 </span><span class="tok-c">#        -Dhazelcast.jmx=true \</span>
+<span class="lineno">20 </span><span class="tok-c">#        -Dcom.sun.management.jmxremote \</span>
+<span class="lineno">21 </span><span class="tok-c">#        -Dcom.sun.management.jmxremote.port=$RMI_PORT \</span>
+<span class="lineno">22 </span><span class="tok-c">#        -Dcom.sun.management.jmxremote.rmi.port=$RMI_PORT \</span>
+<span class="lineno">23 </span><span class="tok-c">#        -Djava.rmi.server.hostname=$HOST \</span>
+<span class="lineno">24 </span><span class="tok-c">#        -Dcom.sun.management.jmxremote.ssl=false \</span>
+<span class="lineno">25 </span><span class="tok-c">#        -Dcom.sun.management.jmxremote.authenticate=false \</span>
+<span class="lineno">26 </span><span class="tok-c">#        -Dglue.layers=./config/api-framework-1.0-SNAPSHOT-common-config.zip,./config/tutorial-simple-post-api-1.0-SNAPSHOT-common-config.zip,./config/tutorial-docker-1.0-SNAPSHOT-common-config.zip \</span>
+<span class="lineno">27 </span><span class="tok-c">#        -agentlib:jdwp=transport=dt_socket,address=$DEBUG_PORT,server=y,suspend=n \</span>
+<span class="lineno">28 </span><span class="tok-c">#        -jar tutorial-docker-1.0-SNAPSHOT.jar&quot;]</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_docker_image">Docker Image</h3>
+<div class="paragraph">
+<p>To create image you will need to install Docker. Depending on your OS, please install
+docker from <a href="https://www.docker.com/">Docker.com</a></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create Image</p>
+<div class="listingblock">
+<div class="title">Run command in same folder where <strong>Dockerfile</strong> is present.</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sh"><span></span><span class="lineno">1 </span>docker build -t tutorial-docker .</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run Image</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sh"><span></span><span class="lineno">1 </span>docker run --name tutorial-docker-test -p <span class="tok-m">8888</span>:8888 tutorial-docker</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>To test, use same test commands as used in <strong>Simple POST API</strong> tutorial.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>You docker image is ready with name <strong>tutorial-docker</strong>!!!</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Image created is only present in your system. To publish image, please refer
+to  Docker documentation.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.1<br>
-Last updated 2018-01-12 15:28:30 GMT
+Last updated 2018-01-13 00:55:42 GMT
 </div>
 </div>
 </body>
