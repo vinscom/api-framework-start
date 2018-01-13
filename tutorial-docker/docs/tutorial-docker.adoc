@@ -1,0 +1,5 @@
+ifndef::toc[:toc: left]
+ifndef::source-highlighter[:source-highlighter: pygments]
+ifndef::pygments-linenums-mode[:pygments-linenums-mode: inline]
+ifndef::imagesdir[:imagesdir: ./../../docs/images]
+
