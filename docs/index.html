@@ -507,6 +507,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
+<li><a href="#_what_is_api_framework">What is API Framework ?</a>
+<ul class="sectlevel2">
+<li><a href="#_features">Features</a></li>
+</ul>
+</li>
 <li><a href="#_simple_get_api">Simple GET API</a>
 <ul class="sectlevel2">
 <li><a href="#_create_maven_project_using_netbean">Create Maven Project using Netbean</a></li>
@@ -558,6 +563,84 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div id="content">
+<div class="sect1">
+<h2 id="_what_is_api_framework">What is API Framework ?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>API Framework is structured code/pattern/project template for you to write API based
+system using Vertx Framework (<a href="http://vertx.io/" class="bare">http://vertx.io/</a>).</p>
+</div>
+<div class="paragraph">
+<p>Idea is to provide structure to development project, so, that with minimum learning curve,
+programmers can become productive. Vertx and API Framework project setup is enough
+to build complex application.</p>
+</div>
+<div class="sect2">
+<h3 id="_features">Features</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Code and Configuration is completely separate.</p>
+</li>
+<li>
+<p>Decoupled source code dependency between classes.</p>
+</li>
+<li>
+<p>Configuration has layer concept to change configuration without changing original
+configuration</p>
+</li>
+<li>
+<p>Build is ready for serverless deployment (AWS Lambda).</p>
+</li>
+<li>
+<p>Build is ready for Docker deployment</p>
+</li>
+<li>
+<p>Zero installation. Copy paste and run. Easy cloud deployment.</p>
+</li>
+<li>
+<p>Component based development and build for extension.</p>
+</li>
+<li>
+<p>High performance (Based on Vertx).</p>
+</li>
+<li>
+<p>Support all Vertx supported languages.</p>
+</li>
+<li>
+<p>Open API 3 based API Definition.</p>
+</li>
+<li>
+<p>Out of box Keycloak integration to create API Gateway.</p>
+</li>
+<li>
+<p>Easy component based testing model.</p>
+</li>
+<li>
+<p>Excellent implementation pattern repository to meet most of the use cases for any
+complex project</p>
+</li>
+<li>
+<p>Easy to learn</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+For dependency and configuration management. We have used
+<a href="https://vinscom.github.io/glue/">Glue</a> project.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_simple_get_api">Simple GET API</h2>
 <div class="sectionbody">
@@ -831,7 +914,7 @@ layer</p></td>
 </table></div></td>
 <td class="tableblock halign-left valign-top"><div><div class="paragraph">
 <p>All configuration layers. Configuration layers are read in same order as defined in
-argument. Layer configuration is read from right to left. Means, left configuration will
+argument. Layer configuration is read from left to right. Means, left configuration will
 override right configuration, if same configuration is also present in right layer.</p>
 </div>
 <div class="admonitionblock note">
@@ -2702,7 +2785,7 @@ to  Docker documentation.
 <div id="footer">
 <div id="footer-text">
 Version 0.1<br>
-Last updated 2018-01-13 00:55:42 GMT
+Last updated 2018-01-13 15:47:32 GMT
 </div>
 </div>
 </body>

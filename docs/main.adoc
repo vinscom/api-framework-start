@@ -1,0 +1,30 @@
+
+= What is API Framework ?
+
+API Framework is structured code/pattern/project template for you to write API based
+system using Vertx Framework (http://vertx.io/).
+
+Idea is to provide structure to development project, so, that with minimum learning curve,
+programmers can become productive. Vertx and API Framework project setup is enough
+to build complex application.
+
+== Features
+. Code and Configuration is completely separate.
+. Decoupled source code dependency between classes.
+. Configuration has layer concept to change configuration without changing original
+configuration
+. Build is ready for serverless deployment (AWS Lambda).
+. Build is ready for Docker deployment
+. Zero installation. Copy paste and run. Easy cloud deployment.
+. Component based development and build for extension.
+. High performance (Based on Vertx).
+. Support all Vertx supported languages.
+. Open API 3 based API Definition.
+. Out of box Keycloak integration to create API Gateway.
+. Easy component based testing model.
+. Excellent implementation pattern repository to meet most of the use cases for any
+complex project
+. Easy to learn
+
+NOTE: For dependency and configuration management. We have used
+https://vinscom.github.io/glue/[Glue] project.
