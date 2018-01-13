@@ -1,8 +1,7 @@
+#tag::Dockerfile[]
 FROM openjdk:8-jdk
 
-RUN apt-get update && apt-get install -y curl
-
-# Vertx cache and cluster config
+# Vertx cache
 ENV VERTX_OPTS -Dvertx.cacheDirBase=/tmp/
 
 # Set the location of the verticles
@@ -16,6 +15,8 @@ CMD ["java \
         -Dglue.layers=./config/api-framework-1.0-SNAPSHOT-common-config.zip,./config/tutorial-simple-post-api-1.0-SNAPSHOT-common-config.zip,./config/tutorial-docker-1.0-SNAPSHOT-common-config.zip \
         -jar tutorial-docker-1.0-SNAPSHOT.jar"]
 
+#end::Dockerfile[]
+#tag::ReferenceConfig[]
 # Reference Config:
 # 1. Debug enable
 # 2. Vertx and Hazelcast JMX enable
@@ -44,3 +45,4 @@ CMD ["java \
 #        -Dglue.layers=./config/api-framework-1.0-SNAPSHOT-common-config.zip,./config/tutorial-simple-post-api-1.0-SNAPSHOT-common-config.zip,./config/tutorial-docker-1.0-SNAPSHOT-common-config.zip \
 #        -agentlib:jdwp=transport=dt_socket,address=$DEBUG_PORT,server=y,suspend=n \
 #        -jar tutorial-docker-1.0-SNAPSHOT.jar"]
+#end::ReferenceConfig[]

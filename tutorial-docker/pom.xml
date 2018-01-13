@@ -25,7 +25,6 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.5.3</version>
                 <executions>
-                    <!-- tag::assembly-tutorial-simple-get-api-config[] -->
                     <execution>
                         <id>common-config</id>
                         <phase>package</phase>
@@ -37,7 +36,6 @@
                             <descriptor>src/assembly/common-config.xml</descriptor>
                         </configuration>
                     </execution>
-                    <!-- end::assembly-tutorial-simple-get-api-config[] -->
                 </executions>
             </plugin>
             <plugin>
@@ -52,6 +50,7 @@
                             <goal>copy</goal>
                         </goals>
                         <configuration>
+                            <!-- tag::config[] -->
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>in.erail</groupId>
@@ -68,6 +67,7 @@
                                     <type>zip</type>
                                 </artifactItem>
                             </artifactItems>
+                            <!-- end::config[] -->
                             <outputDirectory>${project.build.directory}/build/config</outputDirectory>
                         </configuration>
                     </execution>

@@ -3,3 +3,106 @@ ifndef::source-highlighter[:source-highlighter: pygments]
 ifndef::pygments-linenums-mode[:pygments-linenums-mode: inline]
 ifndef::imagesdir[:imagesdir: ./../../docs/images]
 
+= Docker Deployment
+
+In this tutorial, we will package our project created as part of *Simple POST API*  in
+Docker image.
+
+== Project Setup
+We will use Maven project to create build ready for creation of Docker image.
+If you have done *Simple POST API*. Then you will find that our POM.xml is almost
+exactly same.
+
+Only main difference is configuration file. In docker project, we will generate three config
+files.
+
+. API Framework configuration file
+. Post API Tutorial configuration file
+. Docker configuration file (This project)
+
+We have update artefact section. So, after build, you will find 3 configuration files in
+_build/config_ folder
+
+.pom.xml
+[source,xml,linenums,indent=0]
+----
+include::./../pom.xml[tag=config]
+----
+
+== Project configuration layer
+
+Docker configuration layer contains single configuration file *server.properties*.
+This file overrides _host_ property. By default, _host_ property is configured to use
+_localhost_. This creates problem where URLs are not accessible from outside Docker
+container (from Host machine). Using _0.0.0.0_, we make sure that URL is accessible
+from outside also (from Host machine).
+
+[source,ini,linenums]
+----
+include::./../config-layers/common/in/erail/server/Server.properties[]
+----
+
+== Build Project Structure
+
+After build your maven project, you will find below structure in target/build folder
+
+[plantuml,uml/docker-build-folder-structure, png]
+....
+@startsalt
+{
+{T
+ + **build**
+ ++ tutorial-docker-1.0-SNAPSHOT.jar
+ ++ tutorial-docker-1.0-SNAPSHOT-lib
+ +++ dependencies
+ ++ config
+ +++ api-framework-1.0-SNAPSHOT-common-config.zip
+ +++ tutorial-simple-post-api-1.0-SNAPSHOT-common-config.zip
+ +++ tutorial-docker-1.0-SNAPSHOT-common-config.zip
+}
+}
+@endsalt
+....
+
+== Dockerfile
+
+Docker file configuration.
+
+[source,docker,linenums]
+----
+include::./../Dockerfile[tag=Dockerfile]
+----
+
+For your reference, more configuration is provided for you.
+
+[source,docker,linenums]
+----
+include::./../Dockerfile[tag=ReferenceConfig]
+----
+
+== Docker Image
+
+To create image you will need to install Docker. Depending on your OS, please install
+docker from https://www.docker.com/[Docker.com]
+
+. Create Image
++
+.Run command in same folder where *Dockerfile* is present.
+[source,sh,linenums]
+----
+docker build -t tutorial-docker .
+----
+
+. Run Image
++
+[source,sh,linenums]
+----
+docker run --name tutorial-docker-test -p 8888:8888 tutorial-docker
+----
+
+. To test, use same test commands as used in *Simple POST API* tutorial.
+
+You docker image is ready with name *tutorial-docker*!!!
+
+NOTE: Image created is only present in your system. To publish image, please refer
+to  Docker documentation.

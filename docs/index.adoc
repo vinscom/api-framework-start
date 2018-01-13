@@ -14,3 +14,5 @@ include::./../tutorial-simple-post-api/docs/tutorial-simple-post-api.adoc[levelo
 include::./../tutorial-secure-api/docs/tutorial-secure-api.adoc[leveloffset=+1]
 
 include::./../tutorial-amazon-lambda/docs/tutorial-aws-lambda-api.adoc[leveloffset=+1]
+
+include::./../tutorial-docker/docs/tutorial-docker.adoc[leveloffset=+1]
