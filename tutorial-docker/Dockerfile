@@ -13,7 +13,6 @@ WORKDIR $VERTICLE_HOME
 
 ENTRYPOINT ["sh","-c"]
 CMD ["java \
-        -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory \
         -Dglue.layers=./config/api-framework-1.0-SNAPSHOT-common-config.zip,./config/tutorial-simple-post-api-1.0-SNAPSHOT-common-config.zip,./config/tutorial-docker-1.0-SNAPSHOT-common-config.zip \
         -jar tutorial-docker-1.0-SNAPSHOT.jar"]
 
@@ -42,6 +41,6 @@ CMD ["java \
 #        -Djava.rmi.server.hostname=$HOST \
 #        -Dcom.sun.management.jmxremote.ssl=false \
 #        -Dcom.sun.management.jmxremote.authenticate=false \
-#        -Dglue.layers=./config/api-framework-1.0-SNAPSHOT-common-config.zip,./config/tutorial-docker-1.0-SNAPSHOT-common-config.zip \
+#        -Dglue.layers=./config/api-framework-1.0-SNAPSHOT-common-config.zip,./config/tutorial-simple-post-api-1.0-SNAPSHOT-common-config.zip,./config/tutorial-docker-1.0-SNAPSHOT-common-config.zip \
 #        -agentlib:jdwp=transport=dt_socket,address=$DEBUG_PORT,server=y,suspend=n \
 #        -jar tutorial-docker-1.0-SNAPSHOT.jar"]
