@@ -83,8 +83,8 @@ include::./../pom.xml[tag=argLine]
 layer
 !===
 | All configuration layers. Configuration layers are read in same order as defined in
-argument. Layer configuration is read from left to right. Means, left configuration will
-override right configuration, if same configuration is also present in right layer.
+argument. Layer configuration is read from left to right. Means, right configuration will
+override left configuration, if same configuration is also present in right layer.
 
 NOTE: Configuration are managed at individual property level. So, if two
 properties file have same configuration file, but, different property inside those
