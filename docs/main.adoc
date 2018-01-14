@@ -13,6 +13,7 @@ to build complex application.
 . Decoupled source code dependency between classes.
 . Configuration has layer concept to change configuration without changing original
 configuration
+. Fully Reactive
 . Build is ready for serverless deployment (AWS Lambda).
 . Build is ready for Docker deployment
 . Zero installation. Copy paste and run. Easy cloud deployment.
