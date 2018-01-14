@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
 <meta name="author" content="Vinay Kumar">
-<title>API Framework Tutorial - Draft</title>
+<title>API Framework Tutorial</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -499,7 +499,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>API Framework Tutorial - Draft</h1>
+<h1>API Framework Tutorial</h1>
 <div class="details">
 <span id="author" class="author">Vinay Kumar</span><br>
 <span id="revnumber">version 0.1</span>
@@ -572,8 +572,8 @@ system using Vertx Framework (<a href="http://vertx.io/" class="bare">http://ver
 </div>
 <div class="paragraph">
 <p>Idea is to provide structure to development project, so, that with minimum learning curve,
-programmers can become productive. Vertx and API Framework project setup is enough
-to build complex application.</p>
+programmers can become productive. Understanding of Vertx and API Framework project
+setup is enough to build complex application.</p>
 </div>
 <div class="sect2">
 <h3 id="_features">Features</h3>
@@ -583,7 +583,7 @@ to build complex application.</p>
 <p>Code and Configuration is completely separate.</p>
 </li>
 <li>
-<p>Decoupled source code dependency between classes.</p>
+<p>Decoupled source code level dependencies between classes.</p>
 </li>
 <li>
 <p>Configuration has layer concept to change configuration without changing original
@@ -916,9 +916,7 @@ layer</p></td>
 </tbody>
 </table></div></td>
 <td class="tableblock halign-left valign-top"><div><div class="paragraph">
-<p>All configuration layers. Configuration layers are read in same order as defined in
-argument. Layer configuration is read from left to right. Means, right configuration will
-override left configuration, if same configuration is also present in right layer.</p>
+<p>All configuration layers.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -927,10 +925,22 @@ override left configuration, if same configuration is also present in right laye
 <div class="title">Note</div>
 </td>
 <td class="content">
-Configuration are managed at individual property level. So, if two
-properties file have same configuration file, but, different property inside those
-configuration file, then configuration file is merged. For more information read
-Glue documentation.
+Configuration layers are read in same order as defined in
+argument. Layer configuration is read from left to right. Means, right configuration will
+override left configuration, if same configuration is also present in right layer.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Configuration are managed at individual property level. Please refer to <strong>Glue</strong>
+to understand how layers are merged.
 </td>
 </tr>
 </table>
@@ -1002,8 +1012,19 @@ definition. Below is definition</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Our API will have single URL /session (like <a href="http://localhost:8888/v1/session" class="bare">http://localhost:8888/v1/session</a>). Session is not
-related to actual Vertx session.</p>
+<p>Our API will have single URL /session (like <a href="http://localhost:8888/v1/session" class="bare">http://localhost:8888/v1/session</a>).</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Remember API Session is not related to actual Vertx Web Session.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <div class="title">GET</div>
@@ -1016,8 +1037,8 @@ related to actual Vertx session.</p>
 <div class="title">Note</div>
 </td>
 <td class="content">
-Each method requiring processing must have <strong>unique OperationId</strong>. OperationId
-is used for processing request from method.
+Each method requiring processing must have <strong>unique OperationId</strong>.
+OperationId is used for processing request from method.
 </td>
 </tr>
 </table>
@@ -1025,7 +1046,7 @@ is used for processing request from method.
 <div class="sect3">
 <h4 id="_configure_api_framework_to_use_service_definition">Configure API Framework to use service definition</h4>
 <div class="paragraph">
-<p>Copy openapi3.json to <strong>config-layers/common/in/erail/route/openapi3.json</strong>. Now
+<p>Copy <strong>openapi3.json</strong> to <strong>config-layers/common/in/erail/route/openapi3.json</strong>. Now
 API Framework is configured to handle API Request. Next step is to write code to handle
 request.</p>
 </div>
@@ -1120,15 +1141,15 @@ provided to ease development <code>in.erail.service.RESTServiceImpl</code></p>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">header</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">headers</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Contains all request headers</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">param</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pathParameters</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Contains all request parameters</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">query</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">queryStringParameters</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Contains all query parameters</p></td>
 </tr>
 <tr>
@@ -1155,7 +1176,7 @@ provided to ease development <code>in.erail.service.RESTServiceImpl</code></p>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">header</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">headers</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No headers are added</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Headers will be added to response header</p></td>
 </tr>
@@ -1268,7 +1289,7 @@ component via EventBus.</p>
 <div class="sect2">
 <h3 id="_step_4_run_api_server">Step 4: Run API Server</h3>
 <div class="paragraph">
-<p>After running maven install. You should have build folder inside target folder.</p>
+<p>After running maven install. You should have <em>build</em> folder inside target folder.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1435,8 +1456,8 @@ post method.</p>
 <div class="title">Note</div>
 </td>
 <td class="content">
-Each method requiring processing must have <strong>unique OperationId</strong>. OperationId
-is used for processing request from method.
+Each method requiring processing must have <strong>unique OperationId</strong>.
+OperationId is used for processing request from method.
 </td>
 </tr>
 </table>
@@ -1478,7 +1499,7 @@ is used for processing request from method.
 <div class="sect3">
 <h4 id="_create_service_component_2">Create Service Component</h4>
 <div class="paragraph">
-<p>Create below Component configuration file and place it in
+<p>Create below Component configuration file and place it at
 <strong>config-layers/common/in/erail/tutorial/SessionPostService.properties</strong></p>
 </div>
 <div class="listingblock">
@@ -1636,7 +1657,7 @@ existing <strong>SessionGetService</strong> class. We will create new class.</p>
 <div class="sect2">
 <h3 id="_step_4_run_api_server_2">Step 4: Run API Server</h3>
 <div class="paragraph">
-<p>After running maven install. You should have build folder inside target folder.</p>
+<p>After running maven install. You should have <em>build</em> folder inside target folder.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1682,8 +1703,8 @@ existing <strong>SessionGetService</strong> class. We will create new class.</p>
 <h2 id="_secure_api">Secure API</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In last tutorial, we created, Get and Post request. Now, in this tutorial we will use
-Open Id Connect pattern to secure both API.</p>
+<p>In previous tutorials, we created, Get and Post Session APIs. Now, in this tutorial we will
+use Open Id Connect pattern to secure both APIs.</p>
 </div>
 <div class="paragraph">
 <p>Things we will do in this tutorial:</p>
@@ -1695,9 +1716,6 @@ Open Id Connect pattern to secure both API.</p>
 </li>
 <li>
 <p>Create small website to showcase authenticated API working</p>
-</li>
-<li>
-<p>Authenticate with Google Auth using Keycloak</p>
 </li>
 </ol>
 </div>
@@ -1765,7 +1783,8 @@ Depending on your OS, install <a href="https://www.docker.com/community-edition#
 <div class="sect3">
 <h4 id="_configuration">Configuration</h4>
 <div class="paragraph">
-<p>Got to <a href="http://localhost:8080/auth/admin/" class="bare">http://localhost:8080/auth/admin/</a> and login using <strong>admin</strong> and password provided in docker-compose.yml</p>
+<p>Got to <a href="http://localhost:8080/auth/admin/" class="bare">http://localhost:8080/auth/admin/</a> and login using <strong>admin</strong> and use password as provided
+in docker-compose.yml</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1861,8 +1880,8 @@ Depending on your OS, install <a href="https://www.docker.com/community-edition#
 <div class="title">Important</div>
 </td>
 <td class="content">
-<strong>realm-public-key</strong> and <strong>secret</strong> value will depend on your installation. So,
-don&#8217;t simply copy-paste above JSON.
+<strong>realm-public-key</strong> and <strong>secret</strong> value will depend on your installation.
+So, don&#8217;t simply copy-paste above JSON.
 </td>
 </tr>
 </table>
@@ -1907,11 +1926,11 @@ role assigned to him in Keycloak.</p>
 <tr>
 <td class="tableblock halign-left valign-middle" rowspan="2"><p class="tableblock">Full Access</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">API_SESSION_GET</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">User will be use GET request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Client will be able to make GET request</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">API_SESSION_POST</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">User will be able to use POST request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Client will be able to make POST request</p></td>
 </tr>
 </tbody>
 </table>
@@ -2041,7 +2060,7 @@ domain name (localhost). Keycloak authentication won&#8217;t work correctly. To 
 will run Keycloak in its own domain</p>
 </div>
 <div class="paragraph">
-<p>Depending on your OS. Update hosts file with below two entries.</p>
+<p>Depending on your OS. Update hosts file with below entry.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
@@ -2072,6 +2091,9 @@ will run Keycloak in its own domain</p>
 <div class="content">
 <pre>127.0.0.1   openidserver</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Now you will access site on <strong>localhost</strong> and Keycloak on <strong>openidserver</strong> domain.</p>
 </div>
 </div>
 </div>
@@ -2183,7 +2205,7 @@ GET logic.</p>
 <p>We will be extending
 <a href="https://docs.aws.amazon.com/lambda/latest/dg/create-deployment-pkg-zip-java.html">Amazon Lambda Example Project</a>
 to run <strong>Session GET API</strong>. Example Lambda project is setup in Gradle. So, instead of
-Maven, we will be using Gradle Project for this project.</p>
+Maven, we will be using Gradle Project for this tutorial.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2233,8 +2255,9 @@ Maven, we will be using Gradle Project for this project.</p>
 </div>
 </div>
 <div class="paragraph">
-<p><strong>api-framework-amazon-lambda</strong> is the required dependency. As we have already written
-our Session API Code. We have include <strong>tutorial-simple-get-api</strong> project and configuration.</p>
+<p><strong>api-framework-amazon-lambda</strong> is the required dependency. As we have already done
+all the work to write session api as part of <strong>Simple GET API</strong> tutorial. Instead of writing
+any new code, we have included <strong>Simple GET API</strong> project as dependency in our project.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2247,7 +2270,7 @@ our Session API Code. We have include <strong>tutorial-simple-get-api</strong> p
 </div>
 <div class="paragraph">
 <p>Currently, Amazon Lambda only supports Java 1.8. In case you are having problem
-compiling project (Because you have installed Java 1.9). You can specifically set JDK here.</p>
+compiling project (Because you have installed Java 1.9). You can specifically JDK here.</p>
 </div>
 </div>
 </div>
@@ -2269,7 +2292,7 @@ compiling project (Because you have installed Java 1.9). You can specifically se
 </div>
 </div>
 <div class="paragraph">
-<p>To create Lambda function. Simply, create Java class extended <strong>AWSLambda</strong> class.
+<p>To create Lambda function. Simply, create Java class extending <strong>AWSLambda</strong> class.
 And in constructor, pass service component path.</p>
 </div>
 <div class="paragraph">
@@ -2338,8 +2361,8 @@ And in constructor, pass service component path.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Function Package</strong> : Upload <em>tutorial-amazon-lambda.zip</em> file ( You can upload larger
-then 10MB file)</p>
+<p><strong>Function Package</strong> : Upload <em>tutorial-amazon-lambda.zip</em> file ( Amazon recommends
+S3 for uploading larger then 10MB file. For simplicity, just upload file directly from here.)</p>
 </li>
 <li>
 <p><strong>Handle</strong> : Enter <em>in.erail.tutorial.amazon.lambda.SessionGetService</em> (Only class package
@@ -2449,7 +2472,7 @@ you will have to create API manually.
 </div>
 </div>
 <div class="paragraph">
-<p>Our API will be accessible on /session URL.</p>
+<p>Our API will be accessible on <em>/session</em> URL.</p>
 </div>
 </li>
 <li>
@@ -2462,7 +2485,7 @@ you will have to create API manually.
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Resource Name</strong> : <em>session</em> (This can any any name)</p>
+<p><strong>Resource Name</strong> : <em>session</em></p>
 </li>
 <li>
 <p><strong>Resource Path</strong> : URL <em>/session</em></p>
@@ -2522,8 +2545,8 @@ you will have to create API manually.
 <h3 id="_deploy_api">Deploy API</h3>
 <div class="paragraph">
 <p>Now, lets make our API public. To make our API public, we will have to create stage.
-Stage will give us unique URL through which we can access our API (Later on, you can
-map this stage to your custom domain) .</p>
+Stage will give us unique URL through which we can access our API (If you want, you can
+also map this stage to your custom domain) .</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2594,8 +2617,8 @@ make sure you have right level of access in any stage API.
 <h2 id="_docker_deployment">Docker Deployment</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In this tutorial, we will package our project created as part of <strong>Simple POST API</strong>  in
-Docker image.</p>
+<p>In this tutorial, we will package our project created as part of <strong>Simple POST API</strong> tutorial
+into Docker image.</p>
 </div>
 <div class="sect2">
 <h3 id="_project_setup">Project Setup</h3>
@@ -2605,8 +2628,7 @@ If you have done <strong>Simple POST API</strong>. Then you will find that our P
 exactly same.</p>
 </div>
 <div class="paragraph">
-<p>Only main difference is configuration file. In docker project, we will generate three config
-files.</p>
+<p>In docker project, we will generate three config files.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -2650,7 +2672,7 @@ files.</p>
 <div class="sect2">
 <h3 id="_project_configuration_layer">Project configuration layer</h3>
 <div class="paragraph">
-<p>Docker configuration layer contains single configuration file <strong>server.properties</strong>.
+<p>Docker configuration layer contains only single configuration file <strong>server.properties</strong>.
 This file overrides <em>host</em> property. By default, <em>host</em> property is configured to use
 <em>localhost</em>. This creates problem where URLs are not accessible from outside Docker
 container (from Host machine). Using <em>0.0.0.0</em>, we make sure that URL is accessible
@@ -2700,7 +2722,7 @@ from outside also (from Host machine).</p>
 </div>
 </div>
 <div class="paragraph">
-<p>For your reference, more configuration is provided for you.</p>
+<p>For your reference, more configuration is provided to you.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2788,7 +2810,7 @@ to  Docker documentation.
 <div id="footer">
 <div id="footer-text">
 Version 0.1<br>
-Last updated 2018-01-13 16:06:01 GMT
+Last updated 2018-01-14 13:57:37 GMT
 </div>
 </div>
 </body>

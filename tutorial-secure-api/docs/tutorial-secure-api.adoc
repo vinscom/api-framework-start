@@ -6,14 +6,13 @@ ifndef::imagesdir[:imagesdir: ./../../docs/images]
 
 = Secure API
 
-In last tutorial, we created, Get and Post request. Now, in this tutorial we will use
-Open Id Connect pattern to secure both API.
+In previous tutorials, we created, Get and Post Session APIs. Now, in this tutorial we will
+use Open Id Connect pattern to secure both APIs.
 
 Things we will do in this tutorial:
 
 . Setup and configure Keycloak instance
 . Create small website to showcase authenticated API working
-. Authenticate with Google Auth using Keycloak
 
 include::keycloak-setup.adoc[leveloffset=+1]
 

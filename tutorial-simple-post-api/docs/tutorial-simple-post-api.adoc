@@ -44,8 +44,8 @@ include::./../config-layers/common/in/erail/route/openapi3.json[]
 ]
 ----
 
-NOTE: Each method requiring processing must have *unique OperationId*. OperationId
-is used for processing request from method.
+NOTE: Each method requiring processing must have *unique OperationId*.
+OperationId is used for processing request from method.
 
 == Step 2: Create POST Service Class
 [source,java,linenums]
@@ -55,7 +55,7 @@ include::./../src/main/java/in/erail/tutorial/SessionPostService.java[]
 
 === Create Service Component
 
-Create below Component configuration file and place it in
+Create below Component configuration file and place it at
 *config-layers/common/in/erail/tutorial/SessionPostService.properties*
 
 [source,ini,linenums]
@@ -96,7 +96,7 @@ include::./../src/test/java/in/erail/tutorial/SessionTest.java[]
 
 == Step 4: Run API Server
 
-After running maven install. You should have build folder inside target folder.
+After running maven install. You should have _build_ folder inside target folder.
 
 .Build folder structure
 [plantuml,uml/build-folder-structure, png]

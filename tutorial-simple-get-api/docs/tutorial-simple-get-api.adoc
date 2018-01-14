@@ -21,18 +21,19 @@ definition. Below is definition
 include::./../config-layers/common/in/erail/route/openapi3.json[]
 ----
 
-Our API will have single URL /session (like http://localhost:8888/v1/session). Session is not
-related to actual Vertx session.
+Our API will have single URL /session (like http://localhost:8888/v1/session).
+
+NOTE: Remember API Session is not related to actual Vertx Web Session.
 
 .GET
 On get request, session API will return all session messages.
 
-NOTE: Each method requiring processing must have *unique OperationId*. OperationId
-is used for processing request from method.
+NOTE: Each method requiring processing must have *unique OperationId*.
+OperationId is used for processing request from method.
 
 === Configure API Framework to use service definition
 
-Copy openapi3.json to *config-layers/common/in/erail/route/openapi3.json*. Now
+Copy *openapi3.json* to *config-layers/common/in/erail/route/openapi3.json*. Now
 API Framework is configured to handle API Request. Next step is to write code to handle
 request.
 
@@ -79,18 +80,18 @@ As parameter, Message Object provides JsonObject. JsonObject contains below fiel
 
 [%header]
 |===
-| Field Name | Description
-| header        | Contains all request headers
-| param         | Contains all request parameters
-| query           | Contains all query parameters
-| body            | In case of POST request, contains body
+| Field Name                     | Description
+| headers                          | Contains all request headers
+| pathParameters              | Contains all request parameters
+| queryStringParameters   | Contains all query parameters
+| body                                | In case of POST request, contains body
 |===
 
 Reply JSON Object you can have below fields
 [%header]
 |===
 | Field Name | Default | Description
-| header        | No headers are added | Headers will be added to response header
+| headers        | No headers are added | Headers will be added to response header
 | body            | Response content is blank | Body is sent in response
 | statusCode | 200 |  Response HTTP status
 |===
@@ -129,7 +130,7 @@ include::./../src/test/java/in/erail/tutorial/SessionTest.java[]
 
 == Step 4: Run API Server
 
-After running maven install. You should have build folder inside target folder.
+After running maven install. You should have _build_ folder inside target folder.
 
 .Build folder structure
 [plantuml,uml/build-folder-structure, png]

@@ -5,12 +5,12 @@ API Framework is structured code/pattern/project template for you to write API b
 system using Vertx Framework (http://vertx.io/).
 
 Idea is to provide structure to development project, so, that with minimum learning curve,
-programmers can become productive. Vertx and API Framework project setup is enough
-to build complex application.
+programmers can become productive. Understanding of Vertx and API Framework project
+setup is enough to build complex application.
 
 == Features
 . Code and Configuration is completely separate.
-. Decoupled source code dependency between classes.
+. Decoupled source code level dependencies between classes.
 . Configuration has layer concept to change configuration without changing original
 configuration
 . Fully Reactive

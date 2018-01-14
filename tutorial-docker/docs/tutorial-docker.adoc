@@ -5,16 +5,15 @@ ifndef::imagesdir[:imagesdir: ./../../docs/images]
 
 = Docker Deployment
 
-In this tutorial, we will package our project created as part of *Simple POST API*  in
-Docker image.
+In this tutorial, we will package our project created as part of *Simple POST API* tutorial
+into Docker image.
 
 == Project Setup
 We will use Maven project to create build ready for creation of Docker image.
 If you have done *Simple POST API*. Then you will find that our POM.xml is almost
 exactly same.
 
-Only main difference is configuration file. In docker project, we will generate three config
-files.
+In docker project, we will generate three config files.
 
 . API Framework configuration file
 . Post API Tutorial configuration file
@@ -31,7 +30,7 @@ include::./../pom.xml[tag=config]
 
 == Project configuration layer
 
-Docker configuration layer contains single configuration file *server.properties*.
+Docker configuration layer contains only single configuration file *server.properties*.
 This file overrides _host_ property. By default, _host_ property is configured to use
 _localhost_. This creates problem where URLs are not accessible from outside Docker
 container (from Host machine). Using _0.0.0.0_, we make sure that URL is accessible
@@ -73,7 +72,7 @@ Docker file configuration.
 include::./../Dockerfile[tag=Dockerfile]
 ----
 
-For your reference, more configuration is provided for you.
+For your reference, more configuration is provided to you.
 
 [source,docker,linenums]
 ----
