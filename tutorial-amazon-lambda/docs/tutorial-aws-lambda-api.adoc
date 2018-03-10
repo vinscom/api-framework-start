@@ -100,7 +100,7 @@ image::amazon-lambda/aws-lambda-config.png[]
 . Basic Settings
 +
 image::amazon-lambda/aws-lambda-basic-settings.png[]
-Ensure you set memory to 192MB minimum. Or else you will get memory out of exception
+Ensure you set memory to 256MB minimum. Or else you will get memory out of exception
 . Create Test Event
 +
 image::amazon-lambda/aws-lambda-test.png[]
