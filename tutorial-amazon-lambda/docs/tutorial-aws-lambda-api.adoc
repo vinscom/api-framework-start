@@ -51,18 +51,6 @@ include::./../gradle.properties[]
 Currently, Amazon Lambda only supports Java 1.8. In case you are having problem
 compiling project (Because you have installed Java 1.9). You can specifically JDK here.
 
-== Create Lambda Function Code
-
-[source,java,linenums]
-----
-include::./../src/main/java/in/erail/tutorial/amazon/lambda/SessionGetService.java[]
-----
-
-To create Lambda function. Simply, create Java class extending *AWSLambda* class.
-And in constructor, pass service component path.
-
-Your Lambda Function Is Ready!
-
 === Create Build
 
 .Run
@@ -92,11 +80,40 @@ image::amazon-lambda/aws-lambda-author-from-scratch.png[]
 image::amazon-lambda/aws-lambda-config.png[]
   - *Function Package* : Upload _tutorial-amazon-lambda.zip_ file ( Amazon recommends
     S3 for uploading larger then 10MB file. For simplicity, just upload file directly from here.)
-  - *Handle* : Enter _in.erail.tutorial.amazon.lambda.SessionGetService_ (Only class package
+  - *Handle* : Enter _in.erail.amazon.lambda.AWSLambda_ (Only class package
   and class name. No handle)
   - *Environment Variable*
-    * *GLUE_LAYERS*  :  _./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip,./lib/api-framework-amazon-lambda-1.0-SNAPSHOT-common-config.zip_
-    * *JAVA_TOOL_OPTIONS*  :  _-Dvertx.cacheDirBase=/tmp/vertx-cache -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dlog4j.configurationFile=./log4j.xml_
+    * *JAVA_TOOL_OPTIONS*  :  _-Dservice=/in/erail/tutorial/SessionGetService -Dglue.layers=./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip,./lib/api-framework-amazon-lambda-1.0-SNAPSHOT-common-config.zip -Dvertx.cacheDirBase=/tmp/vertx-cache -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dlog4j.configurationFile=./log4j.xml_
++
+[%header]
+|===
+| Java System Properties | Env Variable | Value | Description
+
+| -Dservice 
+| SERVICE 
+| /in/erail/tutorial/SessionGetService 
+| Service component path. You can pass value as Java System property or as Environment variable
+
+| -Dglue.layers 
+| GLUE_LAYERS 
+| ./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip,./lib/api-framework-amazon-lambda-1.0-SNAPSHOT-common-config.zip  
+| Layers to include. Ordered left to right.
+
+| -Dvertx.cacheDirBase 
+| 
+| /tmp/vertx-cache 
+| Standard Vertx option.
+
+| -Dvertx.logger-delegate-factory-class-name 
+| 
+| io.vertx.core.logging.Log4j2LogDelegateFactory 
+| Standard Vertx option
+
+| -Dlog4j.configurationFile 
+| 
+| ./log4j.xml 
+| Standard Vertx option
+|===
 . Basic Settings
 +
 image::amazon-lambda/aws-lambda-basic-settings.png[]

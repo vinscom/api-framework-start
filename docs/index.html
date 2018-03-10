@@ -544,7 +544,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_lambda_project_setup">Lambda Project Setup</a></li>
 <li><a href="#_gradle_project_files">Gradle Project Files</a></li>
-<li><a href="#_create_lambda_function_code">Create Lambda Function Code</a></li>
 <li><a href="#_setup_lambda_function">Setup Lambda Function</a></li>
 <li><a href="#_setup_api_gateway">Setup API Gateway</a></li>
 <li><a href="#_deploy_api">Deploy API</a></li>
@@ -2272,31 +2271,6 @@ any new code, we have included <strong>Simple GET API</strong> project as depend
 compiling project (Because you have installed Java 1.9). You can specifically JDK here.</p>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_create_lambda_function_code">Create Lambda Function Code</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="java"><span></span><span class="lineno"> 1 </span><span class="tok-kn">package</span> <span class="tok-nn">in.erail.tutorial.amazon.lambda</span><span class="tok-o">;</span>
-<span class="lineno"> 2 </span>
-<span class="lineno"> 3 </span><span class="tok-kn">import</span> <span class="tok-nn">in.erail.amazon.lambda.AWSLambda</span><span class="tok-o">;</span>
-<span class="lineno"> 4 </span>
-<span class="lineno"> 5 </span><span class="tok-kd">public</span> <span class="tok-kd">class</span> <span class="tok-nc">SessionGetService</span> <span class="tok-kd">extends</span> <span class="tok-n">AWSLambda</span> <span class="tok-o">{</span>
-<span class="lineno"> 6 </span>
-<span class="lineno"> 7 </span>  <span class="tok-kd">public</span> <span class="tok-nf">SessionGetService</span><span class="tok-o">()</span> <span class="tok-o">{</span>
-<span class="lineno"> 8 </span>    <span class="tok-kd">super</span><span class="tok-o">(</span><span class="tok-s">&quot;/in/erail/tutorial/SessionGetService&quot;</span><span class="tok-o">);</span>
-<span class="lineno"> 9 </span>  <span class="tok-o">}</span>
-<span class="lineno">10 </span>
-<span class="lineno">11 </span><span class="tok-o">}</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To create Lambda function. Simply, create Java class extending <strong>AWSLambda</strong> class.
-And in constructor, pass service component path.</p>
-</div>
-<div class="paragraph">
-<p>Your Lambda Function Is Ready!</p>
-</div>
 <div class="sect3">
 <h4 id="_create_build">Create Build</h4>
 <div class="listingblock">
@@ -2364,7 +2338,7 @@ And in constructor, pass service component path.</p>
 S3 for uploading larger then 10MB file. For simplicity, just upload file directly from here.)</p>
 </li>
 <li>
-<p><strong>Handle</strong> : Enter <em>in.erail.tutorial.amazon.lambda.SessionGetService</em> (Only class package
+<p><strong>Handle</strong> : Enter <em>in.erail.amazon.lambda.AWSLambda</em> (Only class package
 and class name. No handle)</p>
 </li>
 <li>
@@ -2372,10 +2346,55 @@ and class name. No handle)</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>GLUE_LAYERS</strong>  :  <em>./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip,./lib/api-framework-amazon-lambda-1.0-SNAPSHOT-common-config.zip</em></p>
-</li>
-<li>
-<p><strong>JAVA_TOOL_OPTIONS</strong>  :  <em>-Dvertx.cacheDirBase=/tmp/vertx-cache -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dlog4j.configurationFile=./log4j.xml</em></p>
+<p><strong>JAVA_TOOL_OPTIONS</strong>  :  <em>-Dservice=/in/erail/tutorial/SessionGetService -Dglue.layers=./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip,./lib/api-framework-amazon-lambda-1.0-SNAPSHOT-common-config.zip -Dvertx.cacheDirBase=/tmp/vertx-cache -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dlog4j.configurationFile=./log4j.xml</em></p>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Java System Properties</th>
+<th class="tableblock halign-left valign-top">Env Variable</th>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-Dservice</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SERVICE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/in/erail/tutorial/SessionGetService</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service component path. You can pass value as Java System property or as Environment variable</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-Dglue.layers</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GLUE_LAYERS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip,./lib/api-framework-amazon-lambda-1.0-SNAPSHOT-common-config.zip</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Layers to include. Ordered left to right.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-Dvertx.cacheDirBase</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">/tmp/vertx-cache</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Standard Vertx option.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-Dvertx.logger-delegate-factory-class-name</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.vertx.core.logging.Log4j2LogDelegateFactory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Standard Vertx option</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-Dlog4j.configurationFile</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">./log4j.xml</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Standard Vertx option</p></td>
+</tr>
+</tbody>
+</table>
 </li>
 </ul>
 </div>
