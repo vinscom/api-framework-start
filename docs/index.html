@@ -2233,25 +2233,24 @@ Maven, we will be using Gradle Project for this tutorial.</p>
 <span class="lineno"> 6 </span><span class="tok-o">}</span>
 <span class="lineno"> 7 </span>
 <span class="lineno"> 8 </span><span class="tok-n">dependencies</span> <span class="tok-o">{</span>
-<span class="lineno"> 9 </span>    <span class="tok-n">compile</span> <span class="tok-o">(</span>
-<span class="lineno">10 </span>        <span class="tok-c1">//Only Required Dependecy</span>
-<span class="lineno">11 </span>        <span class="tok-s1">&#39;in.erail:api-framework-amazon-lambda:1.0-SNAPSHOT&#39;</span><span class="tok-o">,</span>
-<span class="lineno">12 </span>        <span class="tok-c1">//Already developed Session GET API Tutorial project</span>
-<span class="lineno">13 </span>        <span class="tok-s1">&#39;in.erail:tutorial-simple-get-api:1.0-SNAPSHOT&#39;</span><span class="tok-o">,</span>
-<span class="lineno">14 </span>        <span class="tok-c1">//Session GET API Tutorial project configuration</span>
-<span class="lineno">15 </span>        <span class="tok-s1">&#39;in.erail:tutorial-simple-get-api:1.0-SNAPSHOT:common-config@zip&#39;</span>
-<span class="lineno">16 </span>    <span class="tok-o">)</span>
-<span class="lineno">17 </span><span class="tok-o">}</span>
-<span class="lineno">18 </span>
-<span class="lineno">19 </span><span class="tok-n">task</span> <span class="tok-nf">buildZip</span><span class="tok-o">(</span><span class="tok-nl">type:</span> <span class="tok-n">Zip</span><span class="tok-o">)</span> <span class="tok-o">{</span>
-<span class="lineno">20 </span>    <span class="tok-n">from</span> <span class="tok-n">compileJava</span>
-<span class="lineno">21 </span>    <span class="tok-n">from</span> <span class="tok-n">processResources</span>
-<span class="lineno">22 </span>    <span class="tok-nf">into</span><span class="tok-o">(</span><span class="tok-s1">&#39;lib&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
-<span class="lineno">23 </span>        <span class="tok-n">from</span> <span class="tok-n">configurations</span><span class="tok-o">.</span><span class="tok-na">runtime</span>
-<span class="lineno">24 </span>    <span class="tok-o">}</span>
-<span class="lineno">25 </span><span class="tok-o">}</span>
-<span class="lineno">26 </span>
-<span class="lineno">27 </span><span class="tok-n">build</span><span class="tok-o">.</span><span class="tok-na">dependsOn</span> <span class="tok-n">buildZip</span></code></pre>
+<span class="lineno"> 9 </span>    <span class="tok-c1">//Only Required Dependecies</span>
+<span class="lineno">10 </span>    <span class="tok-n">compile</span> <span class="tok-s1">&#39;in.erail:api-framework-amazon-lambda:1.0-SNAPSHOT&#39;</span>
+<span class="lineno">11 </span>    <span class="tok-n">compile</span> <span class="tok-s1">&#39;in.erail:api-framework-amazon-lambda:1.0-SNAPSHOT:common-config@zip&#39;</span>
+<span class="lineno">12 </span>    <span class="tok-c1">//Already developed Session GET API Tutorial project</span>
+<span class="lineno">13 </span>    <span class="tok-n">compile</span> <span class="tok-s1">&#39;in.erail:tutorial-simple-get-api:1.0-SNAPSHOT&#39;</span>
+<span class="lineno">14 </span>    <span class="tok-c1">//Session GET API Tutorial project configuration</span>
+<span class="lineno">15 </span>    <span class="tok-n">compile</span> <span class="tok-s1">&#39;in.erail:tutorial-simple-get-api:1.0-SNAPSHOT:common-config@zip&#39;</span>
+<span class="lineno">16 </span><span class="tok-o">}</span>
+<span class="lineno">17 </span>
+<span class="lineno">18 </span><span class="tok-n">task</span> <span class="tok-nf">buildZip</span><span class="tok-o">(</span><span class="tok-nl">type:</span> <span class="tok-n">Zip</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+<span class="lineno">19 </span>    <span class="tok-n">from</span> <span class="tok-n">compileJava</span>
+<span class="lineno">20 </span>    <span class="tok-n">from</span> <span class="tok-n">processResources</span>
+<span class="lineno">21 </span>    <span class="tok-nf">into</span><span class="tok-o">(</span><span class="tok-s1">&#39;lib&#39;</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+<span class="lineno">22 </span>        <span class="tok-n">from</span> <span class="tok-n">configurations</span><span class="tok-o">.</span><span class="tok-na">runtime</span>
+<span class="lineno">23 </span>    <span class="tok-o">}</span>
+<span class="lineno">24 </span><span class="tok-o">}</span>
+<span class="lineno">25 </span>
+<span class="lineno">26 </span><span class="tok-n">build</span><span class="tok-o">.</span><span class="tok-na">dependsOn</span> <span class="tok-n">buildZip</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2373,7 +2372,10 @@ and class name. No handle)</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>GLUE_LAYERS</strong>  :  <em>./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip</em></p>
+<p><strong>GLUE_LAYERS</strong>  :  <em>./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip,./lib/api-framework-amazon-lambda-1.0-SNAPSHOT-common-config.zip</em></p>
+</li>
+<li>
+<p><strong>JAVA_TOOL_OPTIONS</strong>  :  <em>-Dvertx.cacheDirBase=/tmp/vertx-cache -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dlog4j.configurationFile=./log4j.xml</em></p>
 </li>
 </ul>
 </div>
