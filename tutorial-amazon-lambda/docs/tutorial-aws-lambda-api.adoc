@@ -74,7 +74,9 @@ Create lambda function using *Create Function*
 image::amazon-lambda/aws-lambda-author-from-scratch.png[]
   - *Name* : handleProcess
   - *Runtime* : Java 8
-  - *Role** : We have already created role. Please create role if you don't have one
+  - *Role* :  Create role from template.
+    * *Role Name* : BasicPermission
+    * *Policy templates* : Basic Edge Lambda permissions
 . Function Code
 +
 image::amazon-lambda/aws-lambda-config.png[]
@@ -83,35 +85,35 @@ image::amazon-lambda/aws-lambda-config.png[]
   - *Handle* : Enter _in.erail.amazon.lambda.AWSLambda_ (Only class package
   and class name. No handle)
   - *Environment Variable*
-    * *JAVA_TOOL_OPTIONS*  :  _-Dservice=/in/erail/tutorial/SessionGetService -Dglue.layers=./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip,./lib/api-framework-amazon-lambda-1.0-SNAPSHOT-common-config.zip -Dvertx.cacheDirBase=/tmp/vertx-cache -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dlog4j.configurationFile=./log4j.xml_
+    * *JAVA_TOOL_OPTIONS*  :  _-Dservice=/in/erail/tutorial/SessionGetService -Dglue.layers=./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip,./lib/api-framework-amazon-lambda-1.0-SNAPSHOT-common-config.zip -Dvertx.cacheDirBase=/tmp/vertx-cache -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dlog4j.configurationFile=./log4j2.xml_
 +
 [%header]
 |===
 | Java System Properties | Env Variable | Value | Description
 
-| -Dservice 
-| SERVICE 
-| /in/erail/tutorial/SessionGetService 
+| -Dservice
+| SERVICE
+| /in/erail/tutorial/SessionGetService
 | Service component path. You can pass value as Java System property or as Environment variable
 
-| -Dglue.layers 
-| GLUE_LAYERS 
-| ./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip,./lib/api-framework-amazon-lambda-1.0-SNAPSHOT-common-config.zip  
+| -Dglue.layers
+| GLUE_LAYERS
+| ./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip,./lib/api-framework-amazon-lambda-1.0-SNAPSHOT-common-config.zip
 | Layers to include. Ordered left to right.
 
-| -Dvertx.cacheDirBase 
-| 
-| /tmp/vertx-cache 
+| -Dvertx.cacheDirBase
+|
+| /tmp/vertx-cache
 | Standard Vertx option.
 
-| -Dvertx.logger-delegate-factory-class-name 
-| 
-| io.vertx.core.logging.Log4j2LogDelegateFactory 
+| -Dvertx.logger-delegate-factory-class-name
+|
+| io.vertx.core.logging.Log4j2LogDelegateFactory
 | Standard Vertx option
 
-| -Dlog4j.configurationFile 
-| 
-| ./log4j.xml 
+| -Dlog4j.configurationFile
+|
+| ./log4j2.xml
 | Standard Vertx option
 |===
 . Basic Settings

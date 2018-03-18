@@ -2319,7 +2319,17 @@ compiling project (Because you have installed Java 1.9). You can specifically JD
 <p><strong>Runtime</strong> : Java 8</p>
 </li>
 <li>
-<p><strong>Role</strong>* : We have already created role. Please create role if you don&#8217;t have one</p>
+<p><strong>Role</strong> :  Create role from template.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Role Name</strong> : BasicPermission</p>
+</li>
+<li>
+<p><strong>Policy templates</strong> : Basic Edge Lambda permissions</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -2346,7 +2356,7 @@ and class name. No handle)</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>JAVA_TOOL_OPTIONS</strong>  :  <em>-Dservice=/in/erail/tutorial/SessionGetService -Dglue.layers=./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip,./lib/api-framework-amazon-lambda-1.0-SNAPSHOT-common-config.zip -Dvertx.cacheDirBase=/tmp/vertx-cache -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dlog4j.configurationFile=./log4j.xml</em></p>
+<p><strong>JAVA_TOOL_OPTIONS</strong>  :  <em>-Dservice=/in/erail/tutorial/SessionGetService -Dglue.layers=./lib/api-framework-1.0-SNAPSHOT-common-config.zip,./lib/tutorial-simple-get-api-1.0-SNAPSHOT-common-config.zip,./lib/api-framework-amazon-lambda-1.0-SNAPSHOT-common-config.zip -Dvertx.cacheDirBase=/tmp/vertx-cache -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -Dlog4j.configurationFile=./log4j2.xml</em></p>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 25%;">
@@ -2390,7 +2400,7 @@ and class name. No handle)</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-Dlog4j.configurationFile</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">./log4j.xml</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">./log4j2.xml</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Standard Vertx option</p></td>
 </tr>
 </tbody>
