@@ -8,7 +8,8 @@
     </Lambda>
   </Appenders>
   <Loggers>
-    <Root level="debug">
+    <Logger name="io.vertx.core.impl.BlockedThreadChecker" level="OFF"/>
+    <Root level="DEBUG">
       <AppenderRef ref="Lambda" />
     </Root>
   </Loggers>
