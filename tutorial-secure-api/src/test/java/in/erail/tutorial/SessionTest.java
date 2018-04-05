@@ -1,5 +1,7 @@
 package in.erail.tutorial;
 
+import com.google.common.net.HttpHeaders;
+import com.google.common.net.MediaType;
 import in.erail.glue.Glue;
 import in.erail.server.Server;
 import io.vertx.core.json.JsonArray;
@@ -32,8 +34,8 @@ public class SessionTest {
               .getVertx()
               .createHttpClient()
               .post(server.getPort(), server.getHost(), "/v1/session")
-              .putHeader("content-type", "application/json")
-              .putHeader("content-length", Integer.toString(content.length()))
+              .putHeader(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
+              .putHeader(HttpHeaders.CONTENT_LENGTH, Integer.toString(content.length()))
               .handler(response -> {
                 context.assertEquals(response.statusCode(), 200, response.statusMessage());
                 async.countDown();
