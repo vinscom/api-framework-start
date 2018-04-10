@@ -26,7 +26,7 @@ public class SessionTest {
     server
             .getVertx()
             .createHttpClient()
-            .get(server.getPort(), server.getHost(), "/v1/session")
+            .get(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/session")
             .handler(response -> {
               context.assertEquals(response.statusCode(), 200, response.statusMessage());
               response.bodyHandler((event) -> {

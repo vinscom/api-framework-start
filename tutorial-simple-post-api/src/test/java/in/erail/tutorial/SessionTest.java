@@ -33,7 +33,7 @@ public class SessionTest {
       server
               .getVertx()
               .createHttpClient()
-              .post(server.getPort(), server.getHost(), "/v1/session")
+              .post(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/session")
               .putHeader(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
               .putHeader(HttpHeaders.CONTENT_LENGTH, Integer.toString(content.length()))
               .handler(response -> {
@@ -54,7 +54,7 @@ public class SessionTest {
     server
             .getVertx()
             .createHttpClient()
-            .get(server.getPort(), server.getHost(), "/v1/session")
+            .get(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/session")
             .handler(response -> {
               context.assertEquals(response.statusCode(), 200, response.statusMessage());
               response.bodyHandler((event) -> {
