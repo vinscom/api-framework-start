@@ -11,16 +11,10 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <api.framework.version>2.1</api.framework.version>
-        <glue.version>2.1</glue.version>
     </properties>
 
     <dependencies>
         <!-- tag::requiredDependencies[] -->
-        <dependency>
-            <groupId>in.erail</groupId>
-            <artifactId>glue</artifactId>
-            <version>${glue.version}</version>
-        </dependency>
         <dependency>
             <groupId>in.erail</groupId>
             <artifactId>api-framework</artifactId>
