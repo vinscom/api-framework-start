@@ -18,6 +18,20 @@
             <artifactId>tutorial-simple-post-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>in.erail</groupId>
+            <artifactId>tutorial-simple-post-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <classifier>common-config</classifier>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>in.erail</groupId>
+            <artifactId>api-framework</artifactId>
+            <version>${api.framework.version}</version>
+            <classifier>common-config</classifier>
+            <type>zip</type>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
