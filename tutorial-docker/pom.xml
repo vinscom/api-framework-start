@@ -10,7 +10,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <api.framework.version>2.1</api.framework.version>
+        <api.framework.version>2.3-SNAPSHOT</api.framework.version>
     </properties>
     <dependencies>
         <dependency>
@@ -38,7 +38,7 @@
             <!-- tag::plugin[] -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>common-config</id>
@@ -48,7 +48,9 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${project.build.directory}/build/config</outputDirectory>
-                            <descriptor>src/assembly/common-config.xml</descriptor>
+                            <descriptors>
+                                <descriptor>src/assembly/common-config.xml</descriptor>
+                            </descriptors>
                         </configuration>
                     </execution>
                 </executions>
@@ -56,7 +58,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <id>copy-installed</id>
@@ -104,7 +106,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>3.1.0</version>
                 <configuration>
                     <outputDirectory>${project.build.directory}/build</outputDirectory>
                     <archive>

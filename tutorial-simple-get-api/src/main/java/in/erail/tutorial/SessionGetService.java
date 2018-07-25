@@ -20,7 +20,10 @@ public class SessionGetService extends RESTServiceImpl {
 
   @Override
   public void process(Message<JsonObject> pMessage) {
-    pMessage.reply(new JsonObject().put(FrameworkConstants.RoutingContext.Json.BODY, getSessions()));
+    pMessage
+            .reply(new JsonObject().put(
+                    FrameworkConstants.RoutingContext.Json.BODY, 
+                    getSessions().toString().getBytes()));
   }
 
   public JsonArray getSessions() {
