@@ -1,10 +1,10 @@
 package in.erail.tutorial;
 
-import in.erail.common.FrameworkConstants;
+import com.google.common.net.MediaType;
+import in.erail.model.RequestEvent;
+import in.erail.model.ResponseEvent;
 import in.erail.service.RESTServiceImpl;
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.core.eventbus.Message;
 
 public class SessionGetService extends RESTServiceImpl {
 
@@ -19,11 +19,10 @@ public class SessionGetService extends RESTServiceImpl {
   }
 
   @Override
-  public void process(Message<JsonObject> pMessage) {
-    pMessage
-            .reply(new JsonObject().put(
-                    FrameworkConstants.RoutingContext.Json.BODY, 
-                    getSessions().toString().getBytes()));
+  public ResponseEvent process(RequestEvent pRequest) {
+    return new ResponseEvent()
+            .setBody(getSessions().toString().getBytes())
+            .setContentType(MediaType.JSON_UTF_8);
   }
 
   public JsonArray getSessions() {
