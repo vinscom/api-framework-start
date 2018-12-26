@@ -21,7 +21,8 @@ public class SessionTest {
   @Rule
   public Timeout rule = Timeout.seconds(2000);
 
-  @Test
+  @SuppressWarnings("deprecation")
+	@Test
   public void testPostRequest(TestContext context) {
 
     Async async = context.async(5);
@@ -46,7 +47,8 @@ public class SessionTest {
 
   }
 
-  @Test
+  @SuppressWarnings("deprecation")
+	@Test
   public void testGetRequest(TestContext context) {
 
     Async async = context.async(2);

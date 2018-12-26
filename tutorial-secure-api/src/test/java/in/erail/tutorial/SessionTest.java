@@ -21,6 +21,7 @@ public class SessionTest {
   @Rule
   public Timeout rule = Timeout.seconds(2000);
 
+  @SuppressWarnings("deprecation")
   @Test
   public void testPostRequest(TestContext context) {
 
@@ -46,6 +47,7 @@ public class SessionTest {
 
   }
 
+  @SuppressWarnings("deprecation")
   @Test
   public void testGetRequest(TestContext context) {
 
