@@ -23,7 +23,7 @@ public class SessionGetService extends RESTServiceImpl {
   public Maybe<ResponseEvent> process(RequestEvent pRequest) {
     return Maybe.just(new ResponseEvent()
             .setBody(getSessions().toString().getBytes())
-            .setContentType(MediaType.JSON_UTF_8));
+            .setMediaType(MediaType.JSON_UTF_8));
   }
 
   public JsonArray getSessions() {
