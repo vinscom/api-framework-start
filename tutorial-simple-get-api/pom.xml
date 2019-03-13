@@ -10,7 +10,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <api.framework.version>2.4.2</api.framework.version>
+        <api.framework.version>2.4.6</api.framework.version>
     </properties>
 
     <dependencies>
@@ -31,14 +31,20 @@
         <!-- tag::optionalDependencies[] -->
         <dependency>
             <groupId>io.vertx</groupId>
-            <artifactId>vertx-unit</artifactId>
+            <artifactId>vertx-junit5</artifactId>
             <version>3.6.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.4.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.4.0</version>
             <scope>test</scope>
         </dependency>
         <!-- end::optionalDependencies[] -->
@@ -58,10 +64,22 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/build/config</outputDirectory>
                             <descriptors>
                                 <descriptor>src/assembly/common-config.xml</descriptor>
                             </descriptors>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>lambda-deployment</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/assembly/lambda-deployment.xml</descriptor>
+                            </descriptors>
+                            <attach>false</attach>
                         </configuration>
                     </execution>
                     <!-- end::assembly-tutorial-simple-get-api-config[] -->
@@ -77,60 +95,6 @@
                 </configuration>
             </plugin>
             <!-- end::argLine[] -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.1</version>
-                <executions>
-                    <execution>
-                        <id>copy-installed</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>in.erail</groupId>
-                                    <artifactId>api-framework</artifactId>
-                                    <version>${api.framework.version}</version>
-                                    <classifier>common-config</classifier>
-                                    <type>zip</type>
-                                </artifactItem>
-                            </artifactItems>
-                            <outputDirectory>${project.build.directory}/build/config</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/build/${project.artifactId}-${project.version}-lib/</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.1</version>
-                <configuration>
-                    <outputDirectory>${project.build.directory}/build</outputDirectory>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>${project.artifactId}-${project.version}-lib/</classpathPrefix>
-                            <mainClass>in.erail.glue.Boot</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
             <!-- end::plugin[] -->
         </plugins>
     </build>
