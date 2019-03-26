@@ -1,43 +1,39 @@
 package in.erail.tutorial;
 
+import com.google.common.net.HttpHeaders;
+import com.google.common.net.MediaType;
 import in.erail.glue.Glue;
 import in.erail.server.Server;
 import io.vertx.core.json.JsonArray;
+import io.vertx.junit5.Timeout;
+import io.vertx.junit5.VertxExtension;
+import io.vertx.junit5.VertxTestContext;
+import io.vertx.reactivex.ext.web.client.WebClient;
+import java.util.concurrent.TimeUnit;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import io.vertx.ext.unit.Async;
-import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.Timeout;
-import io.vertx.ext.unit.junit.VertxUnitRunner;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-@RunWith(VertxUnitRunner.class)
+@ExtendWith(VertxExtension.class)
+@Timeout(value = 10, timeUnit = TimeUnit.MINUTES)
 public class SessionTest {
 
-  @Rule
-  public Timeout rule = Timeout.seconds(2000);
+  @Test
+  public void testGetRequest(VertxTestContext testContext) {
 
-  @SuppressWarnings("deprecation")
-	@Test
-  public void testGetRequest(TestContext context) {
-
-    Async async = context.async(2);
     Server server = Glue.instance().<Server>resolve("/in/erail/server/Server");
-    server
-            .getVertx()
-            .createHttpClient()
+
+    WebClient
+            .create(server.getVertx())
             .get(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/session")
-            .handler(response -> {
-              context.assertEquals(response.statusCode(), 200, response.statusMessage());
-              response.bodyHandler((event) -> {
-                JsonArray data = event.toJsonArray();
-                context.assertEquals(5, data.size());
-                async.countDown();
-              });
-              async.countDown();
+            .putHeader(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
+            .rxSend()
+            .doOnSuccess(response -> Assertions.assertEquals(200, response.statusCode()))
+            .doOnSuccess((t) -> {
+              JsonArray data = t.bodyAsJsonArray();
+              Assertions.assertEquals(5, data.size());
             })
-            .end();
+            .subscribe(t -> testContext.completeNow(), err -> testContext.failNow(err));
   }
 
 }

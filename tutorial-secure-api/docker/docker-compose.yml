@@ -1,7 +1,7 @@
 version: '3.2'
 services:
     openidserver:
-        image: jboss/keycloak:3.4.3.Final
+        image: jboss/keycloak:4.8.3.Final
         hostname: openidserver
         expose:
             - 8080
