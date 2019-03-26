@@ -4,69 +4,52 @@ import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
 import in.erail.glue.Glue;
 import in.erail.server.Server;
+import io.reactivex.Observable;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.junit5.Timeout;
+import io.vertx.junit5.VertxExtension;
+import io.vertx.junit5.VertxTestContext;
+import io.vertx.reactivex.ext.web.client.WebClient;
+import java.util.concurrent.TimeUnit;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import io.vertx.ext.unit.Async;
-import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.Timeout;
-import io.vertx.ext.unit.junit.VertxUnitRunner;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-@RunWith(VertxUnitRunner.class)
+@ExtendWith(VertxExtension.class)
+@Timeout(value = 10, timeUnit = TimeUnit.MINUTES)
 public class SessionTest {
 
-  @Rule
-  public Timeout rule = Timeout.seconds(2000);
-
-  @SuppressWarnings("deprecation")
   @Test
-  public void testPostRequest(TestContext context) {
-
-    Async async = context.async(5);
+  public void testPostRequest(VertxTestContext testContext) {
 
     Server server = Glue.instance().<Server>resolve("/in/erail/server/Server");
     String content = new JsonObject().put("session", "random").toString();
 
-    for (int i = 0; i < 5; ++i) {
-      server
-              .getVertx()
-              .createHttpClient()
-              .post(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/session")
-              .putHeader(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
-              .putHeader(HttpHeaders.CONTENT_LENGTH, Integer.toString(content.length()))
-              .handler(response -> {
-                context.assertEquals(response.statusCode(), 200, response.statusMessage());
-                async.countDown();
-              })
-              .write(content)
-              .end();
-    }
-
-  }
-
-  @SuppressWarnings("deprecation")
-  @Test
-  public void testGetRequest(TestContext context) {
-
-    Async async = context.async(2);
-    Server server = Glue.instance().<Server>resolve("/in/erail/server/Server");
-    server
-            .getVertx()
-            .createHttpClient()
-            .get(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/session")
-            .handler(response -> {
-              context.assertEquals(response.statusCode(), 200, response.statusMessage());
-              response.bodyHandler((event) -> {
-                JsonArray data = event.toJsonArray();
-                context.assertEquals(5, data.size());
-                async.countDown();
-              });
-              async.countDown();
+    Observable
+            .range(0, 5)
+            .flatMapSingle((t) -> {
+              return WebClient
+                      .create(server.getVertx())
+                      .post(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/session")
+                      .putHeader(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
+                      .rxSendJsonObject(new JsonObject().put("session", "random"));
             })
-            .end();
+            .doOnNext(response -> Assertions.assertEquals(200, response.statusCode()))
+            .ignoreElements()
+            .andThen(
+                    WebClient
+                            .create(server.getVertx())
+                            .get(server.getHttpServerOptions().getPort(), server.getHttpServerOptions().getHost(), "/v1/session")
+                            .putHeader(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
+                            .rxSend()
+            )
+            .doOnSuccess(response -> Assertions.assertEquals(200, response.statusCode()))
+            .doOnSuccess((t) -> {
+              JsonArray data = t.bodyAsJsonArray();
+              Assertions.assertEquals(5, data.size());
+            })
+            .subscribe(t -> testContext.completeNow(), err -> testContext.failNow(err));
   }
 
 }
