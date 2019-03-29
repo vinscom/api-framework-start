@@ -11,8 +11,12 @@ ifndef::imagesdir[:imagesdir: ./../../docs/images]
 
 == Install
 
-To reduce complexity of installation. We will run Keycloak in docker.
+To reduce complexity of installation. We will run Keycloak in docker. 
 Depending on your OS, install https://www.docker.com/community-edition#/download[Docker]
+
+=== TLDR
+- Docker Compose: File already provided. To start keycloak instance use *docker compose up* to start keycloak
+- Keycloak Configuration: Full configuration is already provided which can be imported to create realm required for this tutorial (docker/realm-export.json). If you are importing realm, then only thing left is to create user.
 
 Create docker compose file at {att_project_name}/docker
 [source,yml,linenums]
@@ -41,62 +45,9 @@ image::keycloak/step2-add-client.png[]
 
 === Update Settings
 
-image::keycloak/step3-client-settings-part1.png[]
-image::keycloak/step3-client-settings-part2.png[]
+image::keycloak/step3-client-settings.png[]
 
-=== Generate Keycloak configuration JSON
-
-image::keycloak/step3-client-installation.png[]
-
-[source,json,linenums]
-----
-{
-  "realm": "master",
-  "auth-server-url": "http://localhost:8080/auth",
-  "ssl-required": "external",
-  "resource": "tutorial-secure-api-client",
-  "credentials": {
-    "secret": "92867ec4-d23b-4dc8-8910-c80bdc0a8b36"
-  },
-  "confidential-port": 0
-}
-----
-
-==== Add *realm-public-key* to above configuration
-
-Go to Realm settings
-
-image::keycloak/step4-realm-keys.png[]
-
-And press *Public Key* button to see *realm-public-key*
-
-image::keycloak/step5-realm-public-key.png[]
-
-[source,json,linenums]
-----
-{
-  "realm": "master",
-  "auth-server-url": "http://localhost:8080/auth",
-  "realm-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAweS+2PCSDDfGzgXPSElqFFMddkGkNU3Vb44V2TTcsyl9S02RPR+e0QRttKcn17lLzgRBs65ayxlHN5Mi/n5UD/B5Xvtz+uVCwDJ9ltQSCNUsvcuf0NI3SBNu1G23xrOv+rBmyDprykorjUUqoQi4ss/VuqN2S2R+toeB5gRIVcul/xaGDOLHVPJOqWkvMjNO1NCMVAneeBsqru8/EZP6lbipBORvIkPJ8kinkTaoFdEgnDQeyICgg6ONYb5CCQY0B5vvTXMsTePAD0etCJUZbcVfT2p31KL8I3wpIkptL2AtTn1XpKpEm8guax/80CUmSCf5KhfQe39YNt5FC2OLjQIDAQAB",
-  "ssl-required": "external",
-  "resource": "tutorial-secure-api-client",
-  "credentials": {
-    "secret": "92867ec4-d23b-4dc8-8910-c80bdc0a8b36"
-  },
-  "confidential-port": 0
-}
-----
-
-Copy above configuration to */io/vertx/ext/auth/oauth2/keyCloakConfig.json* in
-*common* configuration layer.
-
-Now our Keyclock server is fully setup.
-
-IMPORTANT: *realm-public-key* and *secret* value will depend on your installation.
-So, don't simply copy-paste above JSON.
-
-NOTE: To know all URLs supported by Realm got to
-http://localhost:8080/auth/realms/master/.well-known/openid-configuration[OpenID Endpoint Configuration].
+NOTE: To know all URLs supported by Realm got to http://localhost:8080/auth/realms/tutorial-secure-api/.well-known/openid-configuration[OpenID Endpoint Configuration].
 This information can be accessed from Realm Settings -> General -> Endpoint
 
 === Add Role for each API Operation
@@ -121,6 +72,9 @@ image::keycloak/step11-role-home.png[]
 +
 .API_SESSION_POST Role example
 image::keycloak/step12-role-create.png[]
++
+.API_SESSION_POST Settings
+image::keycloak/step12a-role-create.png[]
 +
 .All role list
 image::keycloak/step13-role-all.png[]
@@ -167,23 +121,3 @@ image::keycloak/step8-change-password-2.png[]
 +
 .Add user to *Full Access* group
 image::keycloak/step9-user-groups.png[]
-
-=== Update Hosts file
-As our API Server and Keycloak are running on same system with same
-domain name (localhost). Keycloak authentication won't work correctly. To fix this we
-will run Keycloak in its own domain
-
-Depending on your OS. Update hosts file with below entry.
-
-[%header]
-|===
-| Server | IP | Domain | Description
-| Keycloak Server | 127.0.0.1 |  openidserver | Domain name for keycloak server
-|===
-
-.Example hosts file content
-....
-127.0.0.1   openidserver
-....
-
-Now you will access site on *localhost* and Keycloak on *openidserver* domain.

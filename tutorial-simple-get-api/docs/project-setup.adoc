@@ -12,7 +12,7 @@ NOTE: Below steps are optional. You can clone
           {att_project_git_repository}[{att_project_git_name}]
           project and use *{att_project_name}* project.
 
-. Create Project Folder *{att_project_name}*. This will be used as base folder.
+. Create Project Folder *{att_project_name}*. This will be used as a base folder.
 . Create new project +
 image:netbean-project-wizard-1.png[]
 . Save project to *{att_project_name}* location +

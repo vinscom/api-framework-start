@@ -73,8 +73,41 @@ To access page, goto http://localhost:8888/content/indexsecure.html
 
 == Enable API Authentication
 
-We have already done all the configuration as part of Keycloak setup. Simple enable
-*OAuth2AuthInstance* component  at */io/vertx/ext/auth/oauth2/OAuth2AuthInstance*
+=== Configure Open ID Connect
+Below configuration is required to use Keycloak as Auth Provider
+
+==== Add Client Configuration
+
+[source,ini,linenums]
+----
+include::./../config-layers/common/io/vertx/ext/auth/oauth2/OAuth2ClientOptions.properties[]
+----
+
+==== Use Keycloak Auth Provider
+[source,ini,linenums]
+----
+include::./../config-layers/common/io/vertx/ext/auth/oauth2/OpenIDConnectAuthFactory.properties[]
+----
+
+=== Configure Components to use Auth Provider
+
+==== Configure Callback Router
+[source,ini,linenums]
+----
+include::./../config-layers/common//in/erail/route/OIDCCallbackRouteBuilder.properties[]
+----
+
+==== Enable loading of User from Session
+[source,ini,linenums]
+----
+include::./../config-layers/common//in/erail/route/LoadUserFromSessionRouteBuillder.properties[]
+----
+
+==== Enable Security on all Open API Routes
+[source,ini,linenums]
+----
+include::./../config-layers/common//in/erail/route/OpenAPI3RouteBuilder.properties[]
+----
 
 == Run Server
 
@@ -83,13 +116,11 @@ We have already done all the configuration as part of Keycloak setup. Simple ena
 java \
 -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory \
 -Dglue.layers=\
-./config/api-framework-1.0-SNAPSHOT-common-config.zip,\
-./config/tutorial-secure-api-1.0-SNAPSHOT-common-config.zip \
+./api-framework-2.4.7-common-config.zip,\
+./tutorial-secure-api-1.0-SNAPSHOT-common-config.zip \
 -jar tutorial-secure-api-1.0-SNAPSHOT.jar
 ----
 
 == Test
 
-If *OAuth2AuthInstance* component is disabled, then you should be able to use API
-without authentication. If *OAuth2AuthInstance* component is enable, then without login,
-you can't access APIs.
+Open http://localhost:8888/content/indexsecure.html in brower. You can only add data to session if you are logged in. If user is not logged in, API will get 400.
