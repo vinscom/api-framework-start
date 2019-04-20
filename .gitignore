@@ -11,3 +11,10 @@ tutorial-simple-get-api/.settings
 .project
 .classpath
 tutorial-amazon-lambda/.settings
+.idea
+tutorial-docker/.settings
+tutorial-secure-api/.settings
+tutorial-simple-post-api/.settings
+.DS_Store
+.factorypath
+nbactions.xml
