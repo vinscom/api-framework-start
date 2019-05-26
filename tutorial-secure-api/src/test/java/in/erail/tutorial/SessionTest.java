@@ -3,6 +3,7 @@ package in.erail.tutorial;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
 import in.erail.glue.Glue;
+import in.erail.route.OpenAPI3RouteBuilder;
 import in.erail.server.Server;
 import io.reactivex.Observable;
 import io.vertx.core.json.JsonArray;
@@ -23,6 +24,8 @@ public class SessionTest {
   @Test
   public void testPostRequest(VertxTestContext testContext) {
 
+    OpenAPI3RouteBuilder routeBuilder = Glue.instance().<OpenAPI3RouteBuilder>resolve("/in/erail/route/OpenAPI3RouteBuilder");
+    routeBuilder.setSecurityEnable(false);
     Server server = Glue.instance().<Server>resolve("/in/erail/server/Server");
     String content = new JsonObject().put("session", "random").toString();
 
